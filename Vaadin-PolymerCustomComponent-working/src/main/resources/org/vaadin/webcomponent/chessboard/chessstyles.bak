@@ -1,0 +1,12 @@
+
+/* quite small by default.. */
+chess-board {
+    font-size: 250%;
+}
+
+/* workaround some style leaks from Valo */
+.dawn td.h1,
+.dawn td.h2,
+.dawn td.h3 {
+    font-size: 1em !important;
+}
