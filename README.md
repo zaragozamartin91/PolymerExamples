@@ -6,14 +6,14 @@ Tutoriales oficiales:
     https://www.polymer-project.org/1.0/start/first-element/intro
 
 Correr codigo:
-    descargar NodeJs
-    descargar Bower
+    descargar NodeJs;
+    descargar Bower;
     en Windows: 
-        abrir COMO ADMINISTRADOR inicio > Node.js > Node.js command prompt
-        npm -g install npm@2.5.0    (actualizar npm)
-        npm install -g polymer-cli
-        npm install -g bower        (en caso que bower no se encuentre ya instalado)
+        abrir COMO ADMINISTRADOR inicio > Node.js > Node.js command prompt;
+        npm -g install npm@2.5.0    (actualizar npm);
+        npm install -g polymer-cli;
+        npm install -g bower        (en caso que bower no se encuentre ya instalado);
     en Otros:
-        npm install -g polymer-cli
-    polymer serve --open
+        npm install -g polymer-cli;
+    polymer serve --open;
     
