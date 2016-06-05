@@ -2,25 +2,45 @@
 <link rel="import" href="../iron-icon/iron-icon.html">
 
 <dom-module id="icon-toggle">
-
   <template>
-
     <style>
       /* local DOM styles go here */
       :host {
         display: inline-block;
       }
+      iron-icon {
+        fill: rgba(0,0,0,0);
+        stroke: currentcolor;
+      }
+      :host([pressed]) iron-icon {
+        fill: currentcolor;
+      }
     </style>
 
-    <!-- local DOM goes here -->
-    <span>Not much here yet.</span>
+    <!-- The icon="[[toggleIcon]]"assignment is a data binding. It links your element's toggleIcon property with the <iron-icon>'s icon property. -->
+    <iron-icon icon="[[toggleIcon]]">
+    </iron-icon>
   </template>
-
+  
   <script>
   Polymer({
     is: 'icon-toggle',
+    properties: {
+      toggleIcon: String,
+      pressed: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true
+      }
+    }
   });
+
+  /*A simple property declaration like toggleIcon just includes the type (in this case, String).*/
+
+/*The properties object also supports several more features. Add the following lines to add support for the pressed property:*/
+  /*value specifies the property's default value*/
+  /*The notify property tells Polymer to dispatch property change events when the property value changes. This lets the change be observed by other nodes.*/
+  /*The reflectToAttribute property tells Polymer to update the corresponding attribute when the property changes. This lets you style the element using an attribute selector, like icon-toggle[pressed].*/
   </script>
-
 </dom-module>
-
