@@ -33,6 +33,15 @@
         notify: true,
         reflectToAttribute: true
       }
+    },
+    listeners: {
+      'tap':'toggle'
+    },
+    toggle: function() {
+      this.pressed = !this.pressed;
+    },
+    isPressed: function() {
+      return this.pressed;
     }
   });
 

@@ -1,0 +1,70 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+
+<dom-module id="mz-user-input">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <!-- 3. Declare the element. Configure using its attributes. -->
+    <paper-input id="paper-input-username" 
+    label="Enter Username"
+    required
+    auto-validate
+    pattern="[A-Za-z]+"
+    value="[[usernameValue]]"
+    error-message="letters only! not empty!"></paper-input>
+
+    <paper-input id="paper-input-dni" 
+    label="Dni"
+    required
+    auto-validate
+    pattern="\d+"
+    maxlength="8"
+    error-message="only 8 chars! numbers only!"></paper-input>
+
+    <paper-input id="paper-input-password"
+    label="password input" 
+    minlength="6"
+    required
+    auto-validate
+    error-message="too short!"
+    type="password"></paper-input>
+
+  </template>
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'mz-user-input',
+      properties: {
+        usernameValue: {
+          type: String,
+          value: "unknown",
+          notify: true,
+          reflectToAttribute: true
+        }
+      },
+      listeners: {
+        'change':'check'
+      },
+      check: function(e) {
+        console.log("usernameValue changed to: " + e.target.value);
+        this.usernameValue = e.target.value;
+      },
+      getUsername: function() {
+        /*var paperInputUsername = document.querySelector("#paper-input-username");
+        return paperInputUsername.value;*/
+        return this.usernameValue;
+      },
+      getDni: function() {
+        var paperInputDni = document.querySelector("#paper-input-dni");
+        return paperInputDni.value;
+      },
+      getPassword: function() {
+        var paperInputPassword = document.querySelector("#paper-input-password");
+        return paperInputPassword.value;
+      }
+    });
+  </script>
+
+</dom-module>
