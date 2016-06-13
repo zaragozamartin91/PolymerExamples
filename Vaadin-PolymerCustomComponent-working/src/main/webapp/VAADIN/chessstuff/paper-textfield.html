@@ -1,0 +1,62 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+
+<dom-module id="paper-textfield">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <!-- 3. Declare the element. Configure using its attributes. -->
+	<!--     {{}} sirve para two-way binding. [[]] sirve para one-way -->
+    <paper-input  
+    	label="{{inputLabel}}" 
+    	value="{{inputValue}}" 
+    	required="{{inputRequired}}"
+    	pattern="{{inputPattern}}"
+    	auto-validate></paper-input>
+    
+  </template>
+
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'paper-textfield',
+      properties: {
+        inputValue: {
+          type: String,
+          value: "",
+          notify: true,
+          reflectToAttribute: true,
+          observer: '_valueObserver'
+        },
+        inputLabel: {
+        	type:String,
+        	value:"",
+        },
+        inputRequired: {
+        	type: Boolean,
+        	value: false,
+        	notify: true,
+          	reflectToAttribute: true
+        },
+        inputPattern: {
+        	type: String,
+        	notify: true,
+          	reflectToAttribute: true
+        }
+      },
+      _valueObserver: function(newValue, oldValue) {
+      	console.log("inputValue changed from " + oldValue + " to " + newValue);      	
+      },
+      getValue: function() {
+        return this.inputValue;
+      },
+      setValue: function(newValue) {
+        this.inputValue = newValue;
+      },
+      toggleRequired: function() {
+      	this.inputRequired = !this.inputRequired;
+      }
+    });
+  </script>
+
+</dom-module>

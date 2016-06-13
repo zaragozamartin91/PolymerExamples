@@ -17,12 +17,16 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("dawn")
 @SuppressWarnings("serial")
 public class MyVaadinUI extends UI {
+	private PaperTextfield paperTextfield;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -30,11 +34,41 @@ public class MyVaadinUI extends UI {
 		setContent(layout);
 
 		Button button = new Button("Add Custom component");
-		button.addClickListener((ClickEvent event) -> {
-			InputButton inputButton = new InputButton();
-			layout.addComponent(inputButton);
+
+		button.addClickListener(new ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				paperTextfield = PaperTextfield.newWithLabel("Enter username:");
+				paperTextfield.setWidth("100%");
+				paperTextfield.setValue("Default");
+				paperTextfield.setRequired(true);
+
+//				paperTextfield.addValueChangeListener(new PaperTextfield.ValueChangeListener() {
+//					public void valueChange() {
+//						Notification.show("Value: " + paperTextfield.getValue());
+//					}
+//				});
+
+				layout.addComponent(paperTextfield);
+			}
 		});
 
+		Button stateButton = new Button("Get State", new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+//				String paperTextFieldValue = paperTextfield.getValue();
+//				Notification.show("paperTextfield.getValue(): " + paperTextFieldValue);
+//				layout.addComponent( new Label( paperTextFieldValue ) );
+				
+				paperTextfield.withStatePerform(new StateAction<PaperTextfieldState>() {
+					public void run(PaperTextfieldState state) {
+						Notification.show("input value is: " + state.value);
+						layout.addComponent( new Label( state.value ) );
+					}
+				});
+			}
+		});
+
+		layout.addComponent(stateButton);
 		layout.addComponent(button);
 	}
 
@@ -70,15 +104,17 @@ public class MyVaadinUI extends UI {
 		public void modifyBootstrapPage(BootstrapPageResponse response) {
 			Element head = response.getDocument().getElementsByTag("head").get(0);
 
-			// add polymer for older browsers
+			// add polymer for older browsers -------------------------------------------------
 			// Element polymer = response.getDocument().createElement("script");
 			// polymer.attr("src", "VAADIN/chessstuff/polymer-platform/platform.js");
 			// head.appendChild(polymer);
+			// ---------------------------------------------------------------------------------
 
-			// add es6 support for older browsers
+			// add es6 support for older browsers ----------------------------------------------
 			// Element traceur = response.getDocument().createElement("script");
 			// traceur.attr("src", "VAADIN/chessstuff/traceur-runtime/traceur-runtime.min.js");
 			// head.appendChild(traceur);
+			// ---------------------------------------------------------------------------------
 
 			Element webcomponentsScript = response.getDocument().createElement("script");
 			webcomponentsScript.attr("src", "VAADIN/chessstuff/bower_components/webcomponentsjs/webcomponents-lite.min.js");
