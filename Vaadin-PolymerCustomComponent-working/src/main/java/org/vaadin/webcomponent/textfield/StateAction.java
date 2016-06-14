@@ -1,4 +1,4 @@
-package org.vaadin.webcomponent.chessboard;
+package org.vaadin.webcomponent.textfield;
 
 import com.vaadin.shared.ui.JavaScriptComponentState;
 

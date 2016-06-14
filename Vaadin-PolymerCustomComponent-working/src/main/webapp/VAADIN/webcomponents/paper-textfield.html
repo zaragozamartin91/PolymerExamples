@@ -6,11 +6,13 @@
   <template>
     <!-- 3. Declare the element. Configure using its attributes. -->
 	<!--     {{}} sirve para two-way binding. [[]] sirve para one-way -->
-    <paper-input  
+    <paper-input 
+    	on-change="handleChange" 
     	label="{{inputLabel}}" 
     	value="{{inputValue}}" 
     	required="{{inputRequired}}"
     	pattern="{{inputPattern}}"
+    	error-message="{{inputErrorMessage}}"
     	auto-validate></paper-input>
     
   </template>
@@ -26,7 +28,7 @@
           value: "",
           notify: true,
           reflectToAttribute: true,
-          observer: '_valueObserver'
+          //observer: '_valueObserver'
         },
         inputLabel: {
         	type:String,
@@ -42,19 +44,40 @@
         	type: String,
         	notify: true,
           	reflectToAttribute: true
+        },
+        inputErrorMessage: {
+        	type: String,
+        	notify: true,
+          	reflectToAttribute: true
         }
       },
-      _valueObserver: function(newValue, oldValue) {
-      	console.log("inputValue changed from " + oldValue + " to " + newValue);      	
+      handleChange: function(e){
+      	console.log("event trigger:");
+      	console.log(e);
+      	console.log("input value changed to: " + this.inputValue);
+      	this.fire('kick', {kickValue: this.inputValue});
       },
+//       _valueObserver: function(newValue, oldValue) {
+//       	console.log("inputValue changed from " + oldValue + " to " + newValue);
+//       	this.fire('kick', {kicked: true});
+//       },
       getValue: function() {
         return this.inputValue;
       },
       setValue: function(newValue) {
         this.inputValue = newValue;
       },
-      toggleRequired: function() {
-      	this.inputRequired = !this.inputRequired;
+      setRequired: function(req) {
+      	this.inputRequired = req;
+      },
+      setErrorMessage: function(errMsg){
+     	this.inputErrorMessage = errMsg;
+      },
+      setLabel: function(lbl){
+      	this.inputLabel = lbl;
+      },
+      setPattern: function(pattern){
+      	this.inputPattern = pattern;
       }
     });
   </script>

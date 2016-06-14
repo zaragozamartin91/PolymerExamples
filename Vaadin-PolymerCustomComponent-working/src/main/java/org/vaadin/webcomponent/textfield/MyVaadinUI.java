@@ -1,4 +1,4 @@
-package org.vaadin.webcomponent.chessboard;
+package org.vaadin.webcomponent.textfield;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +18,6 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -37,34 +36,29 @@ public class MyVaadinUI extends UI {
 
 		button.addClickListener(new ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				paperTextfield = PaperTextfield.newWithLabel("Enter username:");
+				paperTextfield = new PaperTextfield("Enter Username");
 				paperTextfield.setWidth("100%");
-				paperTextfield.setValue("Default");
 				paperTextfield.setRequired(true);
-
-//				paperTextfield.addValueChangeListener(new PaperTextfield.ValueChangeListener() {
-//					public void valueChange() {
-//						Notification.show("Value: " + paperTextfield.getValue());
-//					}
-//				});
+				paperTextfield.setPattern("[A-Za-z]+");
+				paperTextfield.setErrorMessage("Invalid input!");
 
 				layout.addComponent(paperTextfield);
 			}
 		});
 
-		Button stateButton = new Button("Get State", new ClickListener() {
+		Button stateButton = new Button("Print State", new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-//				String paperTextFieldValue = paperTextfield.getValue();
-//				Notification.show("paperTextfield.getValue(): " + paperTextFieldValue);
-//				layout.addComponent( new Label( paperTextFieldValue ) );
-				
-				paperTextfield.withStatePerform(new StateAction<PaperTextfieldState>() {
-					public void run(PaperTextfieldState state) {
-						Notification.show("input value is: " + state.value);
-						layout.addComponent( new Label( state.value ) );
-					}
-				});
+				Notification.show(paperTextfield.getValue());
+
+				// paperTextfield.printState();
+
+				// paperTextfield.withStatePerform(new StateAction<PaperTextfieldState>() {
+				// public void run(PaperTextfieldState state) {
+				// Notification.show("input value is: " + state.value);
+				// layout.addComponent( new Label( state.value ) );
+				// }
+				// });
 			}
 		});
 
@@ -106,22 +100,22 @@ public class MyVaadinUI extends UI {
 
 			// add polymer for older browsers -------------------------------------------------
 			// Element polymer = response.getDocument().createElement("script");
-			// polymer.attr("src", "VAADIN/chessstuff/polymer-platform/platform.js");
+			// polymer.attr("src", "VAADIN/webcomponents/polymer-platform/platform.js");
 			// head.appendChild(polymer);
 			// ---------------------------------------------------------------------------------
 
 			// add es6 support for older browsers ----------------------------------------------
 			// Element traceur = response.getDocument().createElement("script");
-			// traceur.attr("src", "VAADIN/chessstuff/traceur-runtime/traceur-runtime.min.js");
+			// traceur.attr("src", "VAADIN/webcomponents/traceur-runtime/traceur-runtime.min.js");
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
 			Element webcomponentsScript = response.getDocument().createElement("script");
-			webcomponentsScript.attr("src", "VAADIN/chessstuff/bower_components/webcomponentsjs/webcomponents-lite.min.js");
+			webcomponentsScript.attr("src", "VAADIN/webcomponents/bower_components/webcomponentsjs/webcomponents-lite.min.js");
 			head.appendChild(webcomponentsScript);
 
 			Element inputButtonLink = response.getDocument().createElement("link");
-			inputButtonLink.attr("rel", "VAADIN/chessstuff/input-button.html");
+			inputButtonLink.attr("rel", "VAADIN/webcomponents/input-button.html");
 			head.appendChild(inputButtonLink);
 		}
 	};
