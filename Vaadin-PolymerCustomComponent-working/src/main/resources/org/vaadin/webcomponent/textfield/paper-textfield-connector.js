@@ -1,11 +1,10 @@
-/* Inject import to host page, here made dynamically when
- * the server side component is used for the first time. 
+/* Inserta el import to host page, here made dynamically when
+ *  NOTA: ES CONVENIENTE CARGAR LOS ENCABEZADOS DESDE EL SERVLET DE VAADIN Y NO DESDE EL SCRIPT CONECTOR!
  */
-
-var el = document.createElement("link");
-el.rel = "import";
-el.href = "VAADIN/webcomponents/paper-textfield.html";
-document.getElementsByTagName("head").item(0).appendChild(el);
+//var el = document.createElement("link");
+//el.rel = "import";
+//el.href = "VAADIN/webcomponents/paper-textfield.html";
+//document.getElementsByTagName("head").item(0).appendChild(el);
 
 /*
  * La siguiente funcion representa el inicializador del componente de polymer.
@@ -22,19 +21,6 @@ org_vaadin_webcomponent_textfield_PaperTextfield = function() {
 		return e.firstChild;
 	}
 
-	this.init = function() {
-		/*
-		 * Agrego listener para eventos "kick". Un evento kick es disparado
-		 * desde nuestro componente PaperTextfield cada vez que cambia el valor
-		 * del campo contenedor
-		 */
-		component().addEventListener('kick', function(e) {
-			console.log("init_KICK EVENT TRIGGERED WITH:");
-			console.log(e);
-			console.log("calling connector.handleKick with: " + e.detail.kickValue);
-			connector.handleKick(component().inputValue);
-		});
-	};
 
 	/*
 	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
@@ -49,4 +35,11 @@ org_vaadin_webcomponent_textfield_PaperTextfield = function() {
 		component().inputErrorMessage = this.getState().inputErrorMessage;
 		component().inputPattern = this.getState().inputPattern;
 	}
+	
+	component().addEventListener('kick', function(e) {
+		console.log("init_KICK EVENT TRIGGERED WITH:");
+		console.log(e);
+		console.log("calling connector.handleKick with: " + e.detail.kickValue);
+		connector.handleKick(component().inputValue);
+	});
 };

@@ -39,8 +39,11 @@ public final class PaperTextfield extends AbstractJavaScriptComponent {
 		getState().inputLabel = label;
 
 		addHandleKickCallback();
+	}
 
-		callFunction("init");
+	@Override
+	protected PaperTextfieldState getState() {
+		return (PaperTextfieldState) super.getState();
 	}
 
 	/**
@@ -51,6 +54,7 @@ public final class PaperTextfield extends AbstractJavaScriptComponent {
 	 */
 	public void setValue(String value) {
 		getState().inputValue = value;
+		markAsDirty();
 	}
 
 	/**
@@ -62,11 +66,6 @@ public final class PaperTextfield extends AbstractJavaScriptComponent {
 		return getState().inputValue;
 	}
 
-	@Override
-	protected PaperTextfieldState getState() {
-		return (PaperTextfieldState) super.getState();
-	}
-
 	/**
 	 * Establece si el Input es requerido.
 	 * 
@@ -75,6 +74,7 @@ public final class PaperTextfield extends AbstractJavaScriptComponent {
 	 */
 	public void setRequired(boolean isRequired) {
 		this.getState().inputRequired = isRequired;
+		markAsDirty();
 	}
 
 	/**
@@ -85,6 +85,7 @@ public final class PaperTextfield extends AbstractJavaScriptComponent {
 	 */
 	public void setErrorMessage(String errMsg) {
 		this.getState().inputErrorMessage = errMsg;
+		markAsDirty();
 	}
 
 	/**
@@ -96,8 +97,13 @@ public final class PaperTextfield extends AbstractJavaScriptComponent {
 	 */
 	public void setPattern(String pattern) {
 		this.getState().inputPattern = pattern;
+		markAsDirty();
 	}
 
+	public void callGetValue() {
+		callFunction("getValue");
+	}
+	
 	private void addHandleKickCallback() {
 		addFunction("handleKick", new JavaScriptFunction() {
 			public void call(JsonArray arguments) {

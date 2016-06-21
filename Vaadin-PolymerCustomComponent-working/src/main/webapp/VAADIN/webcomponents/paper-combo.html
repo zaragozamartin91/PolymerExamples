@@ -1,0 +1,56 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+<link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+<dom-module id="paper-combo">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <paper-dropdown-menu id="theDrop" required={{dropRequired}} label={{dropLabel}} on-iron-select="handleSelect">
+      <paper-listbox id="theList" class="dropdown-content">
+		
+      </paper-listbox>
+    </paper-dropdown-menu>
+  </template>
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'paper-combo',
+      properties: {
+        dropLabel: {
+          type:String,
+          value:"",
+        },
+        dropRequired: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+        selectedLabel:  {
+        	type:String,
+        	value: ""
+        }
+      },
+      addItem: function(caption) {
+        var newItem = document.createElement('paper-item');
+        newItem.innerHTML = caption;
+        
+        console.log("Adding item: " + caption);
+        Polymer.dom(this.$.theList).appendChild(newItem);
+      },
+      handleSelect: function(e) {
+        console.log("item selected!");
+        console.log(e);
+        console.log(e.target);
+        this.selectedLabel = this.$.theDrop.selectedItemLabel;
+        
+        console.log("this.$.theDrop.selectedItemLabel: " + this.$.theDrop.selectedItemLabel);
+        
+        this.fire('selected',{ selected:this.selectedLabel });
+      }
+    });
+  </script>
+
+</dom-module>

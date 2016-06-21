@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- 1. Load webcomponents-lite.min.js for polyfill support. -->
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
+    </script>
+
+    <!-- 2. Use an HTML Import to bring in some elements. -->
+    <link rel="import" href="mz-input.html">
+  </head>
+  <body>
+    <mz-input input-value="martin" input-label="Enter username" input-required></mz-user-input>
+  </body>
+</html>

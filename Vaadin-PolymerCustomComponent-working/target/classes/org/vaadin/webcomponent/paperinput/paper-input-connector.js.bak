@@ -1,0 +1,66 @@
+/* Inserta el import to host page, here made dynamically when
+ * the server side component is used for the first time. 
+ */
+var paperInputElement = document.createElement("link");
+paperInputElement.rel = "import";
+paperInputElement.href = "VAADIN/webcomponents/bower_components/paper-input/paper-input.html";
+document.getElementsByTagName("head").item(0).appendChild(paperInputElement);
+
+var polymerElement = document.createElement("link");
+polymerElement.rel = "import";
+polymerElement.href = "VAADIN/webcomponents/bower_components/polymer/polymer.html";
+document.getElementsByTagName("head").item(0).appendChild(polymerElement);
+
+/*
+ * La siguiente funcion representa el inicializador del componente de polymer.
+ * El nombre debe ser el prefijo de paquete reemplazando '.' por '_' seguido del
+ * nombre de la clase de vaadin.
+ */
+org_vaadin_webcomponent_paperinput_PaperInput = function() {
+	var connector = this;
+	var e = this.getElement();
+
+	e.innerHTML = '<paper-input auto-validate></paper-input>';
+
+	function component() {
+		return e.firstChild;
+	}
+
+	this.init = function(inputLabel, inputRequired) {
+		/*
+		 * Agrego listener para eventos "change" de paper-input.
+		 */
+		component().addEventListener("change", function(e) {
+			console.log("init_CHANGE EVENT TRIGGERED WITH:");
+			console.log(e);
+			console.log("calling connector.handleChange with: " + component().value);
+
+			console.log("component().required: " + component().required);
+
+			connector.handleChange(component().value);
+		});
+	};
+
+	/*
+	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
+	 * servidor.
+	 */
+	this.onStateChange = function() {
+		console.log("Calling onStateChange!");
+
+		console.log("setting value: " + this.getState().inputValue);
+		component().value = this.getState().inputValue;
+
+		console.log("setting label: " + this.getState().inputLabel);
+		component().label = this.getState().inputLabel;
+
+		console.log("setting errorMessage: " + this.getState().inputErrorMessage);
+		component().errorMessage = this.getState().inputErrorMessage;
+
+		console.log("setting pattern: " + this.getState().inputPattern);
+		component().pattern = this.getState().inputPattern;
+
+		console.log("setting required: " + this.getState().inputRequired);
+		component().required = this.getState().inputRequired;
+	}
+};

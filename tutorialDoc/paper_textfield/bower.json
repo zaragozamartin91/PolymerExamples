@@ -1,0 +1,7 @@
+{
+  "name": "my-project",
+  "version": "0.0.1",
+  "dependencies": {
+    "paper-input": "PolymerElements/paper-input#^1.1.11"
+  }
+}

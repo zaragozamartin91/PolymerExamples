@@ -6,9 +6,10 @@
     </script>
 
     <!-- 2. Use an HTML Import to bring in some elements. -->
-    <link rel="import" href="mz-input.html">
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html">
   </head>
   <body>
-    <mz-input input-value="martin" input-label="Enter username" input-required></mz-user-input>
+    <paper-input value="martin" label="Enter username" required auto-validate error-message="Invalid input!"></paper-input>
   </body>
 </html>
