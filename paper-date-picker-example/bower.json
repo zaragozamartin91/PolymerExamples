@@ -1,0 +1,7 @@
+{
+  "name": "polymer-paper-date-picker-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "paper-date-picker": "polymer-paper-date-picker#^1.1.4"
+  }
+}
