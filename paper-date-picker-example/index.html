@@ -3,14 +3,46 @@
 <head>
     <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="paper-vaad-calendar.html">
-    
+    <link rel="import" href="bower_components/paper-date-picker/paper-date-picker.html">
+    <link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
+    <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+
+
+	<link rel="import" href="paper-dialog-calendar.html">    
 
     <title>polymer-paper-date-picker-example</title>
 </head>
 <body>
-    <paper-vaad-calendar 
+    <!-- <paper-vaad-calendar 
         picker-date="06-02-2016" 
         picker-min-date="June 1, 2016" 
-        picker-max-date="07-30-2016" />
+        picker-max-date="07-30-2016" /> -->
+
+    <paper-dialog-calendar></paper-dialog-calendar>
+
+	
+
+	<!--
+	<paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
+		<paper-date-picker id="picker" date="2016/05/25"></paper-date-picker>
+		<div class="buttons">
+			<paper-button dialog-dismiss>Cancel</paper-button>
+			<paper-button dialog-confirm>OK</paper-button>
+		</div>
+	</paper-dialog>
+	-->
+
+
+<!--
+	<script type="text/javascript">
+		function toggleDialog() {
+			console.log("toggling");
+	 		document.querySelector('paper-dialog-calendar').toggle();
+		}
+
+		document.querySelector('paper-button').onclick = toggleDialog;
+	</script>
+	-->
 </body>
 </html>

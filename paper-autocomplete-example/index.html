@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="bower_components/paper-typeahead-input/paper-typeahead-input.html" />
+
+    <title>paper-typeahead-input-example</title>
+</head>
+<body>
+	<h1>TEST</h1>
+
+ 	<paper-typeahead-input id="input1"
+ 		max-suggestions="4" 
+ 		prefetch-url="/countries.json" 
+ 		placeholder="Countries">
+ 	</paper-typeahead-input>
+
+ 	<paper-typeahead-input id="input2"
+    	local-candidates='["clinton","trump"]'
+ 		placeholder="Enter US candidate" 
+ 		max-suggestions="4" ></paper-typeahead-input>
+</body>
+</html>

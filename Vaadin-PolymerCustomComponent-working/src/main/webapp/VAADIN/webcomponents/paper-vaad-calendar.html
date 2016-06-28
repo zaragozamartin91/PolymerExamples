@@ -1,0 +1,86 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-date-picker/paper-date-picker.html">
+
+<dom-module id="paper-vaad-calendar">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <!-- 3. Declare the element. Configure using its attributes. -->
+    <!--     {{}} sirve para two-way binding. [[]] sirve para one-way -->
+    <paper-date-picker
+        date="{{pickerDate}}"
+        force-narrow="{{pickerNarrow}}"
+        locale="{{pickerLocale}}"
+        heading-format="{{pickerHeadingFormat}}"
+        max-date="{{pickerMaxDate}}"
+        min-date="{{pickerMinDate}}"
+        responsive-width="{{pickerResponsiveWidth}}">
+    </paper-date-picker>
+  </template>
+
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'paper-vaad-calendar',
+      properties: {
+        pickerDate: {
+          type: Date,
+          notify: true,
+          reflectToAttribute: true,
+          observer: '_pickerDateObserver'
+        },
+        /*fuerza formato vertical de calendario en vez de horizontal*/
+        pickerNarrow: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        /*region de fecha*/
+        pickerLocale: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          /*valor por defecto*/
+          value: "es"
+        },
+        /*formato de fecha de encabezado*/
+        pickerHeadingFormat: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          /*valor por defecto: d=caracter dia D=numero dia M=caracter mes*/
+          value: "dd D MMM"
+        },
+        /*fecha maxima permitida de seleccion*/
+        pickerMaxDate: {
+          type: Date,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        /*fecha minima permitida de seleccion*/
+        pickerMinDate: {
+          type: Date,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        /*Maximum screen width at which the picker uses a vertical layout.
+        Determina el maximo tamano de la pantalla para el cual el display del calendario sera vertical.*/
+        pickerResponsiveWidth: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: "560px"
+        },
+      },
+      _pickerDateObserver: function(newValue, oldValue) {
+        if(oldValue && newValue && oldValue.toString() == newValue.toString()){
+          return;
+        }
+
+        console.log("paper-vaad-calendar pickerDate changed from: " + oldValue + " to: " + newValue);
+        this.fire('kick', {kickValue: newValue});
+      },
+    });
+  </script>
+
+</dom-module>

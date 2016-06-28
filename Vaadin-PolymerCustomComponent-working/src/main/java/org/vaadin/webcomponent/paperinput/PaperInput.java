@@ -95,21 +95,26 @@ public final class PaperInput extends AbstractJavaScriptComponent {
 		this.getState().inputPattern = pattern;
 		markAsDirty();
 	}
+	
+	@Override
+	public void setEnabled(boolean isEnabled) {
+		super.setEnabled(isEnabled);
+		getState().inputDisabled = !isEnabled;
+		markAsDirty();
+	}
 
 	/**
 	 * Deshabilita el componente.
 	 */
 	public void disable() {
-		this.getState().inputDisabled = true;
-		markAsDirty();
+		setEnabled(false);
 	}
 
 	/**
 	 * Habilita el componente.
 	 */
 	public void enable() {
-		this.getState().inputDisabled = false;
-		markAsDirty();
+		setEnabled(true);
 	}
 
 	/**

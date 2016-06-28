@@ -62,14 +62,20 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	protected PaperButtonState getState() {
 		return (PaperButtonState) super.getState();
 	}
+	
+	@Override
+	public void setEnabled(boolean isEnabled) {
+		super.setEnabled(isEnabled);
+		getState().buttonDisabled = !isEnabled;
+		markAsDirty();
+	}
 
 	/**
 	 * Deshabilita el botón.
 	 * 
 	 */
 	public void disable() {
-		getState().buttonDisabled = true;
-		markAsDirty();
+		setEnabled(false);
 	}
 
 	/**
@@ -77,8 +83,7 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	 * 
 	 */
 	public void enable() {
-		getState().buttonDisabled = false;
-		markAsDirty();
+		setEnabled(true);
 	}
 
 	private void addHandleClickCallback() {

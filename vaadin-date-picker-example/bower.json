@@ -1,0 +1,7 @@
+{
+  "name": "vaadin-date-picker-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "vaadin-date-picker": "^1.0.1"
+  }
+}

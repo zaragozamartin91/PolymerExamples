@@ -1,0 +1,9 @@
+{
+  "name": "paper-autocomplete-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "paper-typeahead-input": "^1.3.7",
+    "paper-material": "PolymerElements/paper-material#^1.0.6",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.2.0"
+  }
+}

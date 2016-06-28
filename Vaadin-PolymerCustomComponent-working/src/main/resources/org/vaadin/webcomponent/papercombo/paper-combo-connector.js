@@ -23,6 +23,7 @@ org_vaadin_webcomponent_papercombo_PaperCombo = function() {
 		
 		component().dropRequired = this.getState().dropRequired;
 		component().dropLabel = this.getState().dropLabel;
+		component().dropDisabled = this.getState().dropDisabled;
 	}
 
 	

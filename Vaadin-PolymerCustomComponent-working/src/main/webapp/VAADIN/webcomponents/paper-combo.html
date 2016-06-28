@@ -6,10 +6,15 @@
 <dom-module id="paper-combo">
   <!-- Defines the element's style and local DOM -->
   <template>
-    <paper-dropdown-menu id="theDrop" required={{dropRequired}} label={{dropLabel}} on-iron-select="handleSelect">
-      <paper-listbox id="theList" class="dropdown-content">
-		
-      </paper-listbox>
+    <paper-dropdown-menu 
+    	id="theDrop" 
+    	required={{dropRequired}} 
+    	label={{dropLabel}} 
+    	disabled="{{dropDisabled}}"
+    	on-iron-select="handleSelect" >
+      
+      	<paper-listbox id="theList" class="dropdown-content"></paper-listbox>
+      	
     </paper-dropdown-menu>
   </template>
 
@@ -31,7 +36,13 @@
         selectedLabel:  {
         	type:String,
         	value: ""
-        }
+        },
+        dropDisabled: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
       },
       addItem: function(caption) {
         var newItem = document.createElement('paper-item');

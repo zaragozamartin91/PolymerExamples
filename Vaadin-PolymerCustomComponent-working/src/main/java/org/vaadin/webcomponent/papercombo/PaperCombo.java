@@ -1,5 +1,10 @@
 package org.vaadin.webcomponent.papercombo;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
@@ -15,15 +20,18 @@ import elemental.json.JsonArray;
 @SuppressWarnings("serial")
 @JavaScript({ "paper-combo-connector.js" })
 public final class PaperCombo extends AbstractJavaScriptComponent {
+	private String selectedItemCaption = "";
+	private Map<String, Object> items = new HashMap<>();
 
 	/**
 	 * Crea un nuevo PaperCombo con un label.
 	 * 
+	 * @param label
+	 *            - Label del combo.
 	 */
-	public PaperCombo(String label,boolean dropRequired) {
+	public PaperCombo(String label) {
 		getState().dropLabel = label;
-		getState().dropRequired = dropRequired;
-		
+
 		addHandleSelectedCallback();
 	}
 
@@ -31,16 +39,82 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	protected PaperComboState getState() {
 		return (PaperComboState) super.getState();
 	}
+
+	/**
+	 * Agrega un item al combo.
+	 * 
+	 * @param itemCaption
+	 *            - Clave/Caption del item.
+	 * @param item
+	 *            - Item propiamente dicho.
+	 */
+	public void addItem(String itemCaption, Object item) {
+		callFunction("addItem", itemCaption);
+		items.put(itemCaption, item);
+	}
+
+	/**
+	 * Agrega un item al combo. El caption y el valor del item son el mismo.
+	 * 
+	 * @param itemCaption
+	 *            - Caption y valor del item.
+	 */
+	public void addItem(String itemCaption) {
+		this.addItem(itemCaption, itemCaption);
+	}
+
+	/**
+	 * Obtiene el valor seleccionado en el combo.
+	 * 
+	 * @return valor seleccionado en el combo.
+	 */
+	public Object getValue() {
+		return items.get(selectedItemCaption);
+	}
+
+	/**
+	 * Establece el item seleccionado.
+	 * 
+	 * @param itemCaption
+	 *            - Caption del item a marcar como seleccionado.
+	 * @return this.
+	 */
+	public PaperCombo setSelected(String itemCaption) {
+		if (items.keySet().contains(itemCaption)) {
+			this.selectedItemCaption = itemCaption;
+			getState().selectedLabel = itemCaption;
+			return this;
+		}
+
+		throw new RuntimeException("El item " + itemCaption + " no pertenece al combo!");
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+
+		if (visible) {
+			Set<Entry<String, Object>> entries = items.entrySet();
+			for (Entry<String, Object> entry : entries) {
+				callFunction("addItem", entry.getKey());
+			}
+		}
+	}
+
 	
-	public void addItem(String caption){
-		callFunction("addItem", caption);
-	};
+	@Override
+	public void setEnabled(boolean isEnabled) {
+		super.setEnabled(isEnabled);
+		this.getState().dropDisabled = !isEnabled;
+		markAsDirty();
+	}
 
 	private void addHandleSelectedCallback() {
 		addFunction("handleSelected", new JavaScriptFunction() {
 			public void call(JsonArray arguments) {
 				System.out.println("calling PaperCombo#handleSelected with: " + arguments.getString(0));
-				getState().selectedLabel = arguments.getString(0);
+				// getState().selectedLabel = arguments.getString(0);
+				selectedItemCaption = arguments.getString(0);
 			}
 		});
 	}

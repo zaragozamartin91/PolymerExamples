@@ -1,0 +1,7 @@
+{
+  "name": "vaadin-combo-box-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "vaadin-combo-box": "^1.0.1"
+  }
+}
