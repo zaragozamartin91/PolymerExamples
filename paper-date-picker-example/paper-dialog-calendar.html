@@ -1,14 +1,14 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/paper-date-picker/paper-date-picker.html">
 
-<link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
+
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-input/paper-input.html">
 
 <dom-module id="paper-dialog-calendar">
-  <!-- Defines the element's style and local DOM -->
-  <template>
+  <template strip-whitespace>
     <style type="text/css">
       #container {
         position: relative;
@@ -25,14 +25,41 @@
         float:left;
         display:inline; 
       }
-      
-    </style>
-    <!-- 3. Declare the element. Configure using its attributes. -->
-    <!--     {{}} sirve para two-way binding. [[]] sirve para one-way -->
 
-    <div id="container">
-      <paper-input id="dateInput" label="Fecha" on-change="inputToDate" value="{{inputValue}}" pattern="\d{4}/\d{2}/\d{2}" error-message="Formato: yyyy/MM/dd" auto-validate></paper-input>
-      <paper-button raised id="triggerCalendar">Click</paper-button>
+      #calendar {
+        padding: 0px;
+        margin: 0px;
+      }
+
+      #triggerCalendar {
+        padding: 4px;
+        margin-top: 21px;
+      }
+      
+      /*CAMBIA EL COLOR DEL ENCABEZADO DEL CALENDARIO:*/
+      /*:root {
+        --default-primary-color: red;
+        --text-primary-color: white;
+      }*/
+
+    </style>
+
+    <div id="container" >
+      <paper-input 
+        id="dateInput" 
+        label="{{inputLabel}}" 
+        on-change="inputToDate" 
+        value="{{inputValue}}" 
+        pattern="(\d{4}/\d{2}/\d{2}|\d{2}/\d{2}/\d{4})" 
+        error-message="{{inputErrorMessage}}"
+        disabled="{{allDisabled}}"
+        auto-validate></paper-input>
+      
+      <!-- <paper-button raised id="triggerCalendar">{{buttonLabel}}</paper-button> -->
+      <paper-icon-button 
+        icon="icons:today" 
+        id="triggerCalendar"
+        disabled="{{allDisabled}}"></paper-icon-button>
 
       <paper-dialog id="dialog" class="paper-date-picker-dialog" >
         <paper-date-picker id="calendar"
@@ -44,14 +71,12 @@
             min-date="{{pickerMinDate}}"
             responsive-width="{{pickerResponsiveWidth}}">
         </paper-date-picker>
-        <div class="buttons">
+        <!-- <div class="buttons">
           <paper-button dialog-dismiss>Cancel</paper-button>
           <paper-button dialog-confirm>OK</paper-button>
-        </div>
+        </div> -->
       </paper-dialog>
     </div>
-
-
 
   </template>
 
@@ -66,7 +91,11 @@
           notify: true,
           reflectToAttribute: true,
           observer: '_pickerDateObserver',
-          value: new Date()
+        },
+        value: {
+          type: Date,
+          notify: true,
+          reflectToAttribute: true,
         },
         /*fuerza formato vertical de calendario en vez de horizontal*/
         pickerNarrow: {
@@ -81,7 +110,7 @@
           notify: true,
           reflectToAttribute: true,
           /*valor por defecto*/
-          value: "en"
+          value: "es"
         },
         /*formato de fecha de encabezado*/
         pickerHeadingFormat: {
@@ -116,12 +145,39 @@
           notify: true,
           reflectToAttribute: true,
         },
+        inputErrorMessage: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        inputLabel: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        buttonLabel: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        /*formato de fecha day/month/year */
+        ddmmyyyy: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value:false
+        },
+        allDisabled: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value:false
+        },
       },
       ready: function() {
-        console.log("READY!");
+        console.log("paper-dialog-calendar ready!");
         var dialog = this.$.dialog;
         this.$.triggerCalendar.onclick = function() {
-          console.log("TRIGGER!");
           dialog.toggle();
         }
       },
@@ -129,6 +185,18 @@
         if(oldValue && newValue && oldValue.toString() == newValue.toString()){
           return;
         }
+
+        var day = newValue.getDate() < 10 ? "0" + newValue.getDate() : newValue.getDate();
+        var month = (newValue.getMonth() + 1) < 10 ? "0" + (newValue.getMonth() + 1) : newValue.getMonth() + 1;
+        var year = newValue.getFullYear();
+
+        if(this.ddmmyyyy){
+          this.inputValue = day + '/' + month + '/' + year;
+        } else {
+          this.inputValue = year + "/" + month + "/" + day;
+        }
+
+        this.value = newValue;
 
         console.log("paper-dialog-calendar pickerDate changed from: " + oldValue + " to: " + newValue);
         this.fire('kick', {kickValue: newValue});
@@ -138,13 +206,17 @@
       },
       inputToDate: function() {
         if(this.inputValue) {
-          try{
-            this.pickerDate = new Date(this.inputValue);
-          }catch(err) {
-            
+          try {
+            if(this.ddmmyyyy){
+              var splitDate = this.inputValue.split('/');
+              this.pickerDate = new Date(splitDate[2], splitDate[1] - 1, splitDate[0]);
+            } else {
+              this.pickerDate = new Date(this.inputValue);
+            }
+          } catch(err) {
+            this.$.dateInput.invalid=true;
           }
         }
-        console.log("changed!");
       }
     });
   </script>

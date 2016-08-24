@@ -1,0 +1,89 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+
+<dom-module id="paper-multi-combo">
+  <!-- Defines the element's style and local DOM -->
+  <template>
+    <!-- 3. Declare the element. Configure using its attributes. -->
+    <!--     {{}} sirve para two-way binding. [[]] sirve para one-way -->
+    <paper-menu-button ignore-select>
+      <paper-button raised class="dropdown-trigger">{{label}}</paper-button>
+        <paper-menu attrForSelected="value" id="theMenu" multi="{{multi}}" class="dropdown-content"></paper-menu>
+    </paper-menu-button>  
+  </template>
+
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'paper-multi-combo',
+      properties: {
+        label: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        multi: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: true
+        },
+        value: {
+          type: Array,
+          notify: true,
+          reflectToAttribute: true,
+          value: []
+        },
+        items: {
+          type: Array,
+          notify: true,
+          reflectToAttribute: true,
+          value: []
+        },
+      },
+      ready: function(){
+        var theMenu = this.$.theMenu;
+        var self = this;
+        var items = this.items;
+
+        var eventListener = function(e) {
+          var selectedItems = theMenu.selectedItems;
+          
+          self.value = [];
+          selectedItems.forEach(function(selectedItem) {
+            var itemCaption = selectedItem.innerHTML.trim();
+            self.value.push(itemCaption);
+          });
+
+          console.log("paper-multi-combo@value:");
+          console.log(self.value);
+
+          self.fire('changed', {items:items, value:self.value});
+        };
+
+        theMenu.addEventListener('iron-select', eventListener);
+        theMenu.addEventListener('iron-deselect', eventListener);
+
+        this.items.forEach( function(item) {
+          var newItem = document.createElement('paper-item');
+          newItem.innerHTML = item;
+          Polymer.dom(theMenu).appendChild(newItem);
+        } );
+      },
+      addItem: function(caption) {
+        var newItem = document.createElement('paper-item');
+        newItem.innerHTML = caption;
+        
+        Polymer.dom(this.$.theMenu).appendChild(newItem);
+
+        this.items.push(caption);
+      },
+      
+    });
+  </script>
+
+</dom-module>

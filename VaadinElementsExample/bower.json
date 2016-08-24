@@ -1,0 +1,7 @@
+{
+  "name": "vaadin-elements-test",
+  "version": "0.0.1",
+  "dependencies": {
+    "vaadin-core-elements": "^1.0.0"
+  }
+}
