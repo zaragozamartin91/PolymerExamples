@@ -1,0 +1,218 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-date-picker/paper-date-picker.html">
+
+<link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+
+<dom-module id="paper-dialog-calendar">
+  <template strip-whitespace>
+    <style type="text/css">
+      #container {
+        position: relative;
+        width: 100%;
+      }
+
+      #dialog {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+
+      #dateInput {
+        float:left;
+        display:inline; 
+      }
+
+      #calendar {
+        padding: 0px;
+        margin: 0px;
+      }
+
+      #triggerCalendar {
+        padding: 4px;
+        margin-top: 21px;
+      }
+      
+      /*CAMBIA EL COLOR DEL ENCABEZADO DEL CALENDARIO:*/
+      /*:root {
+        --default-primary-color: red;
+        --text-primary-color: white;
+      }*/
+
+    </style>
+
+    <div id="container" >
+      <paper-input 
+        id="dateInput" 
+        label="{{inputLabel}}" 
+        on-change="inputToDate" 
+        value="{{inputValue}}" 
+        pattern="(\d{4}/\d{2}/\d{2}|\d{2}/\d{2}/\d{4})" 
+        error-message="{{inputErrorMessage}}"
+        disabled="{{allDisabled}}"
+        auto-validate></paper-input>
+      
+      <!-- <paper-button raised id="triggerCalendar">{{buttonLabel}}</paper-button> -->
+      <paper-icon-button 
+        icon="icons:today" 
+        id="triggerCalendar"
+        disabled="{{allDisabled}}"></paper-icon-button>
+
+      <paper-dialog id="dialog" class="paper-date-picker-dialog" >
+        <paper-date-picker id="calendar"
+            date="{{pickerDate}}"
+            force-narrow="{{pickerNarrow}}"
+            locale="{{pickerLocale}}"
+            heading-format="{{pickerHeadingFormat}}"
+            max-date="{{pickerMaxDate}}"
+            min-date="{{pickerMinDate}}"
+            responsive-width="{{pickerResponsiveWidth}}">
+        </paper-date-picker>
+        <!-- <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div> -->
+      </paper-dialog>
+    </div>
+
+  </template>
+
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'paper-dialog-calendar',
+      properties: {
+        pickerDate: {
+          type: Date,
+          notify: true,
+          reflectToAttribute: true,
+          observer: '_pickerDateObserver',
+          value: new Date()
+        },
+        /*fuerza formato vertical de calendario en vez de horizontal*/
+        pickerNarrow: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value:true
+        },
+        /*region de fecha*/
+        pickerLocale: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          /*valor por defecto*/
+          value: "es"
+        },
+        /*formato de fecha de encabezado*/
+        pickerHeadingFormat: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          /*valor por defecto: d=caracter dia D=numero dia M=caracter mes*/
+          value: "ddd D MMM"
+        },
+        /*fecha maxima permitida de seleccion*/
+        pickerMaxDate: {
+          type: Date,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        /*fecha minima permitida de seleccion*/
+        pickerMinDate: {
+          type: Date,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        /*Maximum screen width at which the picker uses a vertical layout.
+        Determina el maximo tamano de la pantalla para el cual el display del calendario sera vertical.*/
+        pickerResponsiveWidth: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: "560px"
+        },
+        inputValue: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        inputErrorMessage: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        inputLabel: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        buttonLabel: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        /*formato de fecha day/month/year */
+        ddmmyyyy: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value:false
+        },
+        allDisabled: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value:false
+        },
+      },
+      ready: function() {
+        console.log("paper-dialog-calendar ready!");
+        var dialog = this.$.dialog;
+        this.$.triggerCalendar.onclick = function() {
+          dialog.toggle();
+        }
+      },
+      _pickerDateObserver: function(newValue, oldValue) {
+        if(oldValue && newValue && oldValue.toString() == newValue.toString()){
+          return;
+        }
+
+        var day = newValue.getDate() < 10 ? "0" + newValue.getDate() : newValue.getDate();
+        var month = (newValue.getMonth() + 1) < 10 ? "0" + (newValue.getMonth() + 1) : newValue.getMonth() + 1;
+        var year = newValue.getFullYear();
+
+        if(this.ddmmyyyy){
+          this.inputValue = day + '/' + month + '/' + year;
+        } else {
+          this.inputValue = year + "/" + month + "/" + day;
+        }
+
+        console.log("paper-dialog-calendar pickerDate changed from: " + oldValue + " to: " + newValue);
+        this.fire('kick', {kickValue: newValue});
+      },
+      toggle: function() {
+        this.$.dialog.toggle();
+      },
+      inputToDate: function() {
+        if(this.inputValue) {
+          try {
+            if(this.ddmmyyyy){
+              var splitDate = this.inputValue.split('/');
+              this.pickerDate = new Date(splitDate[2], splitDate[1] - 1, splitDate[0]);
+            } else {
+              this.pickerDate = new Date(this.inputValue);
+            }
+          } catch(err) {
+            this.$.dateInput.invalid=true;
+          }
+        }
+      }
+    });
+  </script>
+
+</dom-module>

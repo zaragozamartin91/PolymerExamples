@@ -1,0 +1,155 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="my-icons.html">
+
+<dom-module id="my-app">
+
+  <template>
+
+    <style>
+
+      :host {
+        display: block;
+        --app-primary-color: #4285f4;
+        --app-secondary-color: black;
+      }
+
+      app-header {
+        background-color: var(--app-primary-color);
+        color: #fff;
+      }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        line-height: 40px;
+        text-decoration: none;
+        color: var(--app-secondary-color);
+      }
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
+      .drawer-list a.subroute {
+        padding-left: 32px;
+      }
+
+
+    </style>
+
+    <!-- app-location binds to the app's URL -->
+    <!-- The <app-location> element is simply a proxy for window.location that provides two-way data binding. A single <app-location> element binds the top-level <app-route> element to the state of the URL bar -->
+    <app-location route="{{route}}"></app-location>
+
+    <!-- this <app-route> manages the top-level routes -->
+    <!-- The <app-route> element matches the current route against a pattern (where :view represents a parameter). If the pattern matches, the route is active and any URL parameters are added to the data object. In this case, the path /profile/tina matches the top-level route, setting routeData.view to profile. The remainder of the route (/tina) forms the tail -->
+    <app-route
+        route="{{route}}"
+        pattern="/:view"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <!-- Add the fullbleed attribute to app-drawer-layout to make it fit the size of its container -->
+    <app-drawer-layout fullbleed>
+
+      <!-- Drawer content -->
+      <app-drawer>
+        <app-toolbar>Menu</app-toolbar>
+        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <a name="view1" href="/view1">View One</a>
+          <a name="view2" href="/view2">View Two</a>
+          <a name="view3" href="/view3">View Three</a>
+          <a name="new-view" href="/new-view">New View</a>
+        </iron-selector>
+      </app-drawer>
+
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
+
+        <app-header condenses reveals effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+            <div title>My App</div>
+          </app-toolbar>
+        </app-header>
+
+        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
+          <my-view1 name="view1"></my-view1>
+          <my-view2 name="view2"></my-view2>
+          <my-view3 name="view3"></my-view3>
+          <my-new-view name="new-view" some-data="MARTIN" slider-value="80"></my-new-view>
+        </iron-pages>
+
+      </app-header-layout>
+
+    </app-drawer-layout>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-app',
+
+      properties: {
+
+        page: {
+          type: String,
+          reflectToAttribute: true,
+        },
+
+      },
+
+      /* multiple properties can be observed for changes using the observers array.
+      each item is simply a string representation of the method to be invoked with the observed properties specified as arguments. */
+      observers: [
+        '_routePageChanged(routeData.view)',
+        '_pageChanged(page)'
+      ],
+
+      _routePageChanged: function(view) {
+        this.page = view || 'view1';
+      },
+
+      _pageChanged: function(page) {
+        var pageName = 'my-' + page;
+
+        // LAZY load page import on demand.
+        var resolvedUrl = this.resolveUrl(pageName + '.html');
+        this.importHref(resolvedUrl, null, null, true);
+
+        if(pageName == 'my-new-view') {
+          /*For locating dynamically-created nodes in your element's local DOM, use the $$ method: this.$$ selector). $$ returns the first node in the local DOM that matches selector*/
+          var myNewView = this.$$('my-new-view');
+          myNewView.addEventListener('slider-value-changed', function(){
+            console.log("my-app detected that my-new-view's slider-value changed!");
+          });
+        }
+      },
+
+      /*esta funcion se dispara cuando el componente esta listo*/
+      ready: function() {
+        console.log("my-app is ready!");
+      }
+    });
+
+  </script>
+
+</dom-module>
