@@ -1,4 +1,4 @@
-package ast.unicore.view.webcomponent.papertypeaheadinput;
+package ast.unicore.view.webcomponent.paperautocomplete;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,23 +19,23 @@ import elemental.json.JsonArray;
  *
  */
 @SuppressWarnings("serial")
-@JavaScript({ "paper-typeahead-input-connector.js" })
-public final class PaperTypeAheadInput extends AbstractJavaScriptComponent {
+@JavaScript({ "paper-autocomplete-input-connector.js" })
+public final class PaperAutocompleteInput extends AbstractJavaScriptComponent {
 	private String selectedValue = "";
 	private Map<String, Object> items = new HashMap<>();
 
 	/**
 	 * Crea un nuevo PaperTypeAheadInput con un label y .
 	 */
-	public PaperTypeAheadInput(String label) {
+	public PaperAutocompleteInput(String label) {
 		getState().inputPlaceholder = label;
 
 		addHandleConfirmedCallback();
 	}
 
 	@Override
-	protected PaperTypeAheadInputState getState() {
-		return (PaperTypeAheadInputState) super.getState();
+	protected PaperAutocompleteInputState getState() {
+		return (PaperAutocompleteInputState) super.getState();
 	}
 
 	/**
@@ -43,7 +43,7 @@ public final class PaperTypeAheadInput extends AbstractJavaScriptComponent {
 	 * 
 	 * @return this.
 	 */
-	public PaperTypeAheadInput required() {
+	public PaperAutocompleteInput required() {
 		getState().inputRequired = true;
 		return this;
 	}
@@ -57,7 +57,7 @@ public final class PaperTypeAheadInput extends AbstractJavaScriptComponent {
 	 *            - Item propiamente dicho.
 	 * @return this.
 	 */
-	public PaperTypeAheadInput addItem(String itemCaption, Object item) {
+	public PaperAutocompleteInput addItem(String itemCaption, Object item) {
 		callFunction("addItem", itemCaption);
 		items.put(itemCaption, item);
 		return this;
@@ -70,7 +70,7 @@ public final class PaperTypeAheadInput extends AbstractJavaScriptComponent {
 	 *            - Caption y valor del item.
 	 * @return this.
 	 */
-	public PaperTypeAheadInput addItem(String itemCaption) {
+	public PaperAutocompleteInput addItem(String itemCaption) {
 		return this.addItem(itemCaption, itemCaption);
 	}
 
@@ -90,7 +90,7 @@ public final class PaperTypeAheadInput extends AbstractJavaScriptComponent {
 	 *            - Caption del item a marcar como seleccionado en el componente cliente.
 	 * @return this.
 	 */
-	public PaperTypeAheadInput setSelected(String itemCaption) {
+	public PaperAutocompleteInput setSelected(String itemCaption) {
 		if (items.keySet().contains(itemCaption)) {
 			this.selectedValue = itemCaption;
 			getState().inputValue = itemCaption;
@@ -111,7 +111,6 @@ public final class PaperTypeAheadInput extends AbstractJavaScriptComponent {
 			}
 		}
 	}
-	
 
 	@Override
 	public void setEnabled(boolean enabled) {
@@ -122,8 +121,9 @@ public final class PaperTypeAheadInput extends AbstractJavaScriptComponent {
 
 	private void addHandleConfirmedCallback() {
 		addFunction("handleConfirmed", new JavaScriptFunction() {
+			@Override
 			public void call(JsonArray arguments) {
-				System.out.println("calling PaperTypeAheadInput#handleConfirmed with: " + arguments.getString(0));
+				System.out.println("PaperAutocompleteInput#handleConfirmed: " + arguments.getString(0));
 				selectedValue = arguments.getString(0);
 			}
 		});

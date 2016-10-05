@@ -38,7 +38,7 @@ If you want to save it in bower.json file, remember to add flag --save
 
 @demo
 -->
-<dom-module id="paper-typeahead-input">
+<dom-module id="paper-autocomplete-input">
 
   <style>
     :host {
@@ -116,7 +116,7 @@ If you want to save it in bower.json file, remember to add flag --save
 
   Polymer({
 
-    is: 'paper-typeahead-input',
+    is: 'paper-autocomplete-input',
     /**
      * Fired when an item in the suggestion list is selected, either by up and down key or hover by mouse.
      *
@@ -306,7 +306,7 @@ If you want to save it in bower.json file, remember to add flag --save
       // This is the point where you should make modifications to the DOM (when
       // necessary), or kick off any processes the element wants to perform.
       document.addEventListener("click", function(){
-        var ptinputs = document.querySelectorAll('paper-typeahead-input')
+        var ptinputs = document.querySelectorAll('paper-autocomplete-input')
         for (var i = 0; i < ptinputs.length; i ++){
           var ptinput = ptinputs[i];
           ptinput._suggestions = [];
@@ -468,7 +468,7 @@ If you want to save it in bower.json file, remember to add flag --save
         return item[this.displayProp];
       }
       else{
-        console.log("paper-typeahead-input: displayProp not set up");
+        console.log("paper-autocomplete-input: displayProp not set up");
         return "";
       }
     },

@@ -1,14 +1,9 @@
 
-/*
- * La siguiente funcion representa el inicializador del componente de polymer.
- * El nombre debe ser el prefijo de paquete reemplazando '.' por '_' seguido del
- * nombre de la clase de vaadin.
- */
-ast_unicore_view_webcomponent_papertypeaheadinput_PaperTypeAheadInput = function() {
+ast_unicore_view_webcomponent_paperautocomplete_PaperAutocompleteInput = function() {
 	var connector = this;
 	var e = this.getElement();
 
-	e.innerHTML = '<paper-typeahead-input></paper-typeahead-input>';
+	e.innerHTML = '<paper-autocomplete-input></paper-autocomplete-input>';
 
 	function component() {
 		return e.firstChild;
@@ -19,7 +14,7 @@ ast_unicore_view_webcomponent_papertypeaheadinput_PaperTypeAheadInput = function
 	 * servidor.
 	 */
 	this.onStateChange = function() {
-		console.log("PaperTypeAheadInput::Calling onStateChange!");
+		console.log("ast_unicore_view_webcomponent_paperautocomplete_PaperAutocompleteInput#onStateChange");
 		
 		var state = this.getState();
 		
@@ -40,7 +35,7 @@ ast_unicore_view_webcomponent_papertypeaheadinput_PaperTypeAheadInput = function
 	 * Agrego listener para eventos "selected" de paper-input.
 	 */
 	component().addEventListener("pt-item-confirmed", function(e) {
-		console.log("pt-item-confirmed EVENT TRIGGERED WITH:");
+		console.log("ast_unicore_view_webcomponent_paperautocomplete_PaperAutocompleteInput#pt-item-confirmed:");
 		console.log(e);
 		
 		connector.handleConfirmed(component().inputValue);

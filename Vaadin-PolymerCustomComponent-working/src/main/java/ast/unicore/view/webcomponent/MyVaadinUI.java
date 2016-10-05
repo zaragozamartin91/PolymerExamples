@@ -10,13 +10,13 @@ import javax.servlet.annotation.WebServlet;
 import org.jsoup.nodes.Element;
 import org.vaadin.maddon.layouts.MVerticalLayout;
 
+import ast.unicore.view.webcomponent.paperautocomplete.PaperAutocompleteInput;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
 import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.InvalidInputException;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
-import ast.unicore.view.webcomponent.papertypeaheadinput.PaperTypeAheadInput;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -42,7 +42,7 @@ public class MyVaadinUI extends UI {
 	private PaperCombo paperCombo;
 	// private PaperVaadCalendar paperVaadCalendar;
 	private PaperTextInput disabledInput;
-	private PaperTypeAheadInput typeAheadInput;
+	private PaperAutocompleteInput typeAheadInput;
 
 	// private VaadinComboBox vaadinComboBox;
 
@@ -90,7 +90,7 @@ public class MyVaadinUI extends UI {
 				paperCombo.addItem("Movistar", "Empresa movistar");
 				paperCombo.addItem("Geotex", "Empresa geotex");
 
-				typeAheadInput = new PaperTypeAheadInput("Seleccione pais");
+				typeAheadInput = new PaperAutocompleteInput("Seleccione pais");
 				typeAheadInput.addItem("Argentina");
 				typeAheadInput.addItem("Brasil");
 				typeAheadInput.addItem("Chile");
@@ -292,7 +292,7 @@ public class MyVaadinUI extends UI {
 			{
 				Element link = response.getDocument().createElement("link");
 				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/paper-typeahead-input.html");
+				link.attr("href", "VAADIN/webcomponents/paper-autocomplete-input.html");
 				head.appendChild(link);
 			}
 
