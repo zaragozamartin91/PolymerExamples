@@ -8,7 +8,7 @@ public interface InputValidator<E> {
 	 *            Contenido del input.
 	 * @param clientComponentInputIsInvalid
 	 *            True si el componente del lado del cliente dice que el contenido es invalido (por ejemplo,
-	 *            estableciendo un criterio mediante {@link PaperInput#setPattern}). False en caso contrario.
+	 *            estableciendo un criterio mediante {@link PaperTextInput#setPattern}). False en caso contrario.
 	 * @throws InvalidInputException
 	 *             Si el valor del input es invalido.
 	 */

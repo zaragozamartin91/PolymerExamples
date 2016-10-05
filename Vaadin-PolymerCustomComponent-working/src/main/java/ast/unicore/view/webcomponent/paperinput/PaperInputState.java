@@ -3,7 +3,7 @@ package ast.unicore.view.webcomponent.paperinput;
 import com.vaadin.shared.ui.JavaScriptComponentState;
 
 /**
- * Representa el estado actual de un {@link PaperInput}.
+ * Representa el estado actual de un {@link PaperTextInput}.
  * 
  * @author martin.zaragoza
  *

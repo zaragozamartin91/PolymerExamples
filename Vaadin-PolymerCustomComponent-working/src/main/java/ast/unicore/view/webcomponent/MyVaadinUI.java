@@ -10,15 +10,13 @@ import javax.servlet.annotation.WebServlet;
 import org.jsoup.nodes.Element;
 import org.vaadin.maddon.layouts.MVerticalLayout;
 
-import ast.unicore.view.webcomponent.combo.paper.PaperCombo;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
+import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.InvalidInputException;
-import ast.unicore.view.webcomponent.paperinput.PaperInput;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
+import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
 import ast.unicore.view.webcomponent.papertypeaheadinput.PaperTypeAheadInput;
-import ast.unicore.view.webcomponent.papervaadcalendar.PaperVaadCalendar;
-import ast.unicore.view.webcomponent.papervaadcalendar.dialog.PaperDialogCalendar;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -39,13 +37,12 @@ import com.vaadin.ui.VerticalLayout;
 public class MyVaadinUI extends UI {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-	private PaperInput paperInput;
+	private PaperTextInput paperInput;
 	private PaperDateInput paperInputDate;
 	private PaperCombo paperCombo;
 	// private PaperVaadCalendar paperVaadCalendar;
-	private PaperInput disabledInput;
+	private PaperTextInput disabledInput;
 	private PaperTypeAheadInput typeAheadInput;
-	private PaperDialogCalendar paperDialogCalendar;
 
 	// private VaadinComboBox vaadinComboBox;
 
@@ -66,7 +63,7 @@ public class MyVaadinUI extends UI {
 		addComponentsButton.addListener(new ClickListener() {
 			@Override
 			public void handleClick() {
-				paperInput = new PaperInput("Nombre organizacion");
+				paperInput = new PaperTextInput("Nombre organizacion");
 				paperInput.setPattern("[a-zA-Z ]+");
 				paperInput.setErrorMessage("Nombre de organizacion invalido!");
 				paperInput.setRequired(true);
@@ -82,10 +79,7 @@ public class MyVaadinUI extends UI {
 					e1.printStackTrace();
 				}
 
-				paperDialogCalendar = new PaperDialogCalendar("Fecha").ddmmyyyy(true).narrow(false).locale("es").headingFormat("ddd D");
-				layout.addComponent(paperDialogCalendar);
-
-				disabledInput = new PaperInput("Disabled!");
+				disabledInput = new PaperTextInput("Disabled!");
 				disabledInput.disable();
 				layout.addComponent(disabledInput);
 
@@ -176,7 +170,6 @@ public class MyVaadinUI extends UI {
 				paperCombo.setEnabled(!paperCombo.isEnabled());
 				// paperVaadCalendar.setEnabled(!paperVaadCalendar.isEnabled());
 				typeAheadInput.setEnabled(!typeAheadInput.isEnabled());
-				paperDialogCalendar.setEnabled(!paperDialogCalendar.isEnabled());
 			}
 		});
 
@@ -250,13 +243,6 @@ public class MyVaadinUI extends UI {
 			{
 				Element link = response.getDocument().createElement("link");
 				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/paper-textfield.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
 				link.attr("href", "VAADIN/webcomponents/bower_components/polymer/polymer.html");
 				head.appendChild(link);
 			}
@@ -306,14 +292,7 @@ public class MyVaadinUI extends UI {
 			{
 				Element link = response.getDocument().createElement("link");
 				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/paper-vaad-calendar.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/bower_components/paper-typeahead-input/paper-typeahead-input.html");
+				link.attr("href", "VAADIN/webcomponents/paper-typeahead-input.html");
 				head.appendChild(link);
 			}
 
@@ -321,13 +300,6 @@ public class MyVaadinUI extends UI {
 				Element link = response.getDocument().createElement("link");
 				link.attr("rel", "import");
 				link.attr("href", "VAADIN/webcomponents/bower_components/paper-styles/paper-styles.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/paper-dialog-calendar.html");
 				head.appendChild(link);
 			}
 

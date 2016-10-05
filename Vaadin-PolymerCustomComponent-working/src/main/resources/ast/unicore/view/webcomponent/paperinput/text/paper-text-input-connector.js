@@ -17,7 +17,7 @@
  * El nombre debe ser el prefijo de paquete reemplazando '.' por '_' seguido del
  * nombre de la clase de vaadin.
  */
-ast_unicore_view_webcomponent_paperinput_PaperInput = function() {
+ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	var connector = this;
 	var e = this.getElement();
 
@@ -42,7 +42,6 @@ ast_unicore_view_webcomponent_paperinput_PaperInput = function() {
 		component().disabled = this.getState().inputDisabled;
 	}
 
-	
 	/*
 	 * Agrego listener para eventos "change" de paper-input.
 	 */

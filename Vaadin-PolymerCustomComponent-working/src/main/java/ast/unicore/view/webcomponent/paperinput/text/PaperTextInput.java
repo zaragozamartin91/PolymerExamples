@@ -1,7 +1,11 @@
-package ast.unicore.view.webcomponent.paperinput;
+package ast.unicore.view.webcomponent.paperinput.text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ast.unicore.view.webcomponent.paperinput.InputValidator;
+import ast.unicore.view.webcomponent.paperinput.InvalidInputException;
+import ast.unicore.view.webcomponent.paperinput.PaperInputState;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractJavaScriptComponent;
@@ -18,8 +22,8 @@ import elemental.json.JsonArray;
  *
  */
 @SuppressWarnings("serial")
-@JavaScript({ "paper-input-connector.js" })
-public class PaperInput extends AbstractJavaScriptComponent {
+@JavaScript({ "paper-text-input-connector.js" })
+public class PaperTextInput extends AbstractJavaScriptComponent {
 	private List<InputValidator<String>> validators = new ArrayList<>();
 	private boolean defaultValidatorEnabled = false;
 
@@ -29,7 +33,7 @@ public class PaperInput extends AbstractJavaScriptComponent {
 	 * @param label
 	 *            Label del campo.
 	 */
-	public PaperInput(String label) {
+	public PaperTextInput(String label) {
 		getState().inputValue = "";
 		getState().inputLabel = label;
 
@@ -140,7 +144,7 @@ public class PaperInput extends AbstractJavaScriptComponent {
 	 *            Nuevo validador.
 	 * @return this.
 	 */
-	public PaperInput addValidator(InputValidator<String> newValidator) {
+	public PaperTextInput addValidator(InputValidator<String> newValidator) {
 		this.validators.add(newValidator);
 		return this;
 	}
@@ -176,7 +180,7 @@ public class PaperInput extends AbstractJavaScriptComponent {
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(PaperInput.class.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
+				System.out.println(PaperTextInput.class.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
 				getState().inputValue = arguments.getString(0);
 				getState().inputInvalid = arguments.getBoolean(1);
 			}

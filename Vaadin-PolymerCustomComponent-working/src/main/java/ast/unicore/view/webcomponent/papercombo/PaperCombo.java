@@ -1,4 +1,4 @@
-package ast.unicore.view.webcomponent.combo.paper;
+package ast.unicore.view.webcomponent.papercombo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * Crea un nuevo PaperCombo con un label.
 	 * 
 	 * @param label
-	 *            - Label del combo.
+	 *            Label del combo.
 	 */
 	public PaperCombo(String label) {
 		getState().dropLabel = label;
@@ -44,9 +44,9 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * Agrega un item al combo.
 	 * 
 	 * @param itemCaption
-	 *            - Clave/Caption del item.
+	 *            Clave/Caption del item.
 	 * @param item
-	 *            - Item propiamente dicho.
+	 *            Item propiamente dicho.
 	 */
 	public void addItem(String itemCaption, Object item) {
 		callFunction("addItem", itemCaption);
@@ -57,7 +57,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * Agrega un item al combo. El caption y el valor del item son el mismo.
 	 * 
 	 * @param itemCaption
-	 *            - Caption y valor del item.
+	 *            Caption y valor del item.
 	 */
 	public void addItem(String itemCaption) {
 		this.addItem(itemCaption, itemCaption);
@@ -76,7 +76,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * Establece el item seleccionado.
 	 * 
 	 * @param itemCaption
-	 *            - Caption del item a marcar como seleccionado.
+	 *            Caption del item a marcar como seleccionado.
 	 * @return this.
 	 */
 	public PaperCombo setSelected(String itemCaption) {
@@ -101,7 +101,6 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		}
 	}
 
-	
 	@Override
 	public void setEnabled(boolean isEnabled) {
 		super.setEnabled(isEnabled);
@@ -111,8 +110,9 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 
 	private void addHandleSelectedCallback() {
 		addFunction("handleSelected", new JavaScriptFunction() {
+			@Override
 			public void call(JsonArray arguments) {
-				System.out.println("calling PaperCombo#handleSelected with: " + arguments.getString(0));
+				System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected with: " + arguments.getString(0));
 				// getState().selectedLabel = arguments.getString(0);
 				selectedItemCaption = arguments.getString(0);
 			}

@@ -1,4 +1,4 @@
-package ast.unicore.view.webcomponent.combo.paper;
+package ast.unicore.view.webcomponent.papercombo;
 
 import com.vaadin.shared.ui.JavaScriptComponentState;
 
