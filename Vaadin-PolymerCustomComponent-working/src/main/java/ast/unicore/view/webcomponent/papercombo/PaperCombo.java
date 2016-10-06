@@ -12,7 +12,8 @@ import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
 
 /**
- * Componente de vaadin del lado del servidor representante del componente paper-dropdown-menu de polymer.
+ * Componente de vaadin del lado del servidor representante del componente
+ * paper-dropdown-menu de polymer.
  * 
  * @author martin.zaragoza
  *
@@ -49,8 +50,9 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Item propiamente dicho.
 	 */
 	public void addItem(String itemCaption, Object item) {
-		callFunction("addItem", itemCaption);
 		items.put(itemCaption, item);
+		getState().captions = items.keySet().toArray(new String[0]);
+		markAsDirty();
 	}
 
 	/**

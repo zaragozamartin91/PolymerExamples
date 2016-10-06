@@ -87,12 +87,14 @@ public class MyVaadinUI extends UI {
 				paperCombo.addItem("Claro", "Empresa de claro");
 				paperCombo.addItem("Movistar", "Empresa movistar");
 				paperCombo.addItem("Geotex", "Empresa geotex");
+//				paperCombo.setWidth("50%");
 
 				PaperCombo peopleCombo = new PaperCombo("PERSONAS");
 				peopleCombo.addItem("Martin");
-				layout.addComponent(peopleCombo);
 				peopleCombo.addItem("Mateo", "Hermano");
 				peopleCombo.addItem("Hector", "Padre");
+				layout.addComponent(peopleCombo);
+//				peopleCombo.setWidth("75%");
 
 				paperInput = new PaperTextInput("Nombre organizacion");
 				paperInput.setPattern("[a-zA-Z ]+");
@@ -100,7 +102,7 @@ public class MyVaadinUI extends UI {
 				paperInput.setRequired(true);
 				paperInput.setValue("ACCUSYS");
 				layout.addComponent(paperInput);
-				paperInput.setWidth("100%");
+				paperInput.setWidth("60%");
 				paperInput.enableDefaultClientComponentValidator();
 
 				PaperTextArea paperTextArea = new PaperTextArea("Descripcion empresa");
