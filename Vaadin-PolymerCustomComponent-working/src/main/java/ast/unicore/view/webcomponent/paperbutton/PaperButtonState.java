@@ -12,4 +12,5 @@ import com.vaadin.shared.ui.JavaScriptComponentState;
 public class PaperButtonState extends JavaScriptComponentState {
 	public String buttonLabel;
 	public Boolean buttonDisabled;
+	public String widthToSet = "";
 }

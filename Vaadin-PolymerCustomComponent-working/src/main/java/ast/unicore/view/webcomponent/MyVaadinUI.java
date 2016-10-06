@@ -96,7 +96,7 @@ public class MyVaadinUI extends UI {
 				peopleCombo.addItem("Mateo", "Hermano");
 				peopleCombo.addItem("Hector", "Padre");
 				layout.addComponent(peopleCombo);
-				peopleCombo.setWidth("75%");
+				peopleCombo.setWidth("100%");
 
 				paperInput = new PaperTextInput("Nombre organizacion");
 				paperInput.setPattern("[a-zA-Z ]+");
@@ -189,6 +189,7 @@ public class MyVaadinUI extends UI {
 		addComboItemButton.setWidth("100%");
 
 		layout.addComponent(comboStateButton);
+		comboStateButton.setWidth("75%");
 
 		layout.addComponent(addComponentsButton);
 		// addComponentsButton.setClickShortcut(KeyCode.ENTER);

@@ -1,6 +1,7 @@
 package ast.unicore.view.webcomponent.paperbutton;
 
 import com.vaadin.annotations.JavaScript;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -110,6 +111,23 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	 */
 	public void enable() {
 		setEnabled(true);
+	}
+
+	@Override
+	public void setHeight(float height, Unit unit) {
+		throw new UnsupportedOperationException("Operacion no soportada!");
+	}
+
+	@Override
+	public void setWidth(float width, Unit unit) {
+		super.setWidth(width, unit);
+		getState().widthToSet = "" + width + unit.getSymbol();
+		markAsDirty();
+	}
+
+	@Override
+	public void setHeight(String height) {
+		throw new UnsupportedOperationException("Operacion no soportada!");
 	}
 
 	private void addHandleClickCallback() {

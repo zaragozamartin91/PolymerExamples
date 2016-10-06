@@ -5,7 +5,6 @@
 //el.rel = "import";
 //el.href = "VAADIN/webcomponents/paper-textfield.html";
 //document.getElementsByTagName("head").item(0).appendChild(el);
-
 /*
  * La siguiente funcion representa el inicializador del componente de polymer.
  * El nombre debe ser el prefijo de paquete reemplazando '.' por '_' seguido del
@@ -20,16 +19,17 @@ ast_unicore_view_webcomponent_paperbutton_PaperButton = function() {
 	function component() {
 		return e.firstChild;
 	}
-	
+
 	this.onStateChange = function() {
-		console.log("Calling onStateChange!");
+		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#onStateChange");
 
 		component().disabled = this.getState().buttonDisabled;
 		component().innerHTML = this.getState().buttonLabel;
+		component().style.width = this.getState().widthToSet;
 	}
-	
+
 	component().addEventListener('click', function(e) {
-		console.log("CLICK EVENT TRIGGERED WITH:");
+		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#click:");
 		console.log(e);
 		console.log("calling connector.handleClick");
 		connector.handleClick();

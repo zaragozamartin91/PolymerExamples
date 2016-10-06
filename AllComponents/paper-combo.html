@@ -44,12 +44,18 @@
           reflectToAttribute: true
         },
       },
-      addItem: function(caption) {
-        var newItem = document.createElement('paper-item');
-        newItem.innerHTML = caption;
-        
-        console.log("Adding item: " + caption);
-        Polymer.dom(this.$.theList).appendChild(newItem);
+      setCaptions: function(captions) {
+    	  var self = this;
+    	  console.log("paper-combo#setCaptions: " + captions);
+    	  Polymer.dom(self.$.theList).innerHTML="";
+    	  
+    	  captions.forEach(function(caption){
+    		  var newItem = document.createElement('paper-item');
+    	      newItem.innerHTML = caption;
+    	        
+    	      console.log("Adding item: " + caption);
+    	      Polymer.dom(self.$.theList).appendChild(newItem);
+    	  });
       },
       handleSelect: function(e) {
         console.log("item selected!");

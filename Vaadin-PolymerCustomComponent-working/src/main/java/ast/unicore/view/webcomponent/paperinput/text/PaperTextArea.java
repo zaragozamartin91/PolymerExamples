@@ -14,7 +14,7 @@ import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
 
 /**
- * Componente de vaadin del lado del servidor representante del componente paper-input de polymer.
+ * Componente de vaadin del lado del servidor representante del componente paper-textarea de polymer.
  * 
  * @author martin.zaragoza
  * 
