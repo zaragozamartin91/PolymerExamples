@@ -8,8 +8,8 @@ public enum WebImport {
 	PAPER_DROPDOWN_MENU("VAADIN/webcomponents/bower_components/paper-dropdown-menu/paper-dropdown-menu.html"),
 	PAPER_COMBO("VAADIN/webcomponents/paper-combo.html"),
 	PAPER_BUTTON("VAADIN/webcomponents/bower_components/paper-button/paper-button.html"),
-	PAPER_AUTOCOMPLETE_INPUT("VAADIN/webcomponents/paper-autocomplete-input.html"),
-	PAPER_STYLES("VAADIN/webcomponents/bower_components/paper-styles/paper-styles.html");
+	PAPER_STYLES("VAADIN/webcomponents/bower_components/paper-styles/paper-styles.html"),
+	PAPER_TEXTAREA("VAADIN/webcomponents/bower_components/paper-input/paper-textarea.html");
 
 	public final String path;
 

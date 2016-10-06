@@ -32,7 +32,7 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	 * servidor.
 	 */
 	this.onStateChange = function() {
-		console.log("Calling onStateChange!");
+		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextInput#onStateChange");
 
 		component().value = this.getState().inputValue;
 		component().label = this.getState().inputLabel;

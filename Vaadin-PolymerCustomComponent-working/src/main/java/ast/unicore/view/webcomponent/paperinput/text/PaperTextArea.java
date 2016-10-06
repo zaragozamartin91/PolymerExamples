@@ -22,7 +22,7 @@ import elemental.json.JsonArray;
  *
  */
 @SuppressWarnings("serial")
-@JavaScript({ "paper-text-input-connector.js" })
+@JavaScript({ "paper-text-area-connector.js" })
 public class PaperTextArea extends AbstractJavaScriptComponent {
 	private List<InputValidator<String>> validators = new ArrayList<>();
 	private boolean defaultValidatorEnabled = false;

@@ -324,6 +324,11 @@ If you want to save it in bower.json file, remember to add flag --save
       // visual state or active behavior (measuring sizes, beginning animations,
       // loading resources, etc).
     },
+    
+    addLocalCandidate: function(candidate) {
+    	this.localCandidates = this.localCandidates || [];
+    	this.localCandidates.push(candidate);
+    },
 
     detached: function() {
       // The analog to `attached`, `detached` fires when the element has been
