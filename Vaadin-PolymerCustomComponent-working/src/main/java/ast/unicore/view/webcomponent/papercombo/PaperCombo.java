@@ -2,8 +2,6 @@ package ast.unicore.view.webcomponent.papercombo;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractJavaScriptComponent;
@@ -91,17 +89,17 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		throw new RuntimeException("El item " + itemCaption + " no pertenece al combo!");
 	}
 
-	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-
-		if (visible) {
-			Set<Entry<String, Object>> entries = items.entrySet();
-			for (Entry<String, Object> entry : entries) {
-				callFunction("addItem", entry.getKey());
-			}
-		}
-	}
+	// @Override
+	// public void setVisible(boolean visible) {
+	// super.setVisible(visible);
+	//
+	// if (visible) {
+	// Set<Entry<String, Object>> entries = items.entrySet();
+	// for (Entry<String, Object> entry : entries) {
+	// callFunction("addItem", entry.getKey());
+	// }
+	// }
+	// }
 
 	@Override
 	public void setEnabled(boolean isEnabled) {

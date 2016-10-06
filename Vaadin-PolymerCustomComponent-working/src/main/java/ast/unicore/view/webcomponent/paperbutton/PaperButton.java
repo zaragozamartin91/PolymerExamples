@@ -1,11 +1,9 @@
 package ast.unicore.view.webcomponent.paperbutton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractJavaScriptComponent;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.JavaScriptFunction;
 
 import elemental.json.JsonArray;
@@ -20,8 +18,8 @@ import elemental.json.JsonArray;
 @SuppressWarnings("serial")
 @JavaScript({ "paper-button-connector.js" })
 public final class PaperButton extends AbstractJavaScriptComponent {
-//	private Button wrappedButton = new Button();
-	
+	private Button wrappedButton = new Button();
+
 	/**
 	 * Manejador de eventos Click.
 	 * 
@@ -32,8 +30,6 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 		public abstract void buttonClick();
 	}
 
-	private List<ClickListener> listeners = new ArrayList<>();
-
 	/**
 	 * Crea un nuevo PaperButton con click listeners.
 	 * 
@@ -43,10 +39,13 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	 *            Listeners de evento click.
 	 */
 	public PaperButton(String label, ClickListener... clickListeners) {
+		wrappedButton.setEnabled(true);
 		getState().buttonLabel = label;
 
 		if (clickListeners != null && clickListeners.length > 0) {
-			listeners = Arrays.asList(clickListeners);
+			for (ClickListener clickListener : clickListeners) {
+				this.addClickListener(clickListener);
+			}
 		}
 
 		addHandleClickCallback();
@@ -59,10 +58,31 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	 *            clickListener a agregar.
 	 * @return this.
 	 */
-	public PaperButton addClickListener(ClickListener listener) {
-		listeners.add(listener);
+	public PaperButton addClickListener(final ClickListener listener) {
+		wrappedButton.addClickListener(new Button.ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				listener.buttonClick();
+			}
+		});
+
 		return this;
 	}
+
+	// FIXME : NO FUNCIONA.
+	// /**
+	// * Agrega un atajo de presion de boton.
+	// *
+	// * @param keyCode
+	// * Tecla a presionar.
+	// * @param modifiers
+	// * [the (optional) modifiers for invoking the shortcut, null for
+	// * none].
+	// *
+	// */
+	// public void setClickShortcut(int keyCode, int... modifiers) {
+	// wrappedButton.setClickShortcut(keyCode, modifiers);
+	// }
 
 	@Override
 	protected PaperButtonState getState() {
@@ -97,9 +117,7 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 			public void call(JsonArray arguments) {
 				System.out.println(PaperButton.class.getSimpleName() + "#handleClick");
 
-				for (ClickListener clickListener : listeners) {
-					clickListener.buttonClick();
-				}
+				wrappedButton.click();
 			}
 		});
 	}

@@ -18,9 +18,9 @@ import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
 
-import com.google.gwt.user.client.ui.TextArea;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.BootstrapFragmentResponse;
 import com.vaadin.server.BootstrapListener;
 import com.vaadin.server.BootstrapPageResponse;
@@ -28,7 +28,9 @@ import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -87,14 +89,14 @@ public class MyVaadinUI extends UI {
 				paperCombo.addItem("Claro", "Empresa de claro");
 				paperCombo.addItem("Movistar", "Empresa movistar");
 				paperCombo.addItem("Geotex", "Empresa geotex");
-//				paperCombo.setWidth("50%");
+				paperCombo.setWidth("50%");
 
 				PaperCombo peopleCombo = new PaperCombo("PERSONAS");
 				peopleCombo.addItem("Martin");
 				peopleCombo.addItem("Mateo", "Hermano");
 				peopleCombo.addItem("Hector", "Padre");
 				layout.addComponent(peopleCombo);
-//				peopleCombo.setWidth("75%");
+				peopleCombo.setWidth("75%");
 
 				paperInput = new PaperTextInput("Nombre organizacion");
 				paperInput.setPattern("[a-zA-Z ]+");
@@ -184,12 +186,27 @@ public class MyVaadinUI extends UI {
 		});
 
 		layout.addComponent(addComboItemButton);
+		addComboItemButton.setWidth("100%");
+
 		layout.addComponent(comboStateButton);
+
 		layout.addComponent(addComponentsButton);
+		// addComponentsButton.setClickShortcut(KeyCode.ENTER);
+
 		layout.addComponent(validateButton);
 		layout.addComponent(toggleVisible);
+
+		Button lameButton = new Button("LAME BUTTON", new Button.ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				Notification.show("LAME PRESSED!");
+			}
+		});
+		lameButton.setClickShortcut(KeyCode.ENTER);
+		layout.addComponent(lameButton);
+		lameButton.setVisible(false);
+
 		layout.addComponent(toggleEnabled);
-		// layout.addComponent(typeAheadValueButton);
 
 		layout.setSizeUndefined();
 		layout.setWidth("100%");
