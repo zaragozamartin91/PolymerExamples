@@ -62,9 +62,9 @@ public class MyVaadinUI extends UI {
 			}
 		});
 
-		addComponentsButton.addListener(new ClickListener() {
+		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
-			public void handleClick() {
+			public void buttonClick() {
 				// typeAheadInput = new
 				// PaperAutocompleteInput("Seleccione pais");
 				// typeAheadInput.addItem("Argentina");
@@ -126,7 +126,7 @@ public class MyVaadinUI extends UI {
 
 		final PaperButton addComboItemButton = new PaperButton("Agregar organizacion", new ClickListener() {
 			@Override
-			public void handleClick() {
+			public void buttonClick() {
 				// Notification.show(paperTextfield.getValue());
 				paperCombo.addItem(paperInput.getValue());
 			}
@@ -134,7 +134,7 @@ public class MyVaadinUI extends UI {
 
 		PaperButton comboStateButton = new PaperButton("Estado de Combo", new ClickListener() {
 			@Override
-			public void handleClick() {
+			public void buttonClick() {
 				Object value = paperCombo.getValue();
 				Notification.show(value == null ? "NOTHING" : value.toString());
 			}
@@ -142,7 +142,7 @@ public class MyVaadinUI extends UI {
 
 		PaperButton validateButton = new PaperButton("Validar", new ClickListener() {
 			@Override
-			public void handleClick() {
+			public void buttonClick() {
 				try {
 					paperInput.validate();
 					System.out.println("PaperInputDate value: " + paperInputDate.getValue());
@@ -163,7 +163,7 @@ public class MyVaadinUI extends UI {
 
 		PaperButton toggleVisible = new PaperButton("Cambiar visible", new ClickListener() {
 			@Override
-			public void handleClick() {
+			public void buttonClick() {
 				paperInput.setVisible(!paperInput.isVisible());
 				disabledInput.setVisible(!disabledInput.isVisible());
 				paperCombo.setVisible(!paperCombo.isVisible());
@@ -174,7 +174,7 @@ public class MyVaadinUI extends UI {
 
 		PaperButton toggleEnabled = new PaperButton("Cambiar habilitado", new ClickListener() {
 			@Override
-			public void handleClick() {
+			public void buttonClick() {
 				paperInput.setEnabled(!paperInput.isEnabled());
 				disabledInput.setEnabled(!disabledInput.isEnabled());
 				paperCombo.setEnabled(!paperCombo.isEnabled());
