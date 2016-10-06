@@ -3,6 +3,7 @@ package ast.unicore.view.webcomponent.paperautocomplete;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import com.vaadin.annotations.JavaScript;
@@ -58,8 +59,10 @@ public final class PaperAutocompleteInput extends AbstractJavaScriptComponent {
 	 * @return this.
 	 */
 	public PaperAutocompleteInput addItem(String itemCaption, Object item) {
-		callFunction("addItem", itemCaption);
 		items.put(itemCaption, item);
+		getState().localCandidates = items.keySet().toString().replace(Pattern.quote("["), "").replace(Pattern.quote("]"), "");
+		System.out.println("getState().localCandidates: " + getState().localCandidates);
+		markAsDirty();
 		return this;
 	}
 

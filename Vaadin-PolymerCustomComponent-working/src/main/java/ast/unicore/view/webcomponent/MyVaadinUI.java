@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import org.jsoup.nodes.Element;
 import org.vaadin.maddon.layouts.MVerticalLayout;
 
+import ast.unicore.view.webcomponent.imports.WebImport;
 import ast.unicore.view.webcomponent.paperautocomplete.PaperAutocompleteInput;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
@@ -63,6 +64,18 @@ public class MyVaadinUI extends UI {
 		addComponentsButton.addListener(new ClickListener() {
 			@Override
 			public void handleClick() {
+				typeAheadInput = new PaperAutocompleteInput("Seleccione pais");
+				typeAheadInput.addItem("Argentina");
+				typeAheadInput.addItem("Brasil");
+				typeAheadInput.addItem("Chile");
+				typeAheadInput.addItem("Peru");
+				typeAheadInput.addItem("Bolivia");
+				layout.addComponent(typeAheadInput);
+
+				PaperAutocompleteInput peopleAutocomplete = new PaperAutocompleteInput("Personas").addItem("martin", new Person("martin", 1234))
+						.addItem("exe", new Person("exe", 45678)).addItem("julio", new Person("julio", 9654));
+				layout.addComponent(peopleAutocomplete);
+
 				paperInput = new PaperTextInput("Nombre organizacion");
 				paperInput.setPattern("[a-zA-Z ]+");
 				paperInput.setErrorMessage("Nombre de organizacion invalido!");
@@ -90,28 +103,6 @@ public class MyVaadinUI extends UI {
 				paperCombo.addItem("Movistar", "Empresa movistar");
 				paperCombo.addItem("Geotex", "Empresa geotex");
 
-				typeAheadInput = new PaperAutocompleteInput("Seleccione pais");
-				typeAheadInput.addItem("Argentina");
-				typeAheadInput.addItem("Brasil");
-				typeAheadInput.addItem("Chile");
-				typeAheadInput.addItem("Peru");
-				typeAheadInput.addItem("Bolivia");
-				layout.addComponent(typeAheadInput);
-
-				// vaadinComboBox = new VaadinComboBox("Empleado");
-				// vaadinComboBox.addItem("Martin");
-				// vaadinComboBox.addItem("Facundo");
-				// vaadinComboBox.addItem("Rolando", "Desarrollador web");
-				// layout.addComponent(vaadinComboBox);
-
-				// try {
-				// paperVaadCalendar = new
-				// PaperVaadCalendar().date("2016/06/01").locale("es").headingFormat("ddd, D MMM").minDate("2016/05/25")
-				// .maxDate("2016/07/17").responsiveWidth(560);
-				// layout.addComponent(paperVaadCalendar);
-				// } catch (ParseException e) {
-				// e.printStackTrace();
-				// }
 			}
 		});
 
@@ -247,62 +238,24 @@ public class MyVaadinUI extends UI {
 				head.appendChild(link);
 			}
 
-			{
+			WebImport[] webImports = WebImport.values();
+			for (WebImport webImport : webImports) {
 				Element link = response.getDocument().createElement("link");
 				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/bower_components/paper-input/paper-input.html");
+				link.attr("href", webImport.path);
 				head.appendChild(link);
 			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/bower_components/paper-item/paper-item.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/bower_components/paper-listbox/paper-listbox.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/bower_components/paper-dropdown-menu/paper-dropdown-menu.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/paper-combo.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/bower_components/paper-button/paper-button.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/paper-autocomplete-input.html");
-				head.appendChild(link);
-			}
-
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "import");
-				link.attr("href", "VAADIN/webcomponents/bower_components/paper-styles/paper-styles.html");
-				head.appendChild(link);
-			}
-
 		}
 	};
+
+	static class Person {
+		public final String name;
+		public final int id;
+
+		public Person(String name, int id) {
+			super();
+			this.name = name;
+			this.id = id;
+		}
+	}
 }

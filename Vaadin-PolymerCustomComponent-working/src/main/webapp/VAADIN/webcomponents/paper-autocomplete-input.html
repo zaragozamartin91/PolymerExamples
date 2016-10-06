@@ -73,7 +73,7 @@ If you want to save it in bower.json file, remember to add flag --save
     </template>
 
    <div style="position:relative;">
-    <paper-input value="{{inputValue}}" on-keyup="_keyup" on-keydown="_keydown"  label="{{placeholder}}"
+    <paper-input value="{{inputValue}}" on-keyup="_keyup" on-keydown="_keydown" label="{{placeholder}}"
       always-float-label="{{alwaysFloatLabel}}"
       autofocus="{{autofocus}}"
       char-counter="{{charCounter}}"
@@ -449,7 +449,7 @@ If you want to save it in bower.json file, remember to add flag --save
             this.fire('pt-item-confirmed',{selectedItem: selectedItem});
           }
         } 
-      } else if (e.which == 13){
+      } else if (e.which == 13) {
         // esc
         return this._suggestions = [];
       } else {
@@ -558,7 +558,8 @@ If you want to save it in bower.json file, remember to add flag --save
       else{
         this._suggestions = matched;
       }
-    }
+    },
+
 
   });
 
