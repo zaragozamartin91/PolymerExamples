@@ -6,8 +6,9 @@
 <dom-module id="paper-combo">
   <!-- Defines the element's style and local DOM -->
   <style>
-  	--paper-dropdown-menu-input {
-  		width: 100%;
+	paper-dropdown-menu {
+	    /* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
+	    width: 100%;
   	}
   </style>
   
@@ -51,17 +52,21 @@
         },
       },
       setCaptions: function(captions) {
-    	  var self = this;
-    	  console.log("paper-combo#setCaptions: " + captions);
-    	  Polymer.dom(self.$.theList).innerHTML="";
-    	  
-    	  captions.forEach(function(caption){
-    		  var newItem = document.createElement('paper-item');
-    	      newItem.innerHTML = caption;
-    	        
-    	      console.log("Adding item: " + caption);
-    	      Polymer.dom(self.$.theList).appendChild(newItem);
-    	  });
+	   	  var self = this;
+	   	  console.log("paper-combo#setCaptions: " + captions);
+	   	  Polymer.dom(self.$.theList).innerHTML="";
+	   	  
+	   	  captions.forEach(function(caption){
+	   		  var newItem = document.createElement('paper-item');
+	   	      newItem.innerHTML = caption;
+	   	        
+	   	      console.log("paper-combo::adding item: " + caption);
+	   	      Polymer.dom(self.$.theList).appendChild(newItem);
+	   	  });
+      },
+      empty: function() {
+      	var self = this;
+	   	Polymer.dom(self.$.theList).innerHTML="";
       },
       handleSelect: function(e) {
         console.log("item selected!");

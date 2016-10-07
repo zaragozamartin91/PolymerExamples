@@ -67,36 +67,20 @@ public class MyVaadinUI extends UI {
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
-				// typeAheadInput = new
-				// PaperAutocompleteInput("Seleccione pais");
-				// typeAheadInput.addItem("Argentina");
-				// typeAheadInput.addItem("Brasil");
-				// typeAheadInput.addItem("Chile");
-				// typeAheadInput.addItem("Peru");
-				// typeAheadInput.addItem("Bolivia");
-				// layout.addComponent(typeAheadInput);
-				//
-				// PaperAutocompleteInput peopleAutocomplete = new
-				// PaperAutocompleteInput("Personas")
-				// .addItem("martin", new Person("martin", 1234)).addItem("exe",
-				// new Person("exe", 45678))
-				// .addItem("julio", new Person("julio", 9654));
-				// layout.addComponent(peopleAutocomplete);
-
 				paperCombo = new PaperCombo("Organizaciones");
 				layout.addComponent(paperCombo);
 				paperCombo.addItem("Macro");
 				paperCombo.addItem("Claro", "Empresa de claro");
 				paperCombo.addItem("Movistar", "Empresa movistar");
 				paperCombo.addItem("Geotex", "Empresa geotex");
-				paperCombo.setWidth("50%");
+				paperCombo.setWidth("100%");
 
 				PaperCombo peopleCombo = new PaperCombo("PERSONAS");
 				peopleCombo.addItem("Martin");
 				peopleCombo.addItem("Mateo", "Hermano");
 				peopleCombo.addItem("Hector", "Padre");
 				layout.addComponent(peopleCombo);
-				peopleCombo.setWidth("100%");
+				peopleCombo.setWidth("50%");
 
 				paperInput = new PaperTextInput("Nombre organizacion");
 				paperInput.setPattern("[a-zA-Z ]+");
@@ -154,23 +138,12 @@ public class MyVaadinUI extends UI {
 			}
 		});
 
-		// PaperButton typeAheadValueButton = new
-		// PaperButton("Valor de typeAhead", new ClickListener() {
-		// @Override
-		// public void handleClick() {
-		// Object value = typeAheadInput.getValue();
-		// Notification.show(value == null ? "NOTHING" : value.toString());
-		// }
-		// });
-
 		PaperButton toggleVisible = new PaperButton("Cambiar visible", new ClickListener() {
 			@Override
 			public void buttonClick() {
 				paperInput.setVisible(!paperInput.isVisible());
 				disabledInput.setVisible(!disabledInput.isVisible());
 				paperCombo.setVisible(!paperCombo.isVisible());
-				// paperVaadCalendar.setVisible(!paperVaadCalendar.isVisible());
-				// typeAheadInput.setVisible(!typeAheadInput.isVisible());
 			}
 		});
 
@@ -180,8 +153,6 @@ public class MyVaadinUI extends UI {
 				paperInput.setEnabled(!paperInput.isEnabled());
 				disabledInput.setEnabled(!disabledInput.isEnabled());
 				paperCombo.setEnabled(!paperCombo.isEnabled());
-				// paperVaadCalendar.setEnabled(!paperVaadCalendar.isEnabled());
-				// typeAheadInput.setEnabled(!typeAheadInput.isEnabled());
 			}
 		});
 
@@ -209,6 +180,13 @@ public class MyVaadinUI extends UI {
 
 		layout.addComponent(toggleEnabled);
 
+		// new PaperButton("LIMPIAR COMBO", new ClickListener() {
+		// @Override
+		// public void buttonClick() {
+		// paperCombo.
+		// }
+		// });
+
 		layout.setSizeUndefined();
 		layout.setWidth("100%");
 		layout.setMargin(true);
@@ -234,8 +212,7 @@ public class MyVaadinUI extends UI {
 	/**
 	 * This injects polymer.js and es6 support polyfils directly into host page.
 	 *
-	 * Better compatibility and good approach if you have multiple webcomponents
-	 * in the app.
+	 * Better compatibility and good approach if you have multiple webcomponents in the app.
 	 */
 	public static BootstrapListener polymerInjector = new BootstrapListener() {
 

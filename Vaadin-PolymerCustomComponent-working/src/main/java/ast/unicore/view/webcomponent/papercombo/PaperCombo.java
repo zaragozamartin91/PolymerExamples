@@ -10,8 +10,7 @@ import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
 
 /**
- * Componente de vaadin del lado del servidor representante del componente
- * paper-dropdown-menu de polymer.
+ * Componente de vaadin del lado del servidor representante del componente paper-dropdown-menu de polymer.
  * 
  * @author martin.zaragoza
  *
@@ -89,18 +88,6 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		throw new RuntimeException("El item " + itemCaption + " no pertenece al combo!");
 	}
 
-	// @Override
-	// public void setVisible(boolean visible) {
-	// super.setVisible(visible);
-	//
-	// if (visible) {
-	// Set<Entry<String, Object>> entries = items.entrySet();
-	// for (Entry<String, Object> entry : entries) {
-	// callFunction("addItem", entry.getKey());
-	// }
-	// }
-	// }
-
 	@Override
 	public void setEnabled(boolean isEnabled) {
 		super.setEnabled(isEnabled);
@@ -112,7 +99,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		addFunction("handleSelected", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected with: " + arguments.getString(0));
+				System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
 				// getState().selectedLabel = arguments.getString(0);
 				selectedItemCaption = arguments.getString(0);
 			}
