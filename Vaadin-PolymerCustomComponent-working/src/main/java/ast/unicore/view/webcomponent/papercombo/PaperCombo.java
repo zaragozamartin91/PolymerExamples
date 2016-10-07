@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.vaadin.annotations.JavaScript;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
+import com.vaadin.ui.TextField;
 
 import elemental.json.JsonArray;
 
@@ -18,6 +21,11 @@ import elemental.json.JsonArray;
 @SuppressWarnings("serial")
 @JavaScript({ "paper-combo-connector.js" })
 public final class PaperCombo extends AbstractJavaScriptComponent {
+	/**
+	 * TextField utilizado para trabajar facilmente con los ValueChange.
+	 */
+	private TextField wrappedField = new TextField();
+
 	private String selectedItemCaption;
 	private Map<String, Object> items;
 
@@ -83,7 +91,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 */
 	public PaperCombo setSelected(String itemCaption) {
 		if (items.keySet().contains(itemCaption)) {
-			this.selectedItemCaption = itemCaption;
+			setSelectedItemCaption(itemCaption);
 			getState().selectedLabel = itemCaption;
 			return this;
 		}
@@ -108,12 +116,50 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		markAsDirty();
 	}
 
+	/**
+	 * Listener de cambio de valor.
+	 * 
+	 * @author martin.zaragoza
+	 *
+	 * @param <DataType>
+	 *            Tipo de dato del valor del item seleccionado.
+	 */
+	public static interface ValueChangeListener<DataType> {
+		/**
+		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo.
+		 * 
+		 * @param selectedItemCaption
+		 *            Caption del item seleccionado.
+		 * @param selectedItemValue
+		 *            Valor del item seleccionado.
+		 */
+		void valueChange(String selectedItemCaption, DataType selectedItemValue);
+	}
+
+	/**
+	 * Agrega un listener de cambio de valor.
+	 * 
+	 * @param valueChangeListener
+	 *            Listener de cambio de valor.
+	 * @param <DataType>
+	 *            Tipo de dato contenido en el Combo.
+	 */
+	@SuppressWarnings("unchecked")
+	public <DataType> void addValueChangeListener(final ValueChangeListener<DataType> valueChangeListener) {
+		wrappedField.addValueChangeListener(new Property.ValueChangeListener() {
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				valueChangeListener.valueChange(selectedItemCaption, (DataType) getValue());
+			}
+		});
+	}
+
 	private void addHandleSelectedCallback() {
 		addFunction("handleSelected", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
 				System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
-				selectedItemCaption = arguments.getString(0);
+				setSelectedItemCaption(arguments.getString(0));
 			}
 		});
 	}
@@ -123,6 +169,11 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	private void resetSelectedCaption() {
-		selectedItemCaption = "";
+		setSelectedItemCaption("");
+	}
+
+	private void setSelectedItemCaption(String caption) {
+		selectedItemCaption = caption;
+		wrappedField.setValue(caption);
 	}
 }

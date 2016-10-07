@@ -20,6 +20,8 @@ import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.BootstrapFragmentResponse;
 import com.vaadin.server.BootstrapListener;
@@ -30,6 +32,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
@@ -76,6 +79,13 @@ public class MyVaadinUI extends UI {
 				organizationCombo.addItem("Movistar", "Empresa movistar");
 				organizationCombo.addItem("Geotex", "Empresa geotex");
 				organizationCombo.setWidth("100%");
+				PaperCombo.ValueChangeListener<String> comboValueChangeListener = new PaperCombo.ValueChangeListener<String>() {
+					@Override
+					public void valueChange(String caption, String value) {
+						Notification.show(caption + " seleccionado. Valor: " + value);
+					}
+				};
+				organizationCombo.addValueChangeListener(comboValueChangeListener);
 
 				peopleCombo = new PaperCombo("PERSONAS");
 				peopleCombo.addItem("Martin");
@@ -83,6 +93,7 @@ public class MyVaadinUI extends UI {
 				peopleCombo.addItem("Hector", "Padre");
 				layout.addComponent(peopleCombo);
 				peopleCombo.setWidth("50%");
+				peopleCombo.addValueChangeListener(comboValueChangeListener);
 
 				organizationInput = new PaperTextInput("Nombre organizacion");
 				organizationInput.setPattern("[a-zA-Z ]+");
@@ -190,6 +201,15 @@ public class MyVaadinUI extends UI {
 			}
 		});
 		layout.addComponent(clearCombosButton);
+
+		TextField textField = new TextField("LAME");
+		textField.addValueChangeListener(new ValueChangeListener() {
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				System.out.println("LAME CHANGED VALUE!");
+			}
+		});
+		textField.setValue("NEW VALUE");
 
 		layout.setSizeUndefined();
 		layout.setWidth("100%");
