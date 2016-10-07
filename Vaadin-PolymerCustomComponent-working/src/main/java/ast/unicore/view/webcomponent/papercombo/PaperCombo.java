@@ -18,8 +18,8 @@ import elemental.json.JsonArray;
 @SuppressWarnings("serial")
 @JavaScript({ "paper-combo-connector.js" })
 public final class PaperCombo extends AbstractJavaScriptComponent {
-	private String selectedItemCaption = "";
-	private Map<String, Object> items = new HashMap<>();
+	private String selectedItemCaption;
+	private Map<String, Object> items;
 
 	/**
 	 * Crea un nuevo PaperCombo con un label.
@@ -28,6 +28,9 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Label del combo.
 	 */
 	public PaperCombo(String label) {
+		resetItems();
+		resetSelectedCaption();
+
 		getState().dropLabel = label;
 
 		addHandleSelectedCallback();
@@ -63,7 +66,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	/**
-	 * Obtiene el valor seleccionado en el combo.
+	 * Obtiene el valor seleccionado en el combo, Null si no existe valor seleccionado.
 	 * 
 	 * @return valor seleccionado en el combo.
 	 */
@@ -88,6 +91,16 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		throw new RuntimeException("El item " + itemCaption + " no pertenece al combo!");
 	}
 
+	/**
+	 * Vacía las opciones del combo.
+	 */
+	public void empty() {
+		resetItems();
+		resetSelectedCaption();
+		getState().captions = new String[] {};
+		markAsDirty();
+	}
+
 	@Override
 	public void setEnabled(boolean isEnabled) {
 		super.setEnabled(isEnabled);
@@ -100,9 +113,16 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 			@Override
 			public void call(JsonArray arguments) {
 				System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
-				// getState().selectedLabel = arguments.getString(0);
 				selectedItemCaption = arguments.getString(0);
 			}
 		});
+	}
+
+	private void resetItems() {
+		items = new HashMap<>();
+	}
+
+	private void resetSelectedCaption() {
+		selectedItemCaption = "";
 	}
 }

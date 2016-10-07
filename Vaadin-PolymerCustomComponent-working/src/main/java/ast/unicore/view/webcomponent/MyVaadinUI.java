@@ -40,11 +40,12 @@ import com.vaadin.ui.VerticalLayout;
 public class MyVaadinUI extends UI {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-	private PaperTextInput paperInput;
+	private PaperTextInput organizationInput;
 	private PaperDateInput paperInputDate;
-	private PaperCombo paperCombo;
+	private PaperCombo organizationCombo;
 	// private PaperVaadCalendar paperVaadCalendar;
 	private PaperTextInput disabledInput;
+	private PaperCombo peopleCombo;
 
 	// private PaperAutocompleteInput typeAheadInput;
 
@@ -65,31 +66,32 @@ public class MyVaadinUI extends UI {
 		});
 
 		addComponentsButton.addClickListener(new ClickListener() {
+
 			@Override
 			public void buttonClick() {
-				paperCombo = new PaperCombo("Organizaciones");
-				layout.addComponent(paperCombo);
-				paperCombo.addItem("Macro");
-				paperCombo.addItem("Claro", "Empresa de claro");
-				paperCombo.addItem("Movistar", "Empresa movistar");
-				paperCombo.addItem("Geotex", "Empresa geotex");
-				paperCombo.setWidth("100%");
+				organizationCombo = new PaperCombo("Organizaciones");
+				layout.addComponent(organizationCombo);
+				organizationCombo.addItem("Macro");
+				organizationCombo.addItem("Claro", "Empresa de claro");
+				organizationCombo.addItem("Movistar", "Empresa movistar");
+				organizationCombo.addItem("Geotex", "Empresa geotex");
+				organizationCombo.setWidth("100%");
 
-				PaperCombo peopleCombo = new PaperCombo("PERSONAS");
+				peopleCombo = new PaperCombo("PERSONAS");
 				peopleCombo.addItem("Martin");
 				peopleCombo.addItem("Mateo", "Hermano");
 				peopleCombo.addItem("Hector", "Padre");
 				layout.addComponent(peopleCombo);
 				peopleCombo.setWidth("50%");
 
-				paperInput = new PaperTextInput("Nombre organizacion");
-				paperInput.setPattern("[a-zA-Z ]+");
-				paperInput.setErrorMessage("Nombre de organizacion invalido!");
-				paperInput.setRequired(true);
-				paperInput.setValue("ACCUSYS");
-				layout.addComponent(paperInput);
-				paperInput.setWidth("60%");
-				paperInput.enableDefaultClientComponentValidator();
+				organizationInput = new PaperTextInput("Nombre organizacion");
+				organizationInput.setPattern("[a-zA-Z ]+");
+				organizationInput.setErrorMessage("Nombre de organizacion invalido!");
+				organizationInput.setRequired(true);
+				organizationInput.setValue("ACCUSYS");
+				layout.addComponent(organizationInput);
+				organizationInput.setWidth("60%");
+				organizationInput.enableDefaultClientComponentValidator();
 
 				PaperTextArea paperTextArea = new PaperTextArea("Descripcion empresa");
 				paperTextArea.setWidth("100%");
@@ -114,14 +116,14 @@ public class MyVaadinUI extends UI {
 			@Override
 			public void buttonClick() {
 				// Notification.show(paperTextfield.getValue());
-				paperCombo.addItem(paperInput.getValue());
+				organizationCombo.addItem(organizationInput.getValue());
 			}
 		});
 
 		PaperButton comboStateButton = new PaperButton("Estado de Combo", new ClickListener() {
 			@Override
 			public void buttonClick() {
-				Object value = paperCombo.getValue();
+				Object value = organizationCombo.getValue();
 				Notification.show(value == null ? "NOTHING" : value.toString());
 			}
 		});
@@ -130,7 +132,7 @@ public class MyVaadinUI extends UI {
 			@Override
 			public void buttonClick() {
 				try {
-					paperInput.validate();
+					organizationInput.validate();
 					System.out.println("PaperInputDate value: " + paperInputDate.getValue());
 				} catch (InvalidInputException e) {
 					Notification.show("Contenido invalido::" + e.getMessage(), Type.ERROR_MESSAGE);
@@ -141,18 +143,18 @@ public class MyVaadinUI extends UI {
 		PaperButton toggleVisible = new PaperButton("Cambiar visible", new ClickListener() {
 			@Override
 			public void buttonClick() {
-				paperInput.setVisible(!paperInput.isVisible());
+				organizationInput.setVisible(!organizationInput.isVisible());
 				disabledInput.setVisible(!disabledInput.isVisible());
-				paperCombo.setVisible(!paperCombo.isVisible());
+				organizationCombo.setVisible(!organizationCombo.isVisible());
 			}
 		});
 
 		PaperButton toggleEnabled = new PaperButton("Cambiar habilitado", new ClickListener() {
 			@Override
 			public void buttonClick() {
-				paperInput.setEnabled(!paperInput.isEnabled());
+				organizationInput.setEnabled(!organizationInput.isEnabled());
 				disabledInput.setEnabled(!disabledInput.isEnabled());
-				paperCombo.setEnabled(!paperCombo.isEnabled());
+				organizationCombo.setEnabled(!organizationCombo.isEnabled());
 			}
 		});
 
@@ -180,12 +182,14 @@ public class MyVaadinUI extends UI {
 
 		layout.addComponent(toggleEnabled);
 
-		// new PaperButton("LIMPIAR COMBO", new ClickListener() {
-		// @Override
-		// public void buttonClick() {
-		// paperCombo.
-		// }
-		// });
+		PaperButton clearCombosButton = new PaperButton("LIMPIAR COMBO", new ClickListener() {
+			@Override
+			public void buttonClick() {
+				organizationCombo.empty();
+				peopleCombo.empty();
+			}
+		});
+		layout.addComponent(clearCombosButton);
 
 		layout.setSizeUndefined();
 		layout.setWidth("100%");

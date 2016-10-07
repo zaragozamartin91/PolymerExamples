@@ -21,10 +21,6 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		component().setCaptions(this.getState().captions);
 	}
 
-	this.addItem = function(caption) {
-		component().addItem(caption);
-	};
-
 	/*
 	 * Agrego listener para eventos "selected" de paper-input.
 	 */
