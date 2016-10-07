@@ -1,4 +1,4 @@
-package ast.unicore.view.webcomponent;
+package mainapp;
 
 import java.text.DateFormat;
 import java.text.ParseException;
