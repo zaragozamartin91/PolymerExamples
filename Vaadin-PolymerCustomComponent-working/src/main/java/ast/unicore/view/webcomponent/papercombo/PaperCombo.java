@@ -58,19 +58,23 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Item propiamente dicho.
 	 */
 	public void addItem(String itemCaption, Object item) {
+		if (items.containsKey(itemCaption)) {
+			throw new DuplicateItemException("La clave " + itemCaption + " ya esta contenida dentro del combo!");
+		}
+
 		items.put(itemCaption, item);
 		getState().captions = items.keySet().toArray(new String[0]);
 		markAsDirty();
 	}
 
 	/**
-	 * Agrega un item al combo. El caption y el valor del item son el mismo.
+	 * Agrega un item al combo. El caption se tomara como el {@link Object#toString()} del item a agregar.
 	 * 
-	 * @param itemCaption
-	 *            Caption y valor del item.
+	 * @param item
+	 *            Item a agregar.
 	 */
-	public void addItem(String itemCaption) {
-		this.addItem(itemCaption, itemCaption);
+	public void addItem(Object item) {
+		this.addItem(item.toString(), item);
 	}
 
 	/**
@@ -83,6 +87,8 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	/**
+	 * FIXME : NO MARCA AL ITEM COMO SELECCIONADO EN LA PARTE DEL CLIENTE.
+	 * 
 	 * Establece el item seleccionado.
 	 * 
 	 * @param itemCaption

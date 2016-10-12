@@ -86,6 +86,7 @@ public class MyVaadinUI extends UI {
 					}
 				};
 				organizationCombo.addValueChangeListener(comboValueChangeListener);
+				organizationCombo.setSelected("Geotex");
 
 				peopleCombo = new PaperCombo("PERSONAS");
 				peopleCombo.addItem("Martin");
