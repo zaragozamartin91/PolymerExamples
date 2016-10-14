@@ -19,6 +19,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		component().dropLabel = this.getState().dropLabel;
 		component().dropDisabled = this.getState().dropDisabled;
 		component().setCaptions(this.getState().captions);
+		component().setSelected(this.getState().selectedLabel);
 	}
 
 	/*

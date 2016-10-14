@@ -4,17 +4,23 @@
 <link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <dom-module id="paper-combo">
-  <!-- Defines the element's style and local DOM -->
+  <style>
+  paper-dropdown-menu {
+      /* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
+      width: 100%;
+    }
+  </style>
+  
   <template>
     <paper-dropdown-menu 
-    	id="theDrop" 
-    	required={{dropRequired}} 
-    	label={{dropLabel}} 
-    	disabled="{{dropDisabled}}"
-    	on-iron-select="handleSelect" >
+      id="theDrop" 
+      required={{dropRequired}} 
+      label={{dropLabel}} 
+      disabled="{{dropDisabled}}"
+      on-iron-select="handleSelect" >
       
-      	<paper-listbox id="theList" class="dropdown-content"></paper-listbox>
-      	
+        <paper-listbox id="theList" class="dropdown-content"></paper-listbox>
+        
     </paper-dropdown-menu>
   </template>
 
@@ -26,6 +32,8 @@
         dropLabel: {
           type:String,
           value:"",
+          notify: true,
+          reflectToAttribute: true
         },
         dropRequired: {
           type: Boolean,
@@ -34,8 +42,8 @@
           reflectToAttribute: true
         },
         selectedLabel:  {
-        	type:String,
-        	value: ""
+          type:String,
+          value: ""
         },
         dropDisabled: {
           type: Boolean,
@@ -43,27 +51,37 @@
           notify: true,
           reflectToAttribute: true
         },
+        captions: {
+          type: Array
+        }
       },
       setCaptions: function(captions) {
-    	  var self = this;
-    	  console.log("paper-combo#setCaptions: " + captions);
-    	  Polymer.dom(self.$.theList).innerHTML="";
-    	  
-    	  captions.forEach(function(caption){
-    		  var newItem = document.createElement('paper-item');
-    	      newItem.innerHTML = caption;
-    	        
-    	      console.log("Adding item: " + caption);
-    	      Polymer.dom(self.$.theList).appendChild(newItem);
-    	  });
+        this.captions = captions;
+        var self = this;
+        console.log("paper-combo#setCaptions: " + captions);
+        Polymer.dom(self.$.theList).innerHTML="";
+        
+        captions.forEach(function(caption){
+          var newItem = document.createElement('paper-item');
+            newItem.innerHTML = caption;
+              
+            console.log("paper-combo::adding item: " + caption);
+            Polymer.dom(self.$.theList).appendChild(newItem);
+        });
+      },
+      setSelected: function(caption) {
+        var index = this.captions.indexOf(caption);
+        this.$.theList.selected = index;
+      },
+      setVoid: function() {
+        this.$.theList.selected = undefined;
       },
       handleSelect: function(e) {
-        console.log("item selected!");
-        console.log(e);
-        console.log(e.target);
+        console.log("paper-combo#handleSelect");
         this.selectedLabel = this.$.theDrop.selectedItemLabel;
         
         console.log("this.$.theDrop.selectedItemLabel: " + this.$.theDrop.selectedItemLabel);
+        console.log("this.$.theList.selected: " + this.$.theList.selected);
         
         this.fire('selected',{ selected:this.selectedLabel });
       }
