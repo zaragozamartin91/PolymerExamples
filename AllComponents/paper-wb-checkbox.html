@@ -1,0 +1,47 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+
+<dom-module id="paper-wb-checkbox">
+  <style>
+  </style>
+  
+  <template>
+    <paper-checkbox id="checkbox" checked="{{checked}}" on-iron-change="handleIronChange">{{label}}</paper-checkbox>
+  </template>
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'paper-wb-checkbox',
+      properties: {
+        label: {
+          type:String,
+          notify: true,
+          reflectToAttribute: true
+        },
+        checked: {
+          type:Boolean,
+          notify: true,
+          reflectToAttribute: true
+        },
+      },
+
+      /*ready: function() {
+        console.log('paper-wb-checkbox#ready:');
+        this.label = this.label || "";
+        this.setLabel(this.label);
+      },
+      setLabel: function(newLabel) {
+        var checkbox = this.$$('#checkbox');
+        this.label = newLabel;
+        Polymer.dom(checkbox).innerHTML = this.label;
+      },*/
+
+      handleIronChange: function(e) {
+        console.log("paper-wb-checkbox#handleIronChange");
+        this.fire('change',{checked:this.checked});
+      }
+    });
+  </script>
+
+</dom-module>

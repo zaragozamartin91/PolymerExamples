@@ -13,6 +13,10 @@
     <link rel="import" href="bower_components/paper-button/paper-button.html">
     <link rel="import" href="paper-autocomplete-input.html">
     <link rel="import" href="bower_components/paper-styles/paper-styles.html">
+
+    <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+    <link rel="import" href="paper-wb-checkbox.html">
+
   </head>
   <body>
     <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!" ></paper-input>
@@ -30,5 +34,11 @@
     max-suggestions="4" ></paper-autocomplete-input>
 
     <paper-combo drop-label="People"></paper-combo>
+    <br/>
+
+    <paper-checkbox checked="checked"> single</paper-checkbox>
+    <paper-checkbox > married</paper-checkbox>
+
+    <paper-wb-checkbox label="CASADO" checked></paper-wb-checkbox>
   </body>
 </html>
