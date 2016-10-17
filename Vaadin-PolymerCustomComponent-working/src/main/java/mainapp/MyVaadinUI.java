@@ -132,11 +132,11 @@ public class MyVaadinUI extends UI {
 			}
 		});
 
-		PaperButton comboStateButton = new PaperButton("Estado de Combo", new ClickListener() {
+		PaperButton comboStateButton = new PaperButton("PaperCombo#getValue()", new ClickListener() {
 			@Override
 			public void buttonClick() {
-				Object value = organizationCombo.getValue();
-				Notification.show(value == null ? "NOTHING" : value.toString());
+				String value = organizationCombo.getValue();
+				Notification.show(value == null ? "NOTHING" : value);
 			}
 		});
 
@@ -194,7 +194,7 @@ public class MyVaadinUI extends UI {
 
 		layout.addComponent(toggleEnabled);
 
-		PaperButton clearCombosButton = new PaperButton("LIMPIAR COMBO", new ClickListener() {
+		PaperButton clearCombosButton = new PaperButton("PaperCombo#empty()", new ClickListener() {
 			@Override
 			public void buttonClick() {
 				organizationCombo.empty();
@@ -203,14 +203,22 @@ public class MyVaadinUI extends UI {
 		});
 		layout.addComponent(clearCombosButton);
 
-		TextField textField = new TextField("LAME");
-		textField.addValueChangeListener(new ValueChangeListener() {
+		// TextField textField = new TextField("LAME");
+		// textField.addValueChangeListener(new ValueChangeListener() {
+		// @Override
+		// public void valueChange(ValueChangeEvent event) {
+		// System.out.println("LAME CHANGED VALUE!");
+		// }
+		// });
+		// textField.setValue("NEW VALUE");
+
+		layout.addComponent(new PaperButton("PaperCombo#clear()", new ClickListener() {
 			@Override
-			public void valueChange(ValueChangeEvent event) {
-				System.out.println("LAME CHANGED VALUE!");
+			public void buttonClick() {
+				organizationCombo.clear();
+				peopleCombo.clear();
 			}
-		});
-		textField.setValue("NEW VALUE");
+		}));
 
 		layout.setSizeUndefined();
 		layout.setWidth("100%");

@@ -57,7 +57,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @param item
 	 *            Item propiamente dicho.
 	 */
-	public void addItem(String itemCaption, Object item) {
+	public PaperCombo addItem(String itemCaption, Object item) {
 		if (items.containsKey(itemCaption)) {
 			throw new DuplicateItemException("La clave " + itemCaption + " ya esta contenida dentro del combo!");
 		}
@@ -65,6 +65,8 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		items.put(itemCaption, item);
 		getState().captions = items.keySet().toArray(new String[0]);
 		markAsDirty();
+
+		return this;
 	}
 
 	/**
@@ -73,8 +75,9 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @param item
 	 *            Item a agregar.
 	 */
-	public void addItem(Object item) {
+	public PaperCombo addItem(Object item) {
 		this.addItem(item.toString(), item);
+		return this;
 	}
 
 	/**
@@ -82,13 +85,12 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * 
 	 * @return valor seleccionado en el combo.
 	 */
-	public Object getValue() {
-		return items.get(selectedItemCaption);
+	@SuppressWarnings("unchecked")
+	public <E> E getValue() {
+		return (E) items.get(selectedItemCaption);
 	}
 
 	/**
-	 * FIXME : NO MARCA AL ITEM COMO SELECCIONADO EN LA PARTE DEL CLIENTE.
-	 * 
 	 * Establece el item seleccionado.
 	 * 
 	 * @param itemCaption
@@ -99,20 +101,38 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		if (items.keySet().contains(itemCaption)) {
 			setSelectedItemCaption(itemCaption);
 			getState().selectedLabel = itemCaption;
-			return this;
+			markAsDirty();
+		} else {
+			throw new RuntimeException("El item " + itemCaption + " no pertenece al combo!");
 		}
 
-		throw new RuntimeException("El item " + itemCaption + " no pertenece al combo!");
+		return this;
+	}
+
+	/**
+	 * Limpia el contenido del combo.
+	 * 
+	 * @return this.
+	 */
+	public PaperCombo clear() {
+		String itemCaption = "";
+		setSelectedItemCaption(itemCaption);
+		getState().selectedLabel = itemCaption;
+		markAsDirty();
+
+		return this;
 	}
 
 	/**
 	 * Vacía las opciones del combo.
 	 */
-	public void empty() {
+	public PaperCombo empty() {
 		resetItems();
 		resetSelectedCaption();
 		getState().captions = new String[] {};
 		markAsDirty();
+
+		return this;
 	}
 
 	@Override
