@@ -43,6 +43,5 @@
   },
   "_source": "git://github.com/polymerelements/paper-listbox.git",
   "_target": "^1.1.2",
-  "_originalSource": "polymerelements/paper-listbox",
-  "_direct": true
+  "_originalSource": "polymerelements/paper-listbox"
 }

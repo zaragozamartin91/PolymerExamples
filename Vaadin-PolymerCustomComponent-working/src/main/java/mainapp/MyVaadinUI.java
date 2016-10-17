@@ -12,6 +12,7 @@ import org.jsoup.nodes.Element;
 import ast.unicore.view.webcomponent.imports.WebImport;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
+import ast.unicore.view.webcomponent.papercheckbox.PaperCheckbox;
 import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.InvalidInputException;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
@@ -31,6 +32,7 @@ import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
@@ -46,13 +48,12 @@ public class MyVaadinUI extends UI {
 	private PaperTextInput organizationInput;
 	private PaperDateInput paperInputDate;
 	private PaperCombo organizationCombo;
-	// private PaperVaadCalendar paperVaadCalendar;
 	private PaperTextInput disabledInput;
 	private PaperCombo peopleCombo;
 
-	// private PaperAutocompleteInput typeAheadInput;
-
-	// private VaadinComboBox vaadinComboBox;
+	private PaperCheckbox marriedCheck;
+	private PaperCheckbox boyCheck;
+	private PaperCheckbox agreeCheck;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -120,6 +121,32 @@ public class MyVaadinUI extends UI {
 				disabledInput = new PaperTextInput("Disabled!");
 				disabledInput.disable();
 				layout.addComponent(disabledInput);
+
+				marriedCheck = new PaperCheckbox("Casado");
+				marriedCheck.addValueChangeListener(new PaperCheckbox.ValueChangeListener() {
+					@Override
+					public void change(boolean value) {
+						Notification.show("" + value);
+					}
+				});
+				marriedCheck.setValue(true);
+				layout.addComponent(marriedCheck);
+
+				boyCheck = new PaperCheckbox("Chico", true);
+				layout.addComponent(boyCheck);
+
+				agreeCheck = new PaperCheckbox("De acuerdo", false, new PaperCheckbox.ValueChangeListener() {
+					@Override
+					public void change(boolean value) {
+						System.out.println("agreeCheck cambio a " + value);
+					}
+				});
+				layout.addComponent(new HorizontalLayout(agreeCheck, new PaperButton("PaperCheckbox#getValue()", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						Notification.show("De acuerdo: " + agreeCheck.getValue());
+					}
+				})));
 
 			}
 		});

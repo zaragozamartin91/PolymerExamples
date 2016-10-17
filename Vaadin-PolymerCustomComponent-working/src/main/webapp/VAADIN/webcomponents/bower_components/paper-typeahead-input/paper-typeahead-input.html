@@ -57,6 +57,24 @@ If you want to save it in bower.json file, remember to add flag --save
     .iron-selected{
       background: #E0E0E0;
     }
+    .typeahead{
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;color: #737373;
+    }
+    .typeahead::first-letter{
+      visibility: hidden;
+    }
+    .typeahead-with-label{
+      position:absolute;
+      top:12px;
+    }
+    .typeahead-without-label{
+      position:absolute;
+      top:-8px;
+    }
   </style>
 
   <template>
@@ -73,6 +91,7 @@ If you want to save it in bower.json file, remember to add flag --save
     </template>
 
    <div style="position:relative;">
+    <p class$="typeahead {{_getTypeaheadClasses(noLabelFloat)}}">{{_getTypeaheadDisplay(_typeahead)}}</p>
     <paper-input value="{{inputValue}}" on-keyup="_keyup" on-keydown="_keydown"  label="{{placeholder}}"
       always-float-label="{{alwaysFloatLabel}}"
       autofocus="{{autofocus}}"
@@ -88,16 +107,16 @@ If you want to save it in bower.json file, remember to add flag --save
       pattern="{{pattern}}"
     ></paper-input>
 
-    <template is="dom-if" if="{{_suggestions.length}}">
+    <template is="dom-if" if="{{suggestions.length}}">
     <paper-material >
     <paper-menu on-iron-select="_itemSelect">
-      <template is="dom-repeat" items="{{_suggestions}}">
-        <template is="dom-if" if="{{isCandidatesJson}}"> 
+      <template is="dom-repeat" items="{{suggestions}}">
+        <template is="dom-if" if="{{isCandidatesJson}}">
           <paper-item on-mouseover="_selection" on-tap="_select">
            <span>{{_getDisplayValue(item)}}</span>
           </paper-item>
         </template>
-        <template is="dom-if" if="{{!isCandidatesJson}}"> 
+        <template is="dom-if" if="{{!isCandidatesJson}}">
           <paper-item on-mouseover="_selection" on-tap="_select">
            <span>{{item}}</span>
           </paper-item>
@@ -174,9 +193,17 @@ If you want to save it in bower.json file, remember to add flag --save
       /**
        * Internal variable holding all matched suggestions.
        */
-      _suggestions:{
+      suggestions:{
         type:Array,
+        readOnly:true,
         value:[]
+      },
+      /**
+       * Internal variable holding all matched suggestions.
+       */
+      _typeahead:{
+        type:String,
+        value:""
       },
       /**
        * Maximum number of suggestions to show up in typeahead.
@@ -200,7 +227,7 @@ If you want to save it in bower.json file, remember to add flag --save
         value:undefined
       },
       /**
-       * A boolean property to indicate if elements in the candidates list are json dictionary. 
+       * A boolean property to indicate if elements in the candidates list are json dictionary.
        * When this property set up to be true, the candidates will be treated as list of json objects. Otherwise will be treated as list of strings.
        */
       isCandidatesJson:{
@@ -208,7 +235,7 @@ If you want to save it in bower.json file, remember to add flag --save
         value:false
       },
       /**
-       * An array to tell what property in the json object of candidate is searchable. 
+       * An array to tell what property in the json object of candidate is searchable.
        * This property only makes sense when property isCandidatesJson set to be true.
        */
       searchableProps:{
@@ -221,7 +248,7 @@ If you want to save it in bower.json file, remember to add flag --save
         */
       displayProp:{
         type:String,
-        value:"undefined"
+        value:undefined
       },
       /**
        * A boolean property to indicate if there is a searching going on to remoteUrl.
@@ -277,7 +304,10 @@ If you want to save it in bower.json file, remember to add flag --save
       /**
        * Bind this to the <paper-input>'s noLabelFloat property.
        */
-      noLabelFloat:Boolean,
+      noLabelFloat:{
+        type:Boolean,
+        value:false
+      },
       /**
        * Bind this to the <paper-input>'s readonly property.
        */
@@ -309,7 +339,7 @@ If you want to save it in bower.json file, remember to add flag --save
         var ptinputs = document.querySelectorAll('paper-typeahead-input')
         for (var i = 0; i < ptinputs.length; i ++){
           var ptinput = ptinputs[i];
-          ptinput._suggestions = [];
+          ptinput._setSuggestions([]);
         }
       });
       var input = Polymer.dom(this.root).querySelector('paper-input');
@@ -331,6 +361,26 @@ If you want to save it in bower.json file, remember to add flag --save
       //
       // Use this to clean up anything you did in `attached`.
     },
+    /**
+     * Focus on the paper-input element inside of paper-typeahead-input.
+     */
+    focus: function() {
+      var input = Polymer.dom(this.root).querySelector('paper-input');
+      input.focus();
+    },
+    _getTypeaheadDisplay:function(_typeahead){
+      var input = this._getInputValue();
+      if (input != "" && typeof(_typeahead) != 'undefined' && _typeahead !='') {
+        return input.substring(0,1) + _typeahead.substring(1);
+      }
+      return "";
+    },
+    _getTypeaheadClasses:function(noLabelFloat){
+      if (noLabelFloat && typeof(noLabelFloat) != 'undefined' && noLabelFloat == true) {
+        return "typeahead-without-label";
+      }
+      return "typeahead-with-label";
+    },
     _itemSelect:function(e, detail){
       this.fire('pt-item-select',detail);
     },
@@ -344,6 +394,25 @@ If you want to save it in bower.json file, remember to add flag --save
       if (e.which == 40 || e.which == 38){
           e.preventDefault();
       }
+      else if (e.which == 9) {
+         //tab key
+        if (this._typeahead && typeof(this._typeahead)!= 'undefined' && this._typeahead != ''){
+          e.preventDefault();
+          if (this.isCandidatesJson == true){
+            //if a typeahead is available it's always the first element of the candidates
+            this.inputObject = this.suggestions[0];
+            this.inputValue = this._getDisplayValue(this.inputObject);
+          }
+          else{
+            this.inputValue = this._typeahead;
+          }
+          var suggestionsMenu = Polymer.dom(this.root).querySelector('paper-menu');
+          var selectedItem = suggestionsMenu[0];
+          this._setSuggestions([]);
+          this.fire('pt-item-confirmed',selectedItem);
+          this._typeahead = "";
+        }
+      }
     },
     /**
      * Callback on mouseover event on paper-item
@@ -356,15 +425,48 @@ If you want to save it in bower.json file, remember to add flag --save
         index = Number(suggestionsMenu.indexOf(selectedItem));
         suggestionsMenu.select(index);
         var input = Polymer.dom(this.root).querySelector('paper-input');
-        input.$.input.focus();
+        input.focus();
       }
       else{
         console.log("suggestionsMenu not defined");
       }
     },
     /**
+     * Return inputValue
+     * @return {[type]} [description]
+     */
+    _getInputValue: function() {
+      if (this.inputValue && typeof(this.inputValue) != 'undefined'){
+        return this.inputValue.trim();
+      }
+      return "";
+    },
+    /**
+     * Update the text to show for typeahead
+     */
+    _updateTypeahead: function() {
+      if (this.suggestions.length == 0){
+        this._typeahead = "";
+        return;
+      }
+      var firstSuggestion = this.suggestions[0];
+
+      if (this.isCandidatesJson == true){ //then use the display property
+        firstSuggestion = this._getDisplayValue(firstSuggestion);
+      }
+
+      if (this._getInputValue() == "") {
+        this._typeahead = "";
+        return;
+      }
+      if (firstSuggestion.toLowerCase().indexOf(this._getInputValue().toLowerCase())!=0) {
+        this._typeahead = "";
+        return;
+      }
+      this._typeahead = firstSuggestion;
+    },
+    /**
      * Callback on click event on paper-item
-     *
      */
     _select: function(e) {
       var suggestionsMenu = Polymer.dom(this.root).querySelector('paper-menu');
@@ -373,15 +475,16 @@ If you want to save it in bower.json file, remember to add flag --save
         index = Number(suggestionsMenu.indexOf(selectedItem));
 
         if (this.isCandidatesJson == true){
-          this.inputObject = this._suggestions[index];
+          this.inputObject = this.suggestions[index];
           this.inputValue = this._getDisplayValue(this.inputObject);
-        } 
+        }
         else{
-          this.inputValue = this._suggestions[index];
+          this.inputValue = this.suggestions[index];
         }
 
-        this._suggestions = [];
+        this._setSuggestions([]);
         this.fire('pt-item-confirmed',e.target);
+        this._typeahead = "";
         e.stopPropagation();
       }
       else{
@@ -394,29 +497,18 @@ If you want to save it in bower.json file, remember to add flag --save
      * @param {e} event
      */
     _keyup: function(e) {
-      console.log("e.which:" + e.which);
-
       if (e.which == 40){
         //down button
         var suggestionsMenu = Polymer.dom(this.root).querySelector('paper-menu');
-
-        if(!suggestionsMenu || !this._suggestions || !this._suggestions.length) {
-          console.log("Triggering down search!");
-          this._search(".*");
-        }
-
-        var selectedItem = suggestionsMenu ? suggestionsMenu.focusedItem : undefined;
+        var selectedItem = suggestionsMenu.focusedItem;
         var index = 0;
         if (typeof(selectedItem) != 'undefined'){
           index = Number(suggestionsMenu.indexOf(selectedItem));
-          index = Math.min(index + 1, this._suggestions.length - 1);
+          index = Math.min(index + 1, this.suggestions.length - 1);
         }
-
-        if(suggestionsMenu){
-          suggestionsMenu.select(index);
-        };
+        suggestionsMenu.select(index);
         var input = Polymer.dom(this.root).querySelector('paper-input');
-        input.$.input.focus();
+        input.focus();
       }
       else if (e.which == 38){
         //up
@@ -428,10 +520,9 @@ If you want to save it in bower.json file, remember to add flag --save
           suggestionsMenu.select(index);
         }
         var input = Polymer.dom(this.root).querySelector('paper-input');
-        input.$.input.focus();
+        input.focus();
       }
       else if (e.which == 13){
-        // enter
         var suggestionsMenu = Polymer.dom(this.root).querySelector('paper-menu');
         if (suggestionsMenu && typeof(suggestionsMenu) != 'undefined'){
           var selectedItem = suggestionsMenu.focusedItem;
@@ -439,27 +530,29 @@ If you want to save it in bower.json file, remember to add flag --save
             index = Number(suggestionsMenu.indexOf(selectedItem));
 
             if (this.isCandidatesJson == true){
-              this.inputObject = this._suggestions[index];
+              this.inputObject = this.suggestions[index];
               this.inputValue = this._getDisplayValue(this.inputObject);
-            } 
-            else{
-              this.inputValue = this._suggestions[index];
             }
-            this._suggestions = [];
-            this.fire('pt-item-confirmed',{selectedItem: selectedItem});
+            else{
+              this.inputValue = this.suggestions[index];
+            }
+            this._setSuggestions([]);
+            this.fire('pt-item-confirmed',selectedItem);
+            this._typeahead = "";
           }
-        } 
-      } else if (e.which == 13){
-        // esc
-        return this._suggestions = [];
-      } else {
+        }
+      }
+      else if (e.which == 9){
+        //prevent fire search for tab key
+      }
+      else{
         var suggestionsMenu = Polymer.dom(this.root).querySelector('paper-menu');
         if (suggestionsMenu && typeof(suggestionsMenu) != 'undefined'){
           suggestionsMenu.select(-1);
         }
         // if (this.inputValue.length >= 3){
         this._search(this.inputValue.trim());
-        // this._suggestions = this._search(this.inputValue.trim());
+        // this.suggestions = this._search(this.inputValue.trim());
         // }
       }
     },
@@ -488,11 +581,11 @@ If you want to save it in bower.json file, remember to add flag --save
     },
     _search:function(term){
       if (term == ""){
-        this._suggestions = [];
+        this._setSuggestions([]);
+        this._updateTypeahead();
         return;
       }
-
-      var patt =  new RegExp(term, 'i');
+      var patt =  new RegExp(term.toLowerCase());
       var matched = [];
 
       if (typeof(this.localCandidates) != 'undefined'){
@@ -525,7 +618,7 @@ If you want to save it in bower.json file, remember to add flag --save
           }
         }
       }
-      // this._suggestions = this._suggestions.concat(matched);
+      // this.suggestions = this.suggestions.concat(matched);
       if (typeof(this.remoteUrl) != 'undefined'){
         var pt_element = this;
         pt_element.fire('pt-remote-searching-start',pt_element);
@@ -543,8 +636,7 @@ If you want to save it in bower.json file, remember to add flag --save
                     var remoteMatched = JSON.parse(resp);
                     var cuttedMatched = remoteMatched.slice(0,ptinput.maxSuggestions);
                     matched = matched.concat(cuttedMatched);
-                    // ptinput._suggestions = ptinput._suggestions.concat(cuttedMatched);
-                    ptinput._suggestions = matched;
+                    ptinput._setSuggestions(matched);
                 }
                 pt_element.remoteUrlSearching = false;
                 pt_element.fire('pt-remote-searching-end',pt_element);
@@ -556,9 +648,10 @@ If you want to save it in bower.json file, remember to add flag --save
         }, this.remoteUrlWaitMs);
       }
       else{
-        this._suggestions = matched;
+        this._setSuggestions(matched);
       }
-    }
+      this._updateTypeahead();
+    }//_search
 
   });
 

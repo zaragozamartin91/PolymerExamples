@@ -1,8 +1,13 @@
 # paper-typeahead-input
 
+[![Travis](https://img.shields.io/travis/cheonhyangzhang/paper-typeahead-input.svg?style=flat)](https://travis-ci.org/cheonhyangzhang/paper-typeahead-input)
+
+[![Coverage Status](https://coveralls.io/repos/github/cheonhyangzhang/paper-typeahead-input/badge.svg?branch=master)](https://coveralls.io/github/cheonhyangzhang/paper-typeahead-input?branch=master)
+
 An element providing a starting point for your own reusable Polymer elements.
 
 ## Demo
+
 
 [Documentation and Demo](http://cheonhyangzhang.github.io/paper-typeahead-input/components/paper-typeahead-input/)
 

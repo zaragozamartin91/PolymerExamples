@@ -9,7 +9,8 @@ public enum WebImport {
 	PAPER_COMBO("VAADIN/webcomponents/paper-combo.html"),
 	PAPER_BUTTON("VAADIN/webcomponents/bower_components/paper-button/paper-button.html"),
 	PAPER_STYLES("VAADIN/webcomponents/bower_components/paper-styles/paper-styles.html"),
-	PAPER_TEXTAREA("VAADIN/webcomponents/bower_components/paper-input/paper-textarea.html");
+	PAPER_TEXTAREA("VAADIN/webcomponents/bower_components/paper-input/paper-textarea.html"),
+	PAPER_CHECKBOX("VAADIN/webcomponents/paper-wb-checkbox.html");
 
 	public final String path;
 
