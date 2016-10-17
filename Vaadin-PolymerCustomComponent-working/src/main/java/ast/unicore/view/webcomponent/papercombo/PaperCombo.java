@@ -22,6 +22,11 @@ import elemental.json.JsonArray;
 @JavaScript({ "paper-combo-connector.js" })
 public final class PaperCombo extends AbstractJavaScriptComponent {
 	/**
+	 * INVALID_KEY__
+	 */
+	public static final String INVALID_KEY = "__INVALID_KEY__";
+
+	/**
 	 * TextField utilizado para trabajar facilmente con los ValueChange.
 	 */
 	private TextField wrappedField = new TextField();
@@ -56,8 +61,16 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Clave/Caption del item.
 	 * @param item
 	 *            Item propiamente dicho.
+	 * @throws InvalidKeyException
+	 *             Cuando la clave/caption del item a agregar sea nula o igual a {@link PaperCombo#INVALID_KEY}.
+	 * @throws DuplicateItemException
+	 *             Cuando se quieran agregar dos items con claves iguales.
 	 */
-	public PaperCombo addItem(String itemCaption, Object item) {
+	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException, DuplicateItemException {
+		if (itemCaption == null || INVALID_KEY.equals(itemCaption)) {
+			throw new InvalidKeyException("La clave " + itemCaption + " es invalida!");
+		}
+
 		if (items.containsKey(itemCaption)) {
 			throw new DuplicateItemException("La clave " + itemCaption + " ya esta contenida dentro del combo!");
 		}
@@ -96,14 +109,16 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @param itemCaption
 	 *            Caption del item a marcar como seleccionado.
 	 * @return this.
+	 * @throws NonexistentKeyException
+	 *             Si el caption no corresponde con ningun item del combo.
 	 */
-	public PaperCombo setSelected(String itemCaption) {
+	public PaperCombo setSelected(String itemCaption) throws NonexistentKeyException {
 		if (items.keySet().contains(itemCaption)) {
 			setSelectedItemCaption(itemCaption);
 			getState().selectedLabel = itemCaption;
 			markAsDirty();
 		} else {
-			throw new RuntimeException("El item " + itemCaption + " no pertenece al combo!");
+			throw new NonexistentKeyException("El item " + itemCaption + " no pertenece al combo!");
 		}
 
 		return this;
@@ -115,7 +130,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @return this.
 	 */
 	public PaperCombo clear() {
-		String itemCaption = "";
+		String itemCaption = INVALID_KEY;
 		setSelectedItemCaption(itemCaption);
 		getState().selectedLabel = itemCaption;
 		markAsDirty();
@@ -150,16 +165,25 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @param <DataType>
 	 *            Tipo de dato del valor del item seleccionado.
 	 */
-	public static interface ValueChangeListener<DataType> {
+	public static abstract class ValueChangeListener<DataType> {
 		/**
-		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo.
+		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo. Si {@link PaperCombo#INVALID_KEY} se
+		 * encuentra seleccionado, el metodo no se ejecutara.
 		 * 
 		 * @param selectedItemCaption
 		 *            Caption del item seleccionado.
 		 * @param selectedItemValue
 		 *            Valor del item seleccionado.
 		 */
-		void valueChange(String selectedItemCaption, DataType selectedItemValue);
+		public abstract void valueChange(String selectedItemCaption, DataType selectedItemValue);
+
+		void change(String selectedItemCaption, DataType selectedItemValue) {
+			if (INVALID_KEY.equals(selectedItemCaption)) {
+				return;
+			} else {
+				valueChange(selectedItemCaption, selectedItemValue);
+			}
+		}
 	}
 
 	/**
@@ -175,7 +199,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		wrappedField.addValueChangeListener(new Property.ValueChangeListener() {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				valueChangeListener.valueChange(selectedItemCaption, (DataType) getValue());
+				valueChangeListener.change(selectedItemCaption, (DataType) getValue());
 			}
 		});
 	}
@@ -195,7 +219,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	private void resetSelectedCaption() {
-		setSelectedItemCaption("");
+		setSelectedItemCaption(INVALID_KEY);
 	}
 
 	private void setSelectedItemCaption(String caption) {
