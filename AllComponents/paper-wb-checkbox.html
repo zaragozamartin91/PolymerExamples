@@ -6,7 +6,7 @@
   </style>
   
   <template>
-    <paper-checkbox id="checkbox" checked="{{checked}}" on-iron-change="handleIronChange">{{label}}</paper-checkbox>
+    <paper-checkbox id="checkbox" checked="{{checked}}" >{{label}}</paper-checkbox>
   </template>
 
   <!-- Creates the element's prototype and registers it -->
@@ -37,10 +37,10 @@
         Polymer.dom(checkbox).innerHTML = this.label;
       },*/
 
-      handleIronChange: function(e) {
-        console.log("paper-wb-checkbox#handleIronChange");
-        this.fire('change',{checked:this.checked});
-      }
+//       handleIronChange: function(e) {
+//         console.log("paper-wb-checkbox#handleIronChange");
+//         this.fire('change',{checked:this.checked});
+//       }
     });
   </script>
 

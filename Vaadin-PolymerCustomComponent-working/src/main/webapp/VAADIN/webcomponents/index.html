@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
+    </script>
+
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html">
+    <link rel="import" href="bower_components/paper-item/paper-item.html">
+    <link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
+    <link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+    <link rel="import" href="paper-combo.html">
+    <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="import" href="paper-autocomplete-input.html">
+    <link rel="import" href="bower_components/paper-styles/paper-styles.html">
+
+    <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+    <link rel="import" href="paper-wb-checkbox.html">
+
+    <link rel="import" href="bower_components/paper-datatable/paper-datatable.html">
+
+    <link rel="import" href="my-map.html">
+
+  </head>
+  <body>
+    <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!" ></paper-input>
+    <paper-input auto-validate label="Ingrese nombre" disabled="disabled" ></paper-input>
+
+  <paper-autocomplete-input id="input1"
+    max-suggestions="4" 
+    prefetch-url="/countries.json" 
+    placeholder="Countries">
+  </paper-autocomplete-input>
+
+  <paper-autocomplete-input id="input2"
+      local-candidates='["clinton","trump"]'
+    placeholder="Enter US candidate" 
+    max-suggestions="4" ></paper-autocomplete-input>
+
+    <paper-combo id="peopleCombo" drop-label="People"></paper-combo>
+    <br/>
+    <paper-combo id="countriesCombo" drop-label="Countries"></paper-combo>
+    <br/>
+
+    <paper-checkbox checked="checked"> single</paper-checkbox>
+    <paper-checkbox > married</paper-checkbox>
+
+    <paper-wb-checkbox label="CASADO" checked></paper-wb-checkbox>
+
+    <my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>    
+
+  </body>
+</html>

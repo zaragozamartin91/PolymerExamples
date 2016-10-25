@@ -1,0 +1,90 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-item/paper-item.html">
+<link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+
+<dom-module id="my-map">
+  <style>
+  paper-dropdown-menu {
+      /* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
+      width: 100%;
+    }
+  </style>
+  
+  <template>
+    <paper-dropdown-menu 
+      id="theDrop" 
+      required={{dropRequired}} 
+      label={{dropLabel}} 
+      disabled="{{dropDisabled}}"
+      on-iron-select="handleSelect" >
+      
+        <paper-listbox id="theList" class="dropdown-content"></paper-listbox>
+        
+    </paper-dropdown-menu>
+  </template>
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'my-map',
+      properties: {
+        items: {
+          type:Object,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {return [];}
+        },
+        dropLabel: {
+          type:String,
+          value:"",
+          notify: true,
+          reflectToAttribute: true
+        },
+        dropRequired: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+        selectedLabel:  {
+          type:String,
+          value: ""
+        },
+
+      },
+      getCaptions: function() {
+        var captions = [];
+        this.items.forEach(function(elem){
+          var caption = elem.title;
+          captions.push(caption);
+        });
+        return captions;
+      },
+      setCaptions: function(captions) {
+        var self = this;
+        console.log("my-map#setCaptions: " + captions);
+        Polymer.dom(self.$.theList).innerHTML="";
+        
+        captions.forEach(function(caption){
+          var newItem = document.createElement('paper-item');
+            newItem.innerHTML = caption;
+              
+            console.log("my-map::adding item: " + caption);
+            Polymer.dom(self.$.theList).appendChild(newItem);
+        });
+      },
+      setSelected: function(caption) {
+        var index = this.getCaptions().indexOf(caption);
+        this.$.theList.selected = index;
+      },
+      setVoid: function() {
+        this.$.theList.selected = undefined;
+      },
+      handleSelect: function(e) {
+
+      }
+    });
+  </script>
+
+</dom-module>
