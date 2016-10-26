@@ -1,0 +1,52 @@
+<link rel="import" href="bower_components/iron-data-table/default-styles.html">
+<link rel="import" href="bower_components/iron-data-table/iron-data-table.html">
+
+<dom-module id="paper-data-table">
+  <style>
+  </style>
+  
+    <template>
+    
+      <!-- <iron-ajax url="data.json" last-response="{{users}}" auto></iron-ajax> -->
+      <iron-data-table id="table" items="[[data]]" selection-enabled>
+        <data-table-column name="First Name">
+          <template>[[item.first]]</template>
+        </data-table-column>
+        <data-table-column name="Last Name">
+          <template>[[item.last]]</template>
+        </data-table-column>
+        <data-table-column name="Title">
+          <template>[[item.title]]</template>
+        </data-table-column>
+      </iron-data-table>
+
+    </template>
+
+  <!-- Creates the element's prototype and registers it -->
+  <script>
+    Polymer({
+      is: 'paper-data-table',
+      properties: {
+        data: {
+          type:Array,
+          notify: true,
+          reflectToAttribute: true
+        },
+      },
+      ready: function() {
+        var table = this.$.table;
+
+        var column = document.createElement('data-table-column');
+        Polymer.dom(column).setAttribute("name", "Age")
+        
+        var template = document.createElement('template');
+        template.innerHTML = "[[item.age]]";
+
+        Polymer.dom(column).appendChild(template);
+
+        Polymer.dom(table).appendChild(column);
+      }
+    });
+  </script>
+
+</dom-module>

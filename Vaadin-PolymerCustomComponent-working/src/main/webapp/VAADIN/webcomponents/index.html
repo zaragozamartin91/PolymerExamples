@@ -17,9 +17,9 @@
     <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
     <link rel="import" href="paper-wb-checkbox.html">
 
-    <link rel="import" href="bower_components/paper-datatable/paper-datatable.html">
-
     <link rel="import" href="my-map.html">
+
+    <link rel="import" href="paper-data-table.html">    
 
   </head>
   <body>
@@ -47,7 +47,30 @@
 
     <paper-wb-checkbox label="CASADO" checked></paper-wb-checkbox>
 
-    <my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>    
+    <my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>   
+
+    <paper-data-table data='[
+              {
+                "title": "miss",
+                "first": "donna",
+                "last": "davis",
+                "age": 25
+              },
+              {
+                "title": "mr",
+                "first": "samuel",
+                "last": "kelley",
+                "age": 26
+              },
+              {
+                "title": "ms",
+                "first": "katie",
+                "last": "butler",
+                "age": 27
+              }
+            ]' ></paper-data-table>
+
+      
 
   </body>
 </html>
