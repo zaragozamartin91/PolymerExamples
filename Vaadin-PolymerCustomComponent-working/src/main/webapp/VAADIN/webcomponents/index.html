@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
     <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
     </script>
 
@@ -19,7 +21,9 @@
 
     <link rel="import" href="my-map.html">
 
-    <link rel="import" href="paper-data-table.html">    
+    <link rel="import" href="paper-data-table.html">
+
+    <link rel="import" href="responsive-table.html">    
 
   </head>
   <body>
@@ -68,9 +72,11 @@
                 "last": "butler",
                 "age": 27
               }
-            ]' ></paper-data-table>
+            ]' >
+      </paper-data-table>
 
-      
+      <responsive-table></responsive-table>
+            
 
   </body>
 </html>
