@@ -1,5 +1,6 @@
-bower_components/
+*/bower_components/
 */node_modules/*
 target/
 .settings/
 .apt_generated/
+src/main/webapp/VAADIN/webcomponents/bower_components/*

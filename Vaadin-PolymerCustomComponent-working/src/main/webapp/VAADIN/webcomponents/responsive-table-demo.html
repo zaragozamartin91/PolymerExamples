@@ -1,6 +1,6 @@
 <link rel="import" href="bower_components/font-roboto/roboto.html">
 
-<dom-module id="responsive-table">
+<dom-module id="responsive-table-demo">
   <style>
     /* -- import Roboto Font ---------------------------- */
     @import "https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic&subset=latin,cyrillic";
@@ -606,6 +606,8 @@
   </style>
   
     <template>
+        <!--SE AGREGA PARA QUE SEA RESPONSIVE EN MOBILE-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
          
         <!-- Responsive table starts here -->
         <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
@@ -712,7 +714,7 @@
   <!-- Creates the element's prototype and registers it -->
   <script>
     Polymer({
-      is: 'responsive-table',
+      is: 'responsive-table-demo',
       properties: {
         data: {
           type:Array,
