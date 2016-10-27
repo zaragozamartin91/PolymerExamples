@@ -11,19 +11,19 @@
     <link rel="import" href="bower_components/paper-item/paper-item.html">
     <link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
     <link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-    <link rel="import" href="paper-combo.html">
     <link rel="import" href="bower_components/paper-button/paper-button.html">
     <link rel="import" href="paper-autocomplete-input.html">
     <link rel="import" href="bower_components/paper-styles/paper-styles.html">
 
     <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+    <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+
+    <link rel="import" href="paper-combo.html">
     <link rel="import" href="paper-wb-checkbox.html">
-
     <link rel="import" href="my-map.html">
-
     <link rel="import" href="paper-data-table.html">
-
-    <link rel="import" href="responsive-table-demo.html">    
+    <link rel="import" href="responsive-table.html">    
 
   </head>
   <body>
@@ -53,6 +53,8 @@
 
     <my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>   
 
+    <paper-icon-button icon="favorite" title="heart"></paper-icon-button>
+
     <paper-data-table data='[
               {
                 "title": "miss",
@@ -75,8 +77,18 @@
             ]' >
       </paper-data-table>
 
-      <responsive-table-demo></responsive-table-demo>
+      <responsive-table 
+        columns='["ID","Name","Link","Status"]'>
+      </responsive-table>
             
+      <script>
+        $(document).ready(function(){
+          var peopleCombo = document.querySelector('#peopleCombo');
+          peopleCombo.setCaptions(["martin","exe","julio"]);
 
+          var countriesCombo = document.querySelector('#countriesCombo');
+          countriesCombo.setCaptions(["arg","chile","brasil"]);
+        });
+      </script>
   </body>
 </html>
