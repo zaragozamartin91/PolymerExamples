@@ -1,4 +1,5 @@
 <link rel="import" href="bower_components/font-roboto/roboto.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 
 <dom-module id="responsive-table">
   <style>
@@ -630,12 +631,12 @@
       is: 'responsive-table',
       properties: {
         columns: {
-            type:Array,
+            type: Array,
             notify: true,
             reflectToAttribute: true,
             value: function() {return [];}
         },
-        columnData: {
+        rows: {
             type: Array,
             value: function() {return [];}
         }
@@ -700,28 +701,48 @@
 
         this.columns.forEach(this.addColumn, this);
       },
-      addColumn: function(column) {
+      appendHeader: function(caption){
         var theadRow = this.$$("#table thead tr");
         var th = document.createElement("th");
-        th.innerHTML = column;
+        th.innerHTML = caption;
         Polymer.dom(theadRow).appendChild(th);
+      },
+      addColumn: function(column) {
+        this.appendHeader(column.name);
+        this.columns.push(column);
       },
       addRow: function(row) {
           var tr = document.createElement('tr');
           var i = 0;
 
-          row.forEach(function(data){
+          var rowObject = {};
+          row.forEach(function(data) {
               var td = document.createElement('td');
-              Polymer.dom(td).setAttribute('data-title', this.columns[i++]);
-              td.innerHTML = data;
-              Polymer.dom(tr).appendChild(td);  
+              var column = this.columns[i++];
+              Polymer.dom(td).setAttribute('data-title', column.name);
+              
+              if(column.icon) {
+                var iconButton = document.createElement('paper-icon-button');
+                Polymer.dom(iconButton).setAttribute('icon',column.icon);
+                Polymer.dom(iconButton).setAttribute('name',column.name);
+                Polymer.dom(td).appendChild(iconButton);
+              } else {
+                td.innerHTML = data;
+              }
+              
+              Polymer.dom(tr).appendChild(td);
+
+              rowObject[column.name] = data;
           },this);
 
           var tbody = this.$$("#table tbody");
           Polymer.dom(tbody).appendChild(tr);
+
+          this.rows.push(rowObject);
       },clear: function() {
           var tbody = this.$$("#table tbody");
           tbody.innerHTML = "";
+          this.rows = [];
       }
     });
   </script>
