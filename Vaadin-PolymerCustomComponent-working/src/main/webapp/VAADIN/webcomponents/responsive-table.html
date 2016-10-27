@@ -699,7 +699,9 @@
 
         })(jQuery.fn.removeClass);
 
-        this.columns.forEach(this.addColumn, this);
+        this.columns.forEach(function(column){
+            this.appendHeader(column.name);
+        }, this);
       },
       appendHeader: function(caption){
         var theadRow = this.$$("#table thead tr");
