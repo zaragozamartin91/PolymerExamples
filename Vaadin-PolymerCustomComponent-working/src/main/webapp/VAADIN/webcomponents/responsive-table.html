@@ -638,6 +638,8 @@
         },
         rows: {
             type: Array,
+            notify: true,
+            reflectToAttribute: true,
             value: function() {return [];}
         }
       },
@@ -702,6 +704,8 @@
         this.columns.forEach(function(column){
             this.appendHeader(column.name);
         }, this);
+
+        this.rows.forEach(this.addArrayRow, this);
       },
       appendHeader: function(caption){
         var theadRow = this.$$("#table thead tr");
@@ -713,29 +717,47 @@
         this.appendHeader(column.name);
         this.columns.push(column);
       },
-      addRow: function(row) {
+      addObjectRow: function(rowObject) {
+          var row = [];
+          this.columns.forEach(function(column) {
+              var data = rowObject[column.name] || "";
+              row.push(data);
+          });
+
+          this.addArrayRow(row);
+      },
+      addArrayRow: function(row) {
           var tr = document.createElement('tr');
-          var i = 0;
+          var colIndex = 0;
+          var rowIndex = this.rows.length;
 
           var rowObject = {};
+          rowObject.rowIndex = rowIndex;
+
           row.forEach(function(data) {
+              var self = this;
+
               var td = document.createElement('td');
-              var column = this.columns[i++];
+              var column = this.columns[colIndex];
+              rowObject[column.name] = data;
+              
               Polymer.dom(td).setAttribute('data-title', column.name);
               
               if(column.icon) {
                 var iconButton = document.createElement('paper-icon-button');
                 Polymer.dom(iconButton).setAttribute('icon',column.icon);
                 Polymer.dom(iconButton).setAttribute('name',column.name);
+                iconButton.addEventListener('click', function() {
+                    self.fire('icon-click', {row:rowObject, rowIndex:rowIndex, column: column});
+                });
                 Polymer.dom(td).appendChild(iconButton);
               } else {
                 td.innerHTML = data;
               }
               
               Polymer.dom(tr).appendChild(td);
-
-              rowObject[column.name] = data;
-          },this);
+              ++colIndex;
+          }, this);
 
           var tbody = this.$$("#table tbody");
           Polymer.dom(tbody).appendChild(tr);
