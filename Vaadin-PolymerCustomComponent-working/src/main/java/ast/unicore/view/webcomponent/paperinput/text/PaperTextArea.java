@@ -45,9 +45,8 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 *            Listener a agregar.
 	 * @return this.
 	 */
-	public PaperTextArea addValueChangeListener(final ValueChangeListener valueChangeListener) {
+	public void addValueChangeListener(final ValueChangeListener valueChangeListener) {
 		wrappedField.addValueChangeListener(valueChangeListener);
-		return this;
 	}
 
 	/**
@@ -120,9 +119,8 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 *            Nuevo validador.
 	 * @return this.
 	 */
-	public PaperTextArea addValidator(final Validator validator) {
+	public void addValidator(final Validator validator) {
 		wrappedField.addValidator(validator);
-		return this;
 	}
 
 	/**

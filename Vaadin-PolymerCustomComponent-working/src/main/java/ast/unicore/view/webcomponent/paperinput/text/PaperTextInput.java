@@ -48,7 +48,7 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	 * 
 	 * @return this.
 	 */
-	public PaperTextInput autoValidate() {
+	public void autoValidate() {
 		if (autoValidate.compareAndSet(false, true)) {
 			wrappedField.addValueChangeListener(new ValueChangeListener() {
 				@Override
@@ -60,7 +60,6 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 				}
 			});
 		}
-		return this;
 	}
 
 	/**
@@ -70,9 +69,8 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	 *            Listener a agregar.
 	 * @return this.
 	 */
-	public PaperTextInput addValueChangeListener(final ValueChangeListener valueChangeListener) {
+	public void addValueChangeListener(final ValueChangeListener valueChangeListener) {
 		wrappedField.addValueChangeListener(valueChangeListener);
-		return this;
 	}
 
 	/**
@@ -158,7 +156,7 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	 *            Nuevo validador.
 	 * @return this.
 	 */
-	public PaperTextInput addValidator(final Validator validator) {
+	public void addValidator(final Validator validator) {
 		wrappedField.addValidator(new Validator() {
 			@Override
 			public void validate(Object value) throws InvalidValueException {
@@ -171,8 +169,6 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 				}
 			}
 		});
-
-		return this;
 	}
 
 	/**
