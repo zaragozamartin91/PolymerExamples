@@ -21,7 +21,7 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	var connector = this;
 	var e = this.getElement();
 
-	e.innerHTML = '<paper-input auto-validate></paper-input>';
+	e.innerHTML = '<paper-input></paper-input>';
 
 	function component() {
 		return e.firstChild;
@@ -40,6 +40,9 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 		component().errorMessage = this.getState().inputErrorMessage;
 		component().pattern = this.getState().inputPattern;
 		component().disabled = this.getState().inputDisabled;
+		component().invalid = this.getState().inputInvalid;
+		
+		component().validate();
 	}
 
 	/*

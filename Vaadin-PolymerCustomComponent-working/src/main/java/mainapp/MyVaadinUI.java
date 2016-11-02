@@ -21,8 +21,10 @@ import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Validator;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.BootstrapFragmentResponse;
 import com.vaadin.server.BootstrapListener;
@@ -98,13 +100,29 @@ public class MyVaadinUI extends UI {
 				peopleCombo.addValueChangeListener(comboValueChangeListener);
 
 				organizationInput = new PaperTextInput("Nombre organizacion");
-				organizationInput.setPattern("[a-zA-Z ]+");
-				organizationInput.setErrorMessage("Nombre de organizacion invalido!");
+				// organizationInput.setPattern("[a-zA-Z ]+");
+				// organizationInput.setErrorMessage("Nombre de organizacion invalido!");
 				organizationInput.setRequired(true);
 				organizationInput.setValue("ACCUSYS");
 				layout.addComponent(organizationInput);
 				organizationInput.setWidth("60%");
-				organizationInput.enableDefaultClientComponentValidator();
+
+				organizationInput.autoValidate();
+				organizationInput.addValidator(new Validator() {
+					@Override
+					public void validate(Object value) throws InvalidValueException {
+						Notification.show("Validando: " + value);
+						if (value == null || value.toString().isEmpty()) {
+							throw new InvalidValueException("Campo no puede ser vacio!");
+						}
+					}
+				});
+				organizationInput.addValueChangeListener(new ValueChangeListener() {
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+						Notification.show("" + event.getProperty().getValue());
+					}
+				});
 
 				PaperTextArea paperTextArea = new PaperTextArea("Descripcion empresa");
 				paperTextArea.setWidth("100%");
@@ -167,14 +185,13 @@ public class MyVaadinUI extends UI {
 			}
 		});
 
-		PaperButton validateButton = new PaperButton("Validar", new ClickListener() {
+		PaperButton validateButton = new PaperButton("PaperTextInput#validate()", new ClickListener() {
 			@Override
 			public void buttonClick() {
 				try {
 					organizationInput.validate();
-					System.out.println("PaperInputDate value: " + paperInputDate.getValue());
-				} catch (InvalidInputException e) {
-					Notification.show("Contenido invalido::" + e.getMessage(), Type.ERROR_MESSAGE);
+				} catch (Exception e) {
+					Notification.show("Valor invalido!", Type.ERROR_MESSAGE);
 				}
 			}
 		});
