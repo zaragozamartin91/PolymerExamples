@@ -1,14 +1,11 @@
 package ast.unicore.view.webcomponent.paperinput.text;
 
-import ast.unicore.view.webcomponent.paperinput.InvalidInputException;
+import ast.unicore.view.webcomponent.paperinput.AbstractPaperInput;
 import ast.unicore.view.webcomponent.paperinput.PaperInputState;
 
 import com.vaadin.annotations.JavaScript;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
-import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
-import com.vaadin.ui.TextField;
 
 import elemental.json.JsonArray;
 
@@ -22,8 +19,7 @@ import elemental.json.JsonArray;
  */
 @SuppressWarnings("serial")
 @JavaScript({ "paper-text-area-connector.js" })
-public class PaperTextArea extends AbstractJavaScriptComponent {
-	private TextField wrappedField = new TextField();
+public class PaperTextArea extends AbstractPaperInput<String> {
 
 	/**
 	 * Crea una nueva instancia con un label.
@@ -39,22 +35,12 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	}
 
 	/**
-	 * Agrega un listener que espera cambios de valor en el campo.
-	 * 
-	 * @param valueChangeListener
-	 *            Listener a agregar.
-	 * @return this.
-	 */
-	public void addValueChangeListener(final ValueChangeListener valueChangeListener) {
-		wrappedField.addValueChangeListener(valueChangeListener);
-	}
-
-	/**
 	 * Establece el valor del campo.
 	 * 
 	 * @param value
 	 *            Valor nuevo.
 	 */
+	@Override
 	public void setValue(String value) {
 		getState().inputValue = value;
 		wrappedField.setValue(value);
@@ -66,50 +52,18 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 * 
 	 * @return Valor del campo.
 	 */
+	@Override
 	public String getValue() {
 		return getState().inputValue;
 	}
 
 	/**
-	 * Establece si el Input es requerido.
-	 * 
-	 * @param isRequired
-	 *            True si es requerido, false caso contrario.
+	 * Limpia el campo y lo restaura a su estado original.
 	 */
-	public void setRequired(boolean isRequired) {
-		this.getState().inputRequired = isRequired;
-		markAsDirty();
-	}
-
 	@Override
-	public void setEnabled(boolean isEnabled) {
-		super.setEnabled(isEnabled);
-		getState().inputDisabled = !isEnabled;
-		markAsDirty();
-	}
-
-	/**
-	 * Deshabilita el componente.
-	 */
-	public void disable() {
-		setEnabled(false);
-	}
-
-	/**
-	 * Habilita el componente.
-	 */
-	public void enable() {
-		setEnabled(true);
-	}
-
-	/**
-	 * Valida el valor del campo usando los validators asignados.
-	 * 
-	 * @throws InvalidInputException
-	 *             En caso que el valor del paper input sea invalido segun los validadores asignados.
-	 */
-	public void validate() {
-		wrappedField.validate();
+	public void clear() {
+		setValue("");
+		setInputValid();
 	}
 
 	/**
@@ -119,15 +73,14 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 *            Nuevo validador.
 	 * @return this.
 	 */
+	@Override
 	public void addValidator(final Validator validator) {
 		wrappedField.addValidator(validator);
 	}
 
-	/**
-	 * Limpia el campo y lo restaura a su estado original.
-	 */
-	public void clear() {
-		setValue("");
+	@Override
+	public void autoValidate() {
+		throw new UnsupportedOperationException("Operacion no soportada por " + getClass().getSimpleName());
 	}
 
 	protected void addHandleChangeCallback() {
@@ -140,10 +93,5 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 				// getState().inputInvalid = arguments.getBoolean(1);
 			}
 		});
-	}
-
-	@Override
-	protected PaperInputState getState() {
-		return (PaperInputState) super.getState();
 	}
 }

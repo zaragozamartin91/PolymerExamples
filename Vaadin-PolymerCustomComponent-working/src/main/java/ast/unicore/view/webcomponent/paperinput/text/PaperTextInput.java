@@ -1,17 +1,10 @@
 package ast.unicore.view.webcomponent.paperinput.text;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import ast.unicore.view.webcomponent.paperinput.InvalidInputException;
+import ast.unicore.view.webcomponent.paperinput.AbstractPaperInput;
 import ast.unicore.view.webcomponent.paperinput.PaperInputState;
 
 import com.vaadin.annotations.JavaScript;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.Validator;
-import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
-import com.vaadin.ui.TextField;
 
 import elemental.json.JsonArray;
 
@@ -25,10 +18,7 @@ import elemental.json.JsonArray;
  */
 @SuppressWarnings("serial")
 @JavaScript({ "paper-text-input-connector.js" })
-public class PaperTextInput extends AbstractJavaScriptComponent {
-	private AtomicBoolean autoValidate = new AtomicBoolean(false);
-	private TextField wrappedField = new TextField();
-
+public class PaperTextInput extends AbstractPaperInput<String> {
 	/**
 	 * Crea un nuevo PaperInput con un label.
 	 * 
@@ -43,42 +33,12 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	}
 
 	/**
-	 * Habilita la validacion del campo automatica. La misma se disparara cada vez que el campo cambie de valor. No se
-	 * lanzaran excepciones.
-	 * 
-	 * @return this.
-	 */
-	public void autoValidate() {
-		if (autoValidate.compareAndSet(false, true)) {
-			wrappedField.addValueChangeListener(new ValueChangeListener() {
-				@Override
-				public void valueChange(ValueChangeEvent event) {
-					try {
-						validate();
-					} catch (Exception e) {
-					}
-				}
-			});
-		}
-	}
-
-	/**
-	 * Agrega un listener que espera cambios de valor en el campo.
-	 * 
-	 * @param valueChangeListener
-	 *            Listener a agregar.
-	 * @return this.
-	 */
-	public void addValueChangeListener(final ValueChangeListener valueChangeListener) {
-		wrappedField.addValueChangeListener(valueChangeListener);
-	}
-
-	/**
 	 * Establece el valor del campo.
 	 * 
 	 * @param value
 	 *            Valor nuevo.
 	 */
+	@Override
 	public void setValue(String value) {
 		getState().inputValue = value;
 		wrappedField.setValue(value);
@@ -90,19 +50,9 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	 * 
 	 * @return Valor del campo.
 	 */
+	@Override
 	public String getValue() {
 		return getState().inputValue;
-	}
-
-	/**
-	 * Establece si el Input es requerido.
-	 * 
-	 * @param isRequired
-	 *            True si es requerido, false caso contrario.
-	 */
-	public void setRequired(boolean isRequired) {
-		this.getState().inputRequired = isRequired;
-		markAsDirty();
 	}
 
 	// /**
@@ -118,62 +68,10 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	// markAsDirty();
 	// }
 
-	@Override
-	public void setEnabled(boolean isEnabled) {
-		super.setEnabled(isEnabled);
-		getState().inputDisabled = !isEnabled;
-		markAsDirty();
-	}
-
-	/**
-	 * Deshabilita el componente.
-	 */
-	public void disable() {
-		setEnabled(false);
-	}
-
-	/**
-	 * Habilita el componente.
-	 */
-	public void enable() {
-		setEnabled(true);
-	}
-
-	/**
-	 * Valida el valor del campo usando los validators asignados.
-	 * 
-	 * @throws InvalidInputException
-	 *             En caso que el valor del paper input sea invalido segun los validadores asignados.
-	 */
-	public void validate() {
-		wrappedField.validate();
-	}
-
-	/**
-	 * Agrega un validador del contenido.
-	 * 
-	 * @param newValidator
-	 *            Nuevo validador.
-	 * @return this.
-	 */
-	public void addValidator(final Validator validator) {
-		wrappedField.addValidator(new Validator() {
-			@Override
-			public void validate(Object value) throws InvalidValueException {
-				try {
-					validator.validate(value);
-				} catch (InvalidValueException e) {
-					setErrorMessage(e.getMessage());
-					setInputInvalid();
-					throw e;
-				}
-			}
-		});
-	}
-
 	/**
 	 * Limpia el campo y lo restaura a su estado original.
 	 */
+	@Override
 	public void clear() {
 		setValue("");
 		setInputValid();
@@ -191,35 +89,4 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 		});
 	}
 
-	@Override
-	protected PaperInputState getState() {
-		return (PaperInputState) super.getState();
-	}
-
-	/**
-	 * Establece mensaje de error de validacion del campo.
-	 *
-	 * @param errMsg
-	 *            Mensaje a obtener.
-	 */
-	protected void setErrorMessage(String errMsg) {
-		this.getState().inputErrorMessage = errMsg;
-		markAsDirty();
-	}
-
-	/**
-	 * Marca el input como invalido.
-	 */
-	protected void setInputInvalid() {
-		getState().inputInvalid = true;
-		markAsDirty();
-	}
-
-	/**
-	 * Marca el input como invalido.
-	 */
-	protected void setInputValid() {
-		getState().inputInvalid = false;
-		markAsDirty();
-	}
 }

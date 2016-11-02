@@ -11,7 +11,7 @@ ast_unicore_view_webcomponent_paperinput_date_PaperDateInput = function() {
 	var connector = this;
 	var e = this.getElement();
 
-	e.innerHTML = '<paper-input type="date" auto-validate></paper-input>';
+	e.innerHTML = '<paper-input type="date"></paper-input>';
 
 	function component() {
 		return e.firstChild;
@@ -30,9 +30,11 @@ ast_unicore_view_webcomponent_paperinput_date_PaperDateInput = function() {
 		component().errorMessage = this.getState().inputErrorMessage;
 		component().pattern = this.getState().inputPattern;
 		component().disabled = this.getState().inputDisabled;
+		component().invalid = this.getState().inputInvalid;
+		
+		component().validate();
 	}
 
-	
 	/*
 	 * Agrego listener para eventos "change" de paper-input.
 	 */

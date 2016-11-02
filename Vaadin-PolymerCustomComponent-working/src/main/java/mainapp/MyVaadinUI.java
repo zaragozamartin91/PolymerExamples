@@ -45,7 +45,7 @@ public class MyVaadinUI extends UI {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
 	private PaperTextInput organizationInput;
-	private PaperDateInput paperInputDate;
+	private PaperDateInput paperDateInput;
 	private PaperCombo organizationCombo;
 	private PaperTextInput disabledInput;
 	private PaperCombo peopleCombo;
@@ -138,15 +138,21 @@ public class MyVaadinUI extends UI {
 						Notification.show("" + event.getProperty().getValue());
 					}
 				});
-				paperTextArea.setRequired(true);
+				paperTextArea.setRequired(true, "Campo no puede ser vacio!");
 
-				paperInputDate = new PaperDateInput("Fecha de cumpleaños");
-				layout.addComponent(paperInputDate);
+				paperDateInput = new PaperDateInput("Fecha de cumpleaños");
+				layout.addComponent(paperDateInput);
 				try {
-					paperInputDate.setValue(DATE_FORMAT.parse("2016-03-21"));
+					paperDateInput.setValue(DATE_FORMAT.parse("2016-03-21"));
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
+				paperDateInput.addValueChangeListener(new ValueChangeListener() {
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+						Notification.show("" + event.getProperty().getValue());
+					}
+				});
 
 				disabledInput = new PaperTextInput("Disabled!");
 				disabledInput.disable();
