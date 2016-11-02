@@ -176,10 +176,11 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	}
 
 	/**
-	 * Limpia el campo.
+	 * Limpia el campo y lo restaura a su estado original.
 	 */
 	public void clear() {
 		setValue("");
+		setInputValid();
 	}
 
 	protected void addHandleChangeCallback() {
@@ -215,6 +216,14 @@ public class PaperTextInput extends AbstractJavaScriptComponent {
 	 */
 	protected void setInputInvalid() {
 		getState().inputInvalid = true;
+		markAsDirty();
+	}
+
+	/**
+	 * Marca el input como invalido.
+	 */
+	protected void setInputValid() {
+		getState().inputInvalid = false;
 		markAsDirty();
 	}
 }

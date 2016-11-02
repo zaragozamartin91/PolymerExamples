@@ -127,6 +127,21 @@ public class MyVaadinUI extends UI {
 				PaperTextArea paperTextArea = new PaperTextArea("Descripcion empresa");
 				paperTextArea.setWidth("100%");
 				layout.addComponent(paperTextArea);
+				paperTextArea.addValidator(new Validator() {
+					@Override
+					public void validate(Object value) throws InvalidValueException {
+						if (value == null || value.toString().length() < 10) {
+							throw new InvalidValueException("Longitud de descripcion muy pequeña!");
+						}
+					}
+				});
+				paperTextArea.addValueChangeListener(new ValueChangeListener() {
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+						Notification.show("" + event.getProperty().getValue());
+					}
+				});
+				paperTextArea.setRequired(true);
 
 				paperInputDate = new PaperDateInput("Fecha de cumpleaños");
 				layout.addComponent(paperInputDate);

@@ -1,15 +1,14 @@
 package ast.unicore.view.webcomponent.paperinput.text;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ast.unicore.view.webcomponent.paperinput.InputValidator;
 import ast.unicore.view.webcomponent.paperinput.InvalidInputException;
 import ast.unicore.view.webcomponent.paperinput.PaperInputState;
 
 import com.vaadin.annotations.JavaScript;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
+import com.vaadin.ui.TextField;
 
 import elemental.json.JsonArray;
 
@@ -24,11 +23,10 @@ import elemental.json.JsonArray;
 @SuppressWarnings("serial")
 @JavaScript({ "paper-text-area-connector.js" })
 public class PaperTextArea extends AbstractJavaScriptComponent {
-	private List<InputValidator<String>> validators = new ArrayList<>();
-	private boolean defaultValidatorEnabled = false;
+	private TextField wrappedField = new TextField();
 
 	/**
-	 * Crea un nuevo PaperInput con un label.
+	 * Crea una nueva instancia con un label.
 	 * 
 	 * @param label
 	 *            Label del campo.
@@ -40,9 +38,16 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 		addHandleChangeCallback();
 	}
 
-	@Override
-	protected PaperInputState getState() {
-		return (PaperInputState) super.getState();
+	/**
+	 * Agrega un listener que espera cambios de valor en el campo.
+	 * 
+	 * @param valueChangeListener
+	 *            Listener a agregar.
+	 * @return this.
+	 */
+	public PaperTextArea addValueChangeListener(final ValueChangeListener valueChangeListener) {
+		wrappedField.addValueChangeListener(valueChangeListener);
+		return this;
 	}
 
 	/**
@@ -53,6 +58,7 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 */
 	public void setValue(String value) {
 		getState().inputValue = value;
+		wrappedField.setValue(value);
 		markAsDirty();
 	}
 
@@ -73,30 +79,6 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 */
 	public void setRequired(boolean isRequired) {
 		this.getState().inputRequired = isRequired;
-		markAsDirty();
-	}
-
-	/**
-	 * Establece mensaje de error de validacion del campo.
-	 * 
-	 * @param errMsg
-	 *            Mensaje a obtener.
-	 */
-	public void setErrorMessage(String errMsg) {
-		this.getState().inputErrorMessage = errMsg;
-		markAsDirty();
-	}
-
-	/**
-	 * Establece el patron de validacion del campo como una expresion regular. Si el contenido del input no cumple con
-	 * la expresion regular, se lo marcara como invalido.
-	 * 
-	 * @param pattern
-	 *            Expresion regular de validacion del campo. Ej: [A-Za-z]+ es expresion regular de caracteres
-	 *            alfabeticos SIN espacios ni numeros.
-	 */
-	public void setPattern(String pattern) {
-		this.getState().inputPattern = pattern;
 		markAsDirty();
 	}
 
@@ -127,14 +109,8 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 * @throws InvalidInputException
 	 *             En caso que el valor del paper input sea invalido segun los validadores asignados.
 	 */
-	public void validate() throws InvalidInputException {
-		boolean inputRequired = getState().inputRequired;
-		String inputValue = getValue() == null ? "" : getValue();
-		boolean inputInvalid = getState().inputInvalid || (inputRequired && inputValue.isEmpty());
-
-		for (InputValidator<String> inputValidator : validators) {
-			inputValidator.validate(inputValue, inputInvalid);
-		}
+	public void validate() {
+		wrappedField.validate();
 	}
 
 	/**
@@ -144,33 +120,13 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 	 *            Nuevo validador.
 	 * @return this.
 	 */
-	public PaperTextArea addValidator(InputValidator<String> newValidator) {
-		this.validators.add(newValidator);
+	public PaperTextArea addValidator(final Validator validator) {
+		wrappedField.addValidator(validator);
 		return this;
 	}
 
 	/**
-	 * Habilita la validacion por defecto del contenido del componente cliente.
-	 */
-	public void enableDefaultClientComponentValidator() {
-		if (defaultValidatorEnabled) {
-			return;
-		}
-
-		this.defaultValidatorEnabled = true;
-
-		this.addValidator(new InputValidator<String>() {
-			@Override
-			public void validate(String inputValue, boolean clientComponentInputIsInvalid) throws InvalidInputException {
-				if (clientComponentInputIsInvalid) {
-					throw new InvalidInputException(getState().inputErrorMessage);
-				}
-			}
-		});
-	}
-
-	/**
-	 * Limpia el campo.
+	 * Limpia el campo y lo restaura a su estado original.
 	 */
 	public void clear() {
 		setValue("");
@@ -181,9 +137,15 @@ public class PaperTextArea extends AbstractJavaScriptComponent {
 			@Override
 			public void call(JsonArray arguments) {
 				System.out.println(PaperTextArea.class.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
+				wrappedField.setValue(arguments.getString(0));
 				getState().inputValue = arguments.getString(0);
-				getState().inputInvalid = arguments.getBoolean(1);
+				// getState().inputInvalid = arguments.getBoolean(1);
 			}
 		});
+	}
+
+	@Override
+	protected PaperInputState getState() {
+		return (PaperInputState) super.getState();
 	}
 }

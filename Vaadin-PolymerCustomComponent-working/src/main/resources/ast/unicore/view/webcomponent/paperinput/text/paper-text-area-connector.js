@@ -21,6 +21,9 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextArea = function() {
 		component().errorMessage = this.getState().inputErrorMessage;
 		component().pattern = this.getState().inputPattern;
 		component().disabled = this.getState().inputDisabled;
+		component().invalid = this.getState().inputInvalid;
+		
+		component().validate();
 	}
 
 	/*
