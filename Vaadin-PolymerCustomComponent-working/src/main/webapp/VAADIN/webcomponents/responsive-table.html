@@ -745,7 +745,6 @@
           var rowIndex = this.rows.length;
 
           var rowObject = {};
-          rowObject.rowIndex = rowIndex;
 
           row.forEach(function(data) {
               var self = this;
@@ -776,35 +775,43 @@
           Polymer.dom(tbody).appendChild(tr);
 
           this.rows.push(rowObject);
-      },clearRows: function() {
+      }, 
+      clearRows: function() {
           var tbody = this.$$("#table tbody");
           tbody.innerHTML = "";
           this.rows = [];
-      },clearColumns: function() {
+      }, 
+      clearColumns: function() {
           var theadRow = this.$$("#table thead tr");
           theadRow.innerHTML = "";
           this.columns = [];
-      },
+      }, 
       setColumns: function(columns) {
           columns.forEach(this.addColumn,this);
-      }, columnIndex : function(colName) {
+      }, 
+      columnIndex : function(colId) {
+          if(typeof colId === "number") {
+              return colId;
+          }
+
           var NOT_FOUND = -1;
           for(var i=0; i< this.columns.length; i++) {
-              if(colName === this.columns[i].name) {
+              if(colId === this.columns[i].name) {
                   return i;
               }
           }
           return NOT_FOUND;
-      }, column(colId) {
+      }, 
+      column(colId) {
           if(typeof colId === "string") {
               return this.columns[this.columnIndex(colId)];
           } else {
               return this.columns[colId];
           }
-      },
+      }, 
       value: function(rowIndex, colId, newVal) { 
-          var column = this.column(colId);
-          var colIndex = this.columnIndex(column.name);
+          var colIndex = this.columnIndex(colId);
+          var column = this.columns[colIndex];
           if(newVal) {
               this.rows[rowIndex][column.name] = newVal;
               if(!column.icon) {
