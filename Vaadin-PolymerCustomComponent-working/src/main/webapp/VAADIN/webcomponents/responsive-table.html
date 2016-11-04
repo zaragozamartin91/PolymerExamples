@@ -782,11 +782,13 @@
           this.rows = [];
       }, 
       clearColumns: function() {
+          this.clearRows();
           var theadRow = this.$$("#table thead tr");
           theadRow.innerHTML = "";
           this.columns = [];
       }, 
       setColumns: function(columns) {
+          this.clearColumns();
           columns.forEach(this.addColumn,this);
       }, 
       columnIndex : function(colId) {
