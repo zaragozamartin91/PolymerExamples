@@ -610,15 +610,15 @@
         <!-- Responsive table starts here -->
         <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
         <div class="table-responsive-vertical shadow-z-1">
-        <!-- Table starts here -->
-        <table id="table" class="table table-hover table-mc-light-blue">
-            <thead>
-                <tr>
-                </tr>
-            </thead>
+            <!-- Table starts here -->
+            <table id="table" class="table table-hover table-mc-light-blue">
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
 
-            <tbody>
-            </tbody>
+                <tbody>
+                </tbody>
             </table>
         </div>
     
@@ -636,10 +636,14 @@
             reflectToAttribute: true,
             value: function() {return [];}
         },
-        rows: {
+        initRows: {
             type: Array,
             notify: true,
             reflectToAttribute: true,
+            value: function() {return [];}
+        },
+        rows: {
+            type: Array,
             value: function() {return [];}
         }
       },
@@ -705,7 +709,7 @@
             this.appendHeader(column.name);
         }, this);
 
-        this.rows.forEach(this.addArrayRow, this);
+        this.initRows.forEach(this.addArrayRow, this);
       },
       appendHeader: function(caption){
         var theadRow = this.$$("#table thead tr");
@@ -714,8 +718,17 @@
         Polymer.dom(theadRow).appendChild(th);
       },
       addColumn: function(column) {
-        this.appendHeader(column.name);
-        this.columns.push(column);
+        var newCol = column;
+        if(typeof column === "string") {
+            newCol = {name:column};
+        }
+        
+        if(newCol.name) {
+            this.appendHeader(newCol.name);
+            this.columns.push(newCol);
+        } else {
+            console.log(newCol + " no es una columna valida!");
+        }
       },
       addObjectRow: function(rowObject) {
           var row = [];
@@ -763,10 +776,46 @@
           Polymer.dom(tbody).appendChild(tr);
 
           this.rows.push(rowObject);
-      },clear: function() {
+      },clearRows: function() {
           var tbody = this.$$("#table tbody");
           tbody.innerHTML = "";
           this.rows = [];
+      },clearColumns: function() {
+          var theadRow = this.$$("#table thead tr");
+          theadRow.innerHTML = "";
+          this.columns = [];
+      },
+      setColumns: function(columns) {
+          columns.forEach(this.addColumn,this);
+      }, columnIndex : function(colName) {
+          var NOT_FOUND = -1;
+          for(var i=0; i< this.columns.length; i++) {
+              if(colName === this.columns[i].name) {
+                  return i;
+              }
+          }
+          return NOT_FOUND;
+      }, column(colId) {
+          if(typeof colId === "string") {
+              return this.columns[this.columnIndex(colId)];
+          } else {
+              return this.columns[colId];
+          }
+      },
+      value: function(rowIndex, colId, newVal) { 
+          var column = this.column(colId);
+          var colIndex = this.columnIndex(column.name);
+          if(newVal) {
+              this.rows[rowIndex][column.name] = newVal;
+              if(!column.icon) {
+                  var tbodyRows = Polymer.dom(this.root).querySelectorAll('tbody tr');
+                  var tr = tbodyRows[rowIndex];
+                  var tds = Polymer.dom(tr).querySelectorAll('td');
+                  tds[colIndex].innerHTML = newVal;
+              }
+          }
+
+          return this.rows[rowIndex][column.name];
       }
     });
   </script>

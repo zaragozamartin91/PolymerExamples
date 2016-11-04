@@ -79,7 +79,7 @@
 
       <responsive-table 
         columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"Like","icon":"favorite"}]'
-        rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"]]'>
+        init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"]]'>
       </responsive-table>
             
       <script>
@@ -89,6 +89,10 @@
 
           var countriesCombo = document.querySelector('#countriesCombo');
           countriesCombo.setCaptions(["arg","chile","brasil"]);
+
+          document.querySelector('responsive-table').addEventListener('icon-click', function(e) {
+              console.log(e.detail);
+          });
         });
       </script>
   </body>
