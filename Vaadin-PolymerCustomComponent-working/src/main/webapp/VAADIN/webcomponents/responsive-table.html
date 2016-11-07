@@ -811,16 +811,31 @@
               return this.columns[colId];
           }
       }, 
+      row: function(rowIndex) {
+          var tds = Polymer.dom(this.root).querySelectorAll('tbody tr td');
+          var tdInitIndex = rowIndex * this.columns.length;
+          var rowObject = {};
+          
+          for(var i=0; i<this.columns.length; i++) {
+              var column = this.columns[i];
+              if(column.icon) {
+                  rowObject[column.name] = "";
+              } else {
+                  rowObject[column.name] = tds[tdInitIndex + i].innerHTML;
+              }
+          }
+
+          return rowObject;
+      },
       value: function(rowIndex, colId, newVal) { 
           var colIndex = this.columnIndex(colId);
           var column = this.columns[colIndex];
           if(newVal) {
               this.rows[rowIndex][column.name] = newVal;
               if(!column.icon) {
-                  var tbodyRows = Polymer.dom(this.root).querySelectorAll('tbody tr');
-                  var tr = tbodyRows[rowIndex];
-                  var tds = Polymer.dom(tr).querySelectorAll('td');
-                  tds[colIndex].innerHTML = newVal;
+                  var tds = Polymer.dom(this.root).querySelectorAll('tbody tr td');
+                  var tdIndex = rowIndex * this.columns.length + colIndex;
+                  tds[tdIndex].innerHTML = newVal;
               }
           }
 
