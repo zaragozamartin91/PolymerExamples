@@ -719,6 +719,8 @@
       },
       addColumn: function(column) {
         var newCol = column;
+
+        // si el parametro column es un string -> creo una columna nueva simple cuyo nombre es igual al parametro
         if(typeof column === "string") {
             newCol = {name:column};
         }
@@ -730,19 +732,32 @@
             console.log(newCol + " no es una columna valida!");
         }
       },
-      addObjectRow: function(rowObject) {
+      arrayRowToObjectRow: function(arrayRow) {
+          var rowObject = {};
+          var colIndex = 0;
+          
+          this.columns.forEach(function(column){
+              rowObject[column.name] = arrayRow[colIndex];
+              colIndex++;
+          }, this);
+
+          return rowObject;
+      },
+      objectRowToArrayRow: function(rowObject) {
           var row = [];
           this.columns.forEach(function(column) {
               var data = rowObject[column.name] || "";
               row.push(data);
           });
-
+          return row;
+      },
+      addObjectRow: function(rowObject) {
+          var row = this.objectRowToArrayRow(rowObject);
           this.addArrayRow(row);
       },
       addArrayRow: function(row) {
           var tr = document.createElement('tr');
           var colIndex = 0;
-          var rowIndex = this.rows.length;
 
           var rowObject = {};
 
@@ -756,11 +771,12 @@
               Polymer.dom(td).setAttribute('data-title', column.name);
               
               if(column.icon) {
+                // si la columna es de tipo boton_icono -> se agrega un click listener al boton que dispare un evento con la informacion de la fila.
                 var iconButton = document.createElement('paper-icon-button');
                 Polymer.dom(iconButton).setAttribute('icon',column.icon);
                 Polymer.dom(iconButton).setAttribute('name',column.name);
                 iconButton.addEventListener('click', function() {
-                    self.fire('icon-click', {row:rowObject, rowIndex:rowIndex, column: column});
+                    self.fire('icon-click', {row:rowObject, column: column});
                 });
                 Polymer.dom(td).appendChild(iconButton);
               } else {
@@ -782,12 +798,14 @@
           this.rows = [];
       }, 
       clearColumns: function() {
+          // eliminar las columnas implica descartar las filas anteriores
           this.clearRows();
           var theadRow = this.$$("#table thead tr");
           theadRow.innerHTML = "";
           this.columns = [];
       }, 
       setColumns: function(columns) {
+          // al establecer las columnas, las anteriores deben eliminarse
           this.clearColumns();
           columns.forEach(this.addColumn,this);
       }, 
@@ -804,42 +822,55 @@
           }
           return NOT_FOUND;
       }, 
-      column(colId) {
+      column: function(colId) {
           if(typeof colId === "string") {
               return this.columns[this.columnIndex(colId)];
           } else {
               return this.columns[colId];
           }
       }, 
-      row: function(rowIndex) {
-          var tds = Polymer.dom(this.root).querySelectorAll('tbody tr td');
-          var tdInitIndex = rowIndex * this.columns.length;
-          var rowObject = {};
-          
-          for(var i=0; i<this.columns.length; i++) {
-              var column = this.columns[i];
-              if(column.icon) {
-                  rowObject[column.name] = "";
-              } else {
-                  rowObject[column.name] = tds[tdInitIndex + i].innerHTML;
-              }
-          }
-
-          return rowObject;
-      },
-      value: function(rowIndex, colId, newVal) { 
+      value: function(rowIndex, colId, newVal, tds) { 
           var colIndex = this.columnIndex(colId);
           var column = this.columns[colIndex];
+
+          // si newVal NO ES UNDEFINED -> modifico el valor de la celda
           if(newVal) {
               this.rows[rowIndex][column.name] = newVal;
               if(!column.icon) {
-                  var tds = Polymer.dom(this.root).querySelectorAll('tbody tr td');
+                  // para evitar realizar un query por cada modificacion de valor, se verifica si las celdas se pasaron como parametro
+                  var __tds = tds || Polymer.dom(this.root).querySelectorAll('tbody tr td');
                   var tdIndex = rowIndex * this.columns.length + colIndex;
-                  tds[tdIndex].innerHTML = newVal;
+                  __tds[tdIndex].innerHTML = newVal;
               }
           }
 
           return this.rows[rowIndex][column.name];
+      },
+      setRow: function(rowIndex, row) {
+          if(row instanceof Array) {
+              row = this.arrayRowToObjectRow(row);
+          }
+
+          var tds = Polymer.dom(this.root).querySelectorAll('tbody tr td');
+          this.columns.forEach(function(column) {
+              this.value(rowIndex, column.name, row[column.name], tds)
+          }, this);
+      },
+      deleteRow: function(rowIndex) {
+          if(rowIndex >= this.rows.length) {
+              return false;
+          }
+
+          // elimino la fila en la tabla
+          var tbodyRows = Polymer.dom(this.root).querySelectorAll('tbody tr');
+          var tr = tbodyRows[rowIndex];
+          var tbody = Polymer.dom(this.root).querySelector('tbody');
+          Polymer.dom(tbody).removeChild(tr);
+
+          // elimino la fila de la propiedad "filas"
+          this.rows.splice(rowIndex, 1);
+
+          return true;
       }
     });
   </script>
