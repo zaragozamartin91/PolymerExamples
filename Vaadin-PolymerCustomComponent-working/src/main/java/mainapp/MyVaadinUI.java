@@ -3,6 +3,10 @@ package mainapp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +21,7 @@ import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
+import ast.unicore.view.webcomponent.table.ResponsiveTable;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -53,6 +58,8 @@ public class MyVaadinUI extends UI {
 	private PaperCheckbox marriedCheck;
 	private PaperCheckbox boyCheck;
 	private PaperCheckbox agreeCheck;
+
+	private ResponsiveTable responsiveTable;
 
 	@Override
 	protected void init(VaadinRequest request) {
@@ -184,6 +191,14 @@ public class MyVaadinUI extends UI {
 					}
 				})));
 
+				List<Map<String, String>> columns = new ArrayList<>();
+				columns.add(new HashMap<String, String>() {
+					{
+						put("name", "ID");
+					}
+				});
+				responsiveTable = new ResponsiveTable(columns);
+				layout.addComponent(responsiveTable);
 			}
 		});
 
@@ -338,6 +353,12 @@ public class MyVaadinUI extends UI {
 			{
 				Element script = response.getDocument().createElement("script");
 				script.attr("src", "VAADIN/webcomponents/bower_components/webcomponentsjs/webcomponents-lite.min.js");
+				head.appendChild(script);
+			}
+
+			{
+				Element script = response.getDocument().createElement("script");
+				script.attr("src", "VAADIN/webcomponents/bower_components/jquery-3.1.1.min/index.js");
 				head.appendChild(script);
 			}
 
