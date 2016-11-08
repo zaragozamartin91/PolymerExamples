@@ -11,9 +11,13 @@ public class IconColumn extends Column {
 	}
 
 	@Override
-	public Map<String, String> asMap() {
-		Map<String, String> map = super.asMap();
+	public Map<String, String> toMap() {
+		Map<String, String> map = super.toMap();
 		map.put("icon", icon);
 		return map;
+	}
+
+	public static IconColumn fromMap(Map<String, String> map) {
+		return new IconColumn(map.get("name"), map.get("icon"));
 	}
 }

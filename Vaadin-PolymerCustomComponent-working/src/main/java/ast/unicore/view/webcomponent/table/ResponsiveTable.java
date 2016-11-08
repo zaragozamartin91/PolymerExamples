@@ -1,10 +1,9 @@
 package ast.unicore.view.webcomponent.table;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractJavaScriptComponent;
@@ -33,15 +32,39 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	public ResponsiveTable(Object... columns) {
 		List<Map<String, String>> columnList = new ArrayList<>();
 
-		for (Object column : columns) {
-			if (column instanceof String) {
-				columnList.add(new Column(column.toString()).asMap());
-			} else {
-				columnList.add(((Column) column).asMap());
-			}
+		for (Object col : columns) {
+			Column column = parseColumn(col);
+			columnList.add(column.toMap());
 		}
 
 		init(columnList);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addRow(Object... values) {
+		Map<String, Object> row;
+		if (values.length == 1 && values[0] instanceof Map) {
+			row = (Map<String, Object>) values[0];
+			if (row.keySet().size() != getState().columns.size()) {
+				throw new RuntimeException("Valores ingresados incorrectos!");
+			}
+		} else if (getState().columns.size() == values.length) {
+			row = buildRow(values);
+		} else {
+			throw new RuntimeException("Valores ingresados incorrectos!");
+		}
+
+		getState().rows.add(row);
+		markAsDirty();
+	}
+
+	protected Map<String, Object> buildRow(Object... values) {
+		Map<String, Object> row = new HashMap<>();
+		int i = 0;
+		for (Map<String, String> column : getState().columns) {
+			row.put(Column.fromMap(column).name, values[i++]);
+		}
+		return row;
 	}
 
 	protected void init(List<Map<String, String>> columns) {
@@ -49,18 +72,12 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		addHandleClickCallback();
 	}
 
-	// public void addColumn(Object col) {
-	// Column column = parseColumn(col);
-	// this.getState().columns.add(column.asMap());
-	// markAsDirty();
-	// }
-
 	@SuppressWarnings("serial")
 	private void addHandleClickCallback() {
 		addFunction("handleIconClick", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(PaperCombo.class.getSimpleName() + "#handleIconClick: ");
+				System.out.println(ResponsiveTable.class.getSimpleName() + "#handleIconClick: ");
 			}
 		});
 	}

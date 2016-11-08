@@ -1,3 +1,4 @@
+<!--<link rel="import" href="bower_components/iron-icons/iron-icons.html">-->
 <link rel="import" href="bower_components/font-roboto/roboto.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 
@@ -757,6 +758,11 @@
           } else {
               this.addObjectRow(row);
           }
+      },
+      setRows: function(rows) {
+          // limpia todas las filas y las vuelve a establecer.
+          this.clearRows();
+          rows.forEach(this.addRow, this);
       },
       addObjectRow: function(rowObject) {
           var row = this.objectRowToArrayRow(rowObject);

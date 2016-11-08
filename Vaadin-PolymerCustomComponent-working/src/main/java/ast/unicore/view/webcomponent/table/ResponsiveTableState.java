@@ -11,5 +11,5 @@ public class ResponsiveTableState extends JavaScriptComponentState {
 
 	public List<Map<String, String>> columns = new ArrayList<>();
 
-	// public List<Map<String, Object>> rows = new ArrayList<>();
+	public List<Map<String, Object>> rows = new ArrayList<>();
 }
