@@ -9,9 +9,10 @@ ast_unicore_view_webcomponent_table_ResponsiveTable = function() {
 	}
 
 	this.onStateChange = function() {
-		console.log("ast_unicore_view_webcomponent_table_ResponsiveTable#onStateChange");
-
+		console.log("ast_unicore_view_webcomponent_table_ResponsiveTable#onStateChange:");
 		console.log(this.getState().columns);
+		
+		component().setColumns(this.getState().columns);
 	}
 
 	component().addEventListener("icon-click", function(e) {

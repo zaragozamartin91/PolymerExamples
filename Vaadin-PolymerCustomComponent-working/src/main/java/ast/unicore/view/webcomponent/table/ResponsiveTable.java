@@ -1,5 +1,6 @@
 package ast.unicore.view.webcomponent.table;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,13 +21,26 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		return (ResponsiveTableState) super.getState();
 	}
 
-	public ResponsiveTable(List<Map<String, String>> columns) {
-		getState().columns = columns;
-		markAsDirty();
+	public ResponsiveTable(Object... columns) {
+		List<Map<String, String>> columnList = new ArrayList<>();
 
+		for (Object column : columns) {
+			if (column instanceof String) {
+				columnList.add(new Column(column.toString()).asMap());
+			} else {
+				columnList.add(((Column) column).asMap());
+			}
+		}
+
+		init(columnList);
+	}
+
+	protected void init(List<Map<String, String>> columns) {
+		getState().columns = columns;
 		addHandleClickCallback();
 	}
 
+	@SuppressWarnings("serial")
 	private void addHandleClickCallback() {
 		addFunction("handleIconClick", new JavaScriptFunction() {
 			@Override

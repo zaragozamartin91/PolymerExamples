@@ -21,6 +21,7 @@ import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
+import ast.unicore.view.webcomponent.table.IconColumn;
 import ast.unicore.view.webcomponent.table.ResponsiveTable;
 
 import com.vaadin.annotations.Theme;
@@ -191,14 +192,9 @@ public class MyVaadinUI extends UI {
 					}
 				})));
 
-				List<Map<String, String>> columns = new ArrayList<>();
-				columns.add(new HashMap<String, String>() {
-					{
-						put("name", "ID");
-					}
-				});
-				responsiveTable = new ResponsiveTable(columns);
+				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"));
 				layout.addComponent(responsiveTable);
+				responsiveTable.setWidth("100%");
 			}
 		});
 
