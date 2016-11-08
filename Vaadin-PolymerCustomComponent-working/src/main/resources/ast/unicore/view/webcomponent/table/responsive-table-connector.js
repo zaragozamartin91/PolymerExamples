@@ -8,11 +8,23 @@ ast_unicore_view_webcomponent_table_ResponsiveTable = function() {
 		return e.firstChild;
 	}
 
+	function arraysEqual(arr1, arr2) {
+		return JSON.stringify(arr1) == JSON.stringify(arr2);
+	}
+
+	function arraysDifferent(arr1, arr2) {
+		return !arraysEqual(arr1, arr2);
+	}
+
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_table_ResponsiveTable#onStateChange:");
 		console.log(this.getState().columns);
+
+		if (arraysDifferent(this.getState().columns, component().columns)) {
+			component().setColumns(this.getState().columns);
+		}
 		
-		component().setColumns(this.getState().columns);
+		
 	}
 
 	component().addEventListener("icon-click", function(e) {

@@ -751,6 +751,13 @@
           });
           return row;
       },
+      addRow: function(row) {
+          if (row.constructor === Array) {
+              this.addArrayRow(row);
+          } else {
+              this.addObjectRow(row);
+          }
+      },
       addObjectRow: function(rowObject) {
           var row = this.objectRowToArrayRow(rowObject);
           this.addArrayRow(row);

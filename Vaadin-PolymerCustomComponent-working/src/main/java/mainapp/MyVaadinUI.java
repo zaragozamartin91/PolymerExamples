@@ -195,6 +195,7 @@ public class MyVaadinUI extends UI {
 				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
+				// responsiveTable.addColumn("Wife");
 			}
 		});
 

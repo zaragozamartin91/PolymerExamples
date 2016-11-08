@@ -21,6 +21,15 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		return (ResponsiveTableState) super.getState();
 	}
 
+	private Column parseColumn(Object column) {
+		if (column instanceof String) {
+			return new Column(column.toString());
+		} else {
+			return (Column) column;
+		}
+
+	}
+
 	public ResponsiveTable(Object... columns) {
 		List<Map<String, String>> columnList = new ArrayList<>();
 
@@ -39,6 +48,12 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		getState().columns = columns;
 		addHandleClickCallback();
 	}
+
+	// public void addColumn(Object col) {
+	// Column column = parseColumn(col);
+	// this.getState().columns.add(column.asMap());
+	// markAsDirty();
+	// }
 
 	@SuppressWarnings("serial")
 	private void addHandleClickCallback() {
