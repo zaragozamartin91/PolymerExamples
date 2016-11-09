@@ -18,14 +18,16 @@ ast_unicore_view_webcomponent_table_ResponsiveTable = function() {
 
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_table_ResponsiveTable#onStateChange:");
-		console.log(this.getState().columns);
-		console.log(this.getState().rows);
 
 		if (arraysDifferent(this.getState().columns, component().columns)) {
+			console.log("Estableciendo columnas:");
+			console.log(this.getState().columns);
 			component().setColumns(this.getState().columns);
 		}
 
 		if (arraysDifferent(this.getState().rows, component().rows)) {
+			console.log("Estableciendo filas:");
+			console.log(this.getState().rows);
 			component().setRows(this.getState().rows);
 		}
 	}

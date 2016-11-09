@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -191,6 +192,36 @@ public class MyVaadinUI extends UI {
 						Notification.show("De acuerdo: " + agreeCheck.getValue());
 					}
 				})));
+
+				final PaperTextInput rowAddInput = new PaperTextInput("Ingresa fila como: valor1,valor2,... || clave1:valor1, clave2:valor2, ...");
+				rowAddInput.setWidth("50%");
+				PaperButton rowAddButton = new PaperButton("Agregar fila", new ClickListener() {
+					@Override
+					public void buttonClick() {
+						try {
+							if (rowAddInput.getValue().contains(":")) {
+								Map<String, Object> rowMap = new HashMap<>();
+								String[] keysAndValues = rowAddInput.getValue().split(Pattern.quote(","));
+								for (String keyValue : keysAndValues) {
+									String[] keyValueSplit = keyValue.split(Pattern.quote(":"));
+									rowMap.put(keyValueSplit[0].trim(), keyValueSplit[1].trim());
+								}
+								responsiveTable.addRow(rowMap);
+							} else {
+								String[] rowValues = rowAddInput.getValue().split(Pattern.quote(","));
+								List<Object> values = new ArrayList<>();
+								for (String value : rowValues) {
+									values.add((value == null) ? "" : value.trim());
+								}
+								responsiveTable.addRow(values.toArray());
+							}
+						} catch (Exception e) {
+							Notification.show("Error agregando fila", Type.ERROR_MESSAGE);
+						}
+					}
+				});
+				layout.addComponent(rowAddInput);
+				layout.addComponent(rowAddButton);
 
 				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"));
 				layout.addComponent(responsiveTable);

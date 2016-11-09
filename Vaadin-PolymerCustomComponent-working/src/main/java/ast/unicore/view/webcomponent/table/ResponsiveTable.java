@@ -40,15 +40,14 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		init(columnList);
 	}
 
-	@SuppressWarnings("unchecked")
+	public void addRow(Map<String, Object> rowMap) {
+		getState().rows.add(rowMap);
+		markAsDirty();
+	}
+
 	public void addRow(Object... values) {
 		Map<String, Object> row;
-		if (values.length == 1 && values[0] instanceof Map) {
-			row = (Map<String, Object>) values[0];
-			if (row.keySet().size() != getState().columns.size()) {
-				throw new RuntimeException("Valores ingresados incorrectos!");
-			}
-		} else if (getState().columns.size() == values.length) {
+		if (getState().columns.size() == values.length) {
 			row = buildRow(values);
 		} else {
 			throw new RuntimeException("Valores ingresados incorrectos!");
