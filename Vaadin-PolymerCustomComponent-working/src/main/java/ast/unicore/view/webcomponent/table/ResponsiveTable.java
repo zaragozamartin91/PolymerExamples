@@ -2,6 +2,7 @@ package ast.unicore.view.webcomponent.table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -106,6 +107,32 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		clickListeners.add(clickListener);
 	}
 
+	/**
+	 * Remueve todas las filas de la tabla.
+	 */
+	public void empty() {
+		getState().rows = new ArrayList<>();
+		markAsDirty();
+	}
+
+	/**
+	 * Elimina una fila a partir de su indice en la tabla. Las filas se cuentan desde el 0.
+	 * 
+	 * @param rowIndex
+	 *            Indice de fila a remover.
+	 * @return Fila eliminada, <b>null</b> si la fila no existe.
+	 */
+	public Map<String, Object> removeRow(int rowIndex) {
+		if (rowIndex >= getState().rows.size()) {
+			return null;
+		} else {
+			Map<String, Object> deleted = getState().rows.remove(rowIndex);
+			markAsDirty();
+
+			return deleted;
+		}
+	}
+
 	@Override
 	protected ResponsiveTableState getState() {
 		return (ResponsiveTableState) super.getState();
@@ -120,7 +147,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	}
 
 	protected Map<String, Object> buildRow(Object... values) {
-		Map<String, Object> row = new HashMap<>();
+		Map<String, Object> row = new LinkedHashMap<>();
 		int i = 0;
 		for (Map<String, String> column : getState().columns) {
 			row.put(Column.fromMap(column).name, values[i++]);

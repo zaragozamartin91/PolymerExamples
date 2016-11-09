@@ -225,6 +225,25 @@ public class MyVaadinUI extends UI {
 				});
 				layout.addComponent(rowAddInput);
 				layout.addComponent(rowAddButton);
+				layout.addComponent(new PaperButton("Vaciar filas", new ClickListener() {
+					@Override
+					public void buttonClick() {
+						responsiveTable.empty();
+					}
+				}));
+				final PaperTextInput rowRemoveInput = new PaperTextInput("Remover fila");
+				layout.addComponent(rowRemoveInput);
+				layout.addComponent(new PaperButton("Remover fila", new ClickListener() {
+					@Override
+					public void buttonClick() {
+						try {
+							int rowIndex = Integer.parseInt(rowRemoveInput.getValue());
+							responsiveTable.removeRow(rowIndex);
+						} catch (NumberFormatException e) {
+							Notification.show("Valor invalido!", Type.ERROR_MESSAGE);
+						}
+					}
+				}));
 				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
