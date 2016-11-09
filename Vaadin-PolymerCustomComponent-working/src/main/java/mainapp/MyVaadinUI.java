@@ -22,6 +22,7 @@ import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
+import ast.unicore.view.webcomponent.table.Column;
 import ast.unicore.view.webcomponent.table.IconColumn;
 import ast.unicore.view.webcomponent.table.ResponsiveTable;
 
@@ -45,6 +46,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import elemental.json.JsonObject;
 
 @Theme("dawn")
 @SuppressWarnings("serial")
@@ -216,17 +219,22 @@ public class MyVaadinUI extends UI {
 								responsiveTable.addRow(values.toArray());
 							}
 						} catch (Exception e) {
-							Notification.show("Error agregando fila", Type.ERROR_MESSAGE);
+							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
 						}
 					}
 				});
 				layout.addComponent(rowAddInput);
 				layout.addComponent(rowAddButton);
-
 				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
 				responsiveTable.addRow(1, "Martin", "Programmer", "...");
+				responsiveTable.addClickListener(new ResponsiveTable.ClickListener() {
+					@Override
+					public void iconClick(Column column, JsonObject row) {
+						Notification.show(row.toJson());
+					}
+				});
 			}
 		});
 
