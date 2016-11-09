@@ -1,7 +1,6 @@
 package ast.unicore.view.webcomponent.table;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,17 +119,34 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 * 
 	 * @param rowIndex
 	 *            Indice de fila a remover.
-	 * @return Fila eliminada, <b>null</b> si la fila no existe.
+	 * @return Fila eliminada.
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 *             Si el indice de la fila excede a la cantidad de filas de la tabla.
 	 */
 	public Map<String, Object> removeRow(int rowIndex) {
 		if (rowIndex >= getState().rows.size()) {
-			return null;
+			throw new IndexOutOfBoundsException("Indice " + rowIndex + " excede la cantidad de filas de la tabla");
 		} else {
 			Map<String, Object> deleted = getState().rows.remove(rowIndex);
 			markAsDirty();
 
-			return deleted;
+			return new LinkedHashMap<>(deleted);
 		}
+	}
+
+	/**
+	 * Obtiene una copia de una fila.
+	 * 
+	 * @param rowIndex
+	 *            Indice de fila a obtener.
+	 * @return Copia de fila buscada.
+	 */
+	public Map<String, Object> getRow(int rowIndex) {
+		if (rowIndex >= getState().rows.size()) {
+			throw new IndexOutOfBoundsException("Indice " + rowIndex + " excede la cantidad de filas de la tabla");
+		}
+		return new LinkedHashMap<>(getState().rows.get(rowIndex));
 	}
 
 	@Override
