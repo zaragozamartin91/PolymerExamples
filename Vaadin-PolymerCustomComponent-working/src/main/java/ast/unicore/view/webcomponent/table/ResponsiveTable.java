@@ -51,13 +51,17 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 *            Valores de fila a agregar.
 	 */
 	public void addRow(Map<String, Object> rowMap) {
-		Set<Entry<String, Object>> rowEntries = rowMap.entrySet();
-		for (Entry<String, Object> rowEntry : rowEntries) {
-			rowEntry.setValue(rowEntry.getValue() == null ? "" : rowEntry.getValue());
-		}
+		if (rowMap.size() == getState().columns.size()) {
+			Set<Entry<String, Object>> rowEntries = rowMap.entrySet();
+			for (Entry<String, Object> rowEntry : rowEntries) {
+				rowEntry.setValue(rowEntry.getValue() == null ? "" : rowEntry.getValue());
+			}
 
-		getState().rows.add(rowMap);
-		markAsDirty();
+			getState().rows.add(rowMap);
+			markAsDirty();
+		} else {
+			throw new IllegalArgumentException("Cantidad de valores ingresados no corresponden con cantidad de columnas de la tabla");
+		}
 	}
 
 	/**
@@ -67,13 +71,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 * @param values
 	 */
 	public void addRow(Object... values) {
-		Map<String, Object> row;
-		if (getState().columns.size() == values.length) {
-			row = buildRow(values);
-		} else {
-			throw new RuntimeException("Valores ingresados incorrectos!");
-		}
-
+		Map<String, Object> row = buildRow(values);
 		addRow(row);
 	}
 
@@ -131,7 +129,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 			Map<String, Object> deleted = getState().rows.remove(rowIndex);
 			markAsDirty();
 
-			return new LinkedHashMap<>(deleted);
+			return wrapRow(deleted);
 		}
 	}
 
@@ -144,9 +142,117 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 */
 	public Map<String, Object> getRow(int rowIndex) {
 		if (rowIndex >= getState().rows.size()) {
-			throw new IndexOutOfBoundsException("Indice " + rowIndex + " excede la cantidad de filas de la tabla");
+			throw new IndexOutOfBoundsException("Indice " + rowIndex + " es igual o mayor a la cantidad de filas de la tabla");
 		}
-		return new LinkedHashMap<>(getState().rows.get(rowIndex));
+		return wrapRow(getState().rows.get(rowIndex));
+	}
+
+	/**
+	 * Obtiene la cantidad de filas de la tabla.
+	 * 
+	 * @return cantidad de filas de la tabla.
+	 */
+	public int getRowCount() {
+		return getState().rows.size();
+	}
+
+	/**
+	 * Obtiene filas a partir de un valor de columna.
+	 * 
+	 * @param columnName
+	 *            Nombre de columna.
+	 * @param value
+	 *            Valor esperado.
+	 * @return Filas que cumplen con el criterio.
+	 */
+	public List<Map<String, Object>> getRowsByColumn(String columnName, Object value) {
+		if (columnName == null || value == null) {
+			throw new NullPointerException("Nombre de columna o valor nulos");
+		}
+
+		List<Map<String, Object>> rows = getState().rows;
+		List<Map<String, Object>> matchRows = new ArrayList<>();
+
+		for (Map<String, Object> row : rows) {
+			if (value.equals(row.get(columnName))) {
+				matchRows.add(wrapRow(row));
+			}
+		}
+
+		return matchRows;
+	}
+
+	/**
+	 * Establece un valor de celda.
+	 * 
+	 * @param rowIndex
+	 *            Indice de fila (inicia en 0).
+	 * @param columnName
+	 *            Nombre de columna.
+	 * @param value
+	 *            Valor a establecer.
+	 * @return Fila modificada.
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 *             Si el indice de fila es igual o superior a cantidad de filas.
+	 */
+	public Map<String, Object> setCellValue(int rowIndex, String columnName, Object value) {
+		Map<String, Object> row = getRow(rowIndex);
+		row.put(columnName, value);
+
+		return setRow(rowIndex, row);
+	}
+
+	/**
+	 * Modifica una fila.
+	 * 
+	 * @param rowIndex
+	 *            Indice de fila (comienza de 0).
+	 * @param row
+	 *            Nuevos valores de fila.
+	 * @return Fila modificada.
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 *             Si el indice de fila es igual o superior a cantidad de filas.
+	 */
+	public Map<String, Object> setRow(int rowIndex, Map<String, Object> row) {
+		if (rowIndex >= getRowCount()) {
+			throw new IndexOutOfBoundsException("Indice de fila igual o superior a cantidad de filas de la tabla");
+		}
+
+		getState().rows.set(rowIndex, row);
+		markAsDirty();
+		return wrapRow(row);
+	}
+
+	/**
+	 * Modifica una fila.
+	 * 
+	 * @param rowIndex
+	 *            Indice de fila (comienza de 0).
+	 * @param values
+	 *            Nuevos valores de fila.
+	 * @return Fila modificada.
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 *             Si el indice de fila es igual o superior a cantidad de filas.
+	 * @throws IllegalArgumentException
+	 *             Si cantidad de valores de fila es menor a cantidad de columnas.
+	 */
+	public Map<String, Object> setRow(int rowIndex, Object... values) {
+		Map<String, Object> row = buildRow(values);
+		return setRow(rowIndex, row);
+	}
+
+	/**
+	 * Envuelve una fila en un mapa.
+	 * 
+	 * @param row
+	 *            Fila a envolver.
+	 * @return fila envuelta.
+	 */
+	protected Map<String, Object> wrapRow(Map<String, Object> row) {
+		return new LinkedHashMap<>(row);
 	}
 
 	@Override
@@ -163,12 +269,16 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	}
 
 	protected Map<String, Object> buildRow(Object... values) {
-		Map<String, Object> row = new LinkedHashMap<>();
-		int i = 0;
-		for (Map<String, String> column : getState().columns) {
-			row.put(Column.fromMap(column).name, values[i++]);
+		if (getState().columns.size() == values.length) {
+			Map<String, Object> row = new LinkedHashMap<>();
+			int i = 0;
+			for (Map<String, String> column : getState().columns) {
+				row.put(Column.fromMap(column).name, values[i++]);
+			}
+			return row;
+		} else {
+			throw new IllegalArgumentException("Cantidad de valores ingresados no corresponden con cantidad de columnas de la tabla");
 		}
-		return row;
 	}
 
 	protected void init(List<Map<String, String>> columns) {

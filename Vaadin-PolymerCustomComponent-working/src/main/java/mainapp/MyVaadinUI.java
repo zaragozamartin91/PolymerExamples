@@ -196,26 +196,20 @@ public class MyVaadinUI extends UI {
 					}
 				})));
 
-				final PaperTextInput rowAddInput = new PaperTextInput("Ingresa fila como: valor1,valor2,... || clave1:valor1, clave2:valor2, ...");
-				rowAddInput.setWidth("50%");
+				// PRUEBA RESPONSIVE TABLE ------------------------------------------------------------------------------------------------------
+
+				final PaperTextInput rowDataInput = new PaperTextInput("Ingresa fila como: valor1,valor2,... || clave1:valor1, clave2:valor2, ...");
+				rowDataInput.setWidth("50%");
 				PaperButton rowAddButton = new PaperButton("Agregar fila", new ClickListener() {
 					@Override
 					public void buttonClick() {
 						try {
-							if (rowAddInput.getValue().contains(":")) {
-								Map<String, Object> rowMap = new HashMap<>();
-								String[] keysAndValues = rowAddInput.getValue().split(Pattern.quote(","));
-								for (String keyValue : keysAndValues) {
-									String[] keyValueSplit = keyValue.split(Pattern.quote(":"));
-									rowMap.put(keyValueSplit[0].trim(), keyValueSplit[1].trim());
-								}
+							String rowData = rowDataInput.getValue();
+							if (rowData.contains(":")) {
+								Map<String, Object> rowMap = parseRowAsMap(rowData);
 								responsiveTable.addRow(rowMap);
 							} else {
-								String[] rowValues = rowAddInput.getValue().split(Pattern.quote(","));
-								List<Object> values = new ArrayList<>();
-								for (String value : rowValues) {
-									values.add((value == null) ? "" : value.trim());
-								}
+								List<Object> values = parseRowAsValues(rowData);
 								responsiveTable.addRow(values.toArray());
 							}
 						} catch (Exception e) {
@@ -223,7 +217,7 @@ public class MyVaadinUI extends UI {
 						}
 					}
 				});
-				layout.addComponent(rowAddInput);
+				layout.addComponent(rowDataInput);
 				layout.addComponent(rowAddButton);
 				layout.addComponent(new PaperButton("Vaciar filas", new ClickListener() {
 					@Override
@@ -231,16 +225,34 @@ public class MyVaadinUI extends UI {
 						responsiveTable.empty();
 					}
 				}));
-				final PaperTextInput rowRemoveInput = new PaperTextInput("Remover fila");
-				layout.addComponent(rowRemoveInput);
+				final PaperTextInput rowIndexInput = new PaperTextInput("Indice fila");
+				layout.addComponent(rowIndexInput);
 				layout.addComponent(new PaperButton("Remover fila", new ClickListener() {
 					@Override
 					public void buttonClick() {
 						try {
-							int rowIndex = Integer.parseInt(rowRemoveInput.getValue());
+							int rowIndex = Integer.parseInt(rowIndexInput.getValue());
 							responsiveTable.removeRow(rowIndex);
 						} catch (NumberFormatException e) {
 							Notification.show("Valor invalido!", Type.ERROR_MESSAGE);
+						}
+					}
+				}));
+				layout.addComponent(new PaperButton("Modificar fila", new ClickListener() {
+					@Override
+					public void buttonClick() {
+						try {
+							int rowIndex = Integer.parseInt(rowIndexInput.getValue());
+							String rowData = rowDataInput.getValue();
+							if (rowData.contains(":")) {
+								Map<String, Object> rowMap = parseRowAsMap(rowData);
+								responsiveTable.setRow(rowIndex, rowMap);
+							} else {
+								List<Object> values = parseRowAsValues(rowData);
+								responsiveTable.setRow(rowIndex, values.toArray());
+							}
+						} catch (Exception e) {
+							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
 						}
 					}
 				}));
@@ -356,6 +368,25 @@ public class MyVaadinUI extends UI {
 		layout.setWidth("100%");
 		layout.setMargin(true);
 		layout.setSpacing(true);
+	}
+
+	private Map<String, Object> parseRowAsMap(String rowData) {
+		Map<String, Object> rowMap = new HashMap<>();
+		String[] keysAndValues = rowData.split(Pattern.quote(","));
+		for (String keyValue : keysAndValues) {
+			String[] keyValueSplit = keyValue.split(Pattern.quote(":"));
+			rowMap.put(keyValueSplit[0].trim(), keyValueSplit[1].trim());
+		}
+		return rowMap;
+	}
+
+	private List<Object> parseRowAsValues(String rowData) {
+		String[] rowValues = rowData.split(Pattern.quote(","));
+		List<Object> values = new ArrayList<>();
+		for (String value : rowValues) {
+			values.add((value == null) ? "" : value.trim());
+		}
+		return values;
 	}
 
 	@WebServlet(value = "/*", asyncSupported = true)
