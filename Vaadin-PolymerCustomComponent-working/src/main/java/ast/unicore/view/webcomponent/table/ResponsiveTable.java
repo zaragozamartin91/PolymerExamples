@@ -27,8 +27,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	private List<ClickListener> clickListeners = new ArrayList<>();
 
 	/**
-	 * Crea una nueva tabla a partir de un conjunto de columnas de tipo {@link String}, {@link Column} o
-	 * {@link IconColumn}.
+	 * Crea una nueva tabla a partir de un conjunto de columnas de tipo {@link String}, {@link Column} o {@link IconColumn}.
 	 * 
 	 * @param columns
 	 *            Columnas de la tabla.
@@ -65,8 +64,8 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	}
 
 	/**
-	 * Agrega una fila a partir de un conjunto de valores. La cantidad de valores pasados como parametro DEBE SER IGUAL
-	 * a la cantidad de columnas de la tabla. Si la tabla tiene columnas de tipo ICONO -> pasar valores vacios como ""
+	 * Agrega una fila a partir de un conjunto de valores. La cantidad de valores pasados como parametro DEBE SER IGUAL a la cantidad de columnas de la tabla.
+	 * Si la tabla tiene columnas de tipo ICONO -> pasar valores vacios como ""
 	 * 
 	 * @param values
 	 */
@@ -88,10 +87,12 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		 * @param column
 		 *            Columna que fue clickeada.
 		 * @param row
-		 *            Fila que fue clickeada. Los valores de la fila son accedidos como si fuese un mapa donde las
-		 *            claves son los nombres de las columnas.
+		 *            Fila que fue clickeada. Los valores de la fila son accedidos como si fuese un mapa donde las claves son los nombres de las columnas.
+		 * @param rowIndex
+		 *            Indice TEMPORAL de la fila en la tabla (El indice es temporal dado que si la tabla se modifica, el valor del indice de la fila puede
+		 *            modificarse).
 		 */
-		public void iconClick(Column column, JsonObject row);
+		public void iconClick(Column column, JsonObject row, int rowIndex);
 	}
 
 	/**
@@ -294,7 +295,9 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 				JsonObject eventDetail = arguments.getObject(0);
 				for (ClickListener clickListener : clickListeners) {
 					Column column = Column.fromJsonObject(eventDetail.getObject("column"));
-					clickListener.iconClick(column, eventDetail.getObject("row"));
+					JsonObject jsonRow = eventDetail.getObject("row");
+					int rowIndex = new Double(eventDetail.getNumber("rowIndex")).intValue();
+					clickListener.iconClick(column, jsonRow, rowIndex);
 				}
 			}
 		});

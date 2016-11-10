@@ -771,6 +771,7 @@
       addArrayRow: function(row) {
           var tr = document.createElement('tr');
           var colIndex = 0;
+          var rowIndex = this.rows.length;
 
           var rowObject = {};
 
@@ -789,7 +790,7 @@
                 Polymer.dom(iconButton).setAttribute('icon',column.icon);
                 Polymer.dom(iconButton).setAttribute('name',column.name);
                 iconButton.addEventListener('click', function() {
-                    self.fire('icon-click', {row:rowObject, column: column});
+                    self.fire('icon-click', {row:rowObject, column: column, rowIndex:rowIndex});
                 });
                 Polymer.dom(td).appendChild(iconButton);
               } else {

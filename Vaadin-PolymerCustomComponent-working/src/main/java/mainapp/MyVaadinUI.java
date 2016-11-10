@@ -262,7 +262,7 @@ public class MyVaadinUI extends UI {
 				responsiveTable.addRow(1, "Martin", "Programmer", "...");
 				responsiveTable.addClickListener(new ResponsiveTable.ClickListener() {
 					@Override
-					public void iconClick(Column column, JsonObject row) {
+					public void iconClick(Column column, JsonObject row, int rowIndex) {
 						Notification.show(row.toJson());
 					}
 				});
@@ -475,5 +475,10 @@ public class MyVaadinUI extends UI {
 			this.name = name;
 			this.id = id;
 		}
+	}
+
+	public static void main(String[] args) {
+		int i = 1;
+		System.out.println(Double.compare(1.000, i));
 	}
 }
