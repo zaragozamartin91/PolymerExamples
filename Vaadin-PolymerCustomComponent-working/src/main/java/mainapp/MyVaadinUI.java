@@ -256,14 +256,20 @@ public class MyVaadinUI extends UI {
 						}
 					}
 				}));
-				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"));
+				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"), new IconColumn("Remove", "delete"));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
-				responsiveTable.addRow(1, "Martin", "Programmer", "...");
+				responsiveTable.addRow(1, "Martin", 1.5, "_", "_");
+				responsiveTable.addRow(2, "Julio", 2.2, "_", "_");
+				responsiveTable.addRow(3, "Exequiel", 3.7, "_", "_");
 				responsiveTable.addClickListener(new ResponsiveTable.ClickListener() {
 					@Override
-					public void iconClick(Column column, JsonObject row, int rowIndex) {
-						Notification.show(row.toJson());
+					public void iconClick(Column column, Map<String, Object> row, int rowIndex) {
+						if ("Remove".equals(column.name)) {
+							responsiveTable.removeRow(rowIndex);
+						} else {
+							Notification.show(row.toString());
+						}
 					}
 				});
 			}

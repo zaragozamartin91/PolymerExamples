@@ -92,7 +92,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		 *            Indice TEMPORAL de la fila en la tabla (El indice es temporal dado que si la tabla se modifica, el valor del indice de la fila puede
 		 *            modificarse).
 		 */
-		public void iconClick(Column column, JsonObject row, int rowIndex);
+		public void iconClick(Column column, Map<String, Object> row, int rowIndex);
 	}
 
 	/**
@@ -295,9 +295,11 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 				JsonObject eventDetail = arguments.getObject(0);
 				for (ClickListener clickListener : clickListeners) {
 					Column column = Column.fromJsonObject(eventDetail.getObject("column"));
-					JsonObject jsonRow = eventDetail.getObject("row");
 					int rowIndex = new Double(eventDetail.getNumber("rowIndex")).intValue();
-					clickListener.iconClick(column, jsonRow, rowIndex);
+
+					Map<String, Object> row = getRow(rowIndex);
+
+					clickListener.iconClick(column, row, rowIndex);
 				}
 			}
 		});
