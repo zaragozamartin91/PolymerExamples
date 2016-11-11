@@ -32,6 +32,7 @@ public class PaperTextArea extends AbstractPaperInput<String> {
 		getState().inputLabel = label;
 
 		addHandleChangeCallback();
+		addHandleFocusCallback();
 	}
 
 	/**
@@ -91,6 +92,17 @@ public class PaperTextArea extends AbstractPaperInput<String> {
 				wrappedField.setValue(arguments.getString(0));
 				getState().inputValue = arguments.getString(0);
 				// getState().inputInvalid = arguments.getBoolean(1);
+			}
+		});
+	}
+
+	protected void addHandleFocusCallback() {
+		addFunction("handleFocus", new JavaScriptFunction() {
+			@Override
+			public void call(JsonArray arguments) {
+				Class<PaperTextArea> clazz = PaperTextArea.class;
+				System.out.println(clazz.getSimpleName() + "#handleFocus: " + arguments.getString(0));
+				wrappedField.focus();
 			}
 		});
 	}

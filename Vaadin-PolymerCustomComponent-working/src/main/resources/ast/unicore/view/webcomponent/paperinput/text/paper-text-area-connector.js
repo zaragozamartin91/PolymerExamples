@@ -22,9 +22,15 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextArea = function() {
 		component().pattern = this.getState().inputPattern;
 		component().disabled = this.getState().inputDisabled;
 		component().invalid = this.getState().inputInvalid;
-		
+
 		component().validate();
 	}
+
+	/* Listener de eventos de foco */
+	component().addEventListener("focus", function(e) {
+		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#focus:");
+		connector.handleFocus(component().value);
+	});
 
 	/*
 	 * Agrego listener para eventos "change" de paper-input.

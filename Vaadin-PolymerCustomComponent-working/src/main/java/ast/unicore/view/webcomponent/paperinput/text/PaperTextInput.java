@@ -1,9 +1,13 @@
 package ast.unicore.view.webcomponent.paperinput.text;
 
+import java.util.Collection;
+
 import ast.unicore.view.webcomponent.paperinput.AbstractPaperInput;
 import ast.unicore.view.webcomponent.paperinput.PaperInputState;
 
 import com.vaadin.annotations.JavaScript;
+import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.JavaScriptFunction;
 
 import elemental.json.JsonArray;
@@ -30,6 +34,7 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 		getState().inputLabel = label;
 
 		addHandleChangeCallback();
+		addHandleFocusCallback();
 	}
 
 	/**
@@ -89,4 +94,19 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
+	protected void addHandleFocusCallback() {
+		addFunction("handleFocus", new JavaScriptFunction() {
+			@Override
+			public void call(JsonArray arguments) {
+				Class<PaperTextInput> clazz = PaperTextInput.class;
+				System.out.println(clazz.getSimpleName() + "#handleFocus: " + arguments.getString(0));
+				Collection<FocusListener> listeners = (Collection<FocusListener>) wrappedField.getListeners(FocusEvent.class);
+				for (FocusListener listener : listeners) {
+					listener.focus(new FocusEvent(wrappedField));
+				}
+
+			}
+		});
+	}
 }

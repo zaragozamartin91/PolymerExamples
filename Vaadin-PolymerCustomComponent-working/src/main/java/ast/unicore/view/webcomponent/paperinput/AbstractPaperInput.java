@@ -1,10 +1,12 @@
 package ast.unicore.view.webcomponent.paperinput;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
+import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.TextField;
 
@@ -15,8 +17,7 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	protected TextField wrappedField = new TextField();
 
 	/**
-	 * Habilita la validacion del campo automatica. La misma se disparara cada vez que el campo cambie de valor. No se
-	 * lanzaran excepciones.
+	 * Habilita la validacion del campo automatica. La misma se disparara cada vez que el campo cambie de valor. No se lanzaran excepciones.
 	 * 
 	 * @return this.
 	 */
@@ -44,6 +45,16 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	 */
 	public void addValueChangeListener(final ValueChangeListener valueChangeListener) {
 		wrappedField.addValueChangeListener(valueChangeListener);
+	}
+
+	/**
+	 * Agrega un listener de eventos de foco.
+	 * 
+	 * @param listener
+	 *            listener de eventos de foco.
+	 */
+	public void addFocusListener(FocusListener listener) {
+		wrappedField.addFocusListener(listener);
 	}
 
 	/**

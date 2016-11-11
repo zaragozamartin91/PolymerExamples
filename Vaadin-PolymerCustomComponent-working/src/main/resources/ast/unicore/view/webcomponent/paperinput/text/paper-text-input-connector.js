@@ -41,16 +41,19 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 		component().pattern = this.getState().inputPattern;
 		component().disabled = this.getState().inputDisabled;
 		component().invalid = this.getState().inputInvalid;
-		
+
 		component().validate();
 	}
 
-	/*
-	 * Agrego listener para eventos "change" de paper-input.
-	 */
+	/* Listener de eventos de foco */
+	component().addEventListener("focus", function(e) {
+		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#focus:");
+		connector.handleFocus(component().value);
+	});
+
+	/* Agrego listener para eventos "change" de paper-input. */
 	component().addEventListener("change", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#change:");
-		console.log(e);
 		connector.handleChange(component().value, component().invalid);
 	});
 };

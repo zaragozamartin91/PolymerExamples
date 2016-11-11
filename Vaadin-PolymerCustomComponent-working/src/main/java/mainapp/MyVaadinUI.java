@@ -31,6 +31,8 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
+import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.BootstrapFragmentResponse;
 import com.vaadin.server.BootstrapListener;
@@ -46,8 +48,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-
-import elemental.json.JsonObject;
 
 @Theme("dawn")
 @SuppressWarnings("serial")
@@ -115,7 +115,6 @@ public class MyVaadinUI extends UI {
 				organizationInput.setValue("ACCUSYS");
 				layout.addComponent(organizationInput);
 				organizationInput.setWidth("60%");
-
 				organizationInput.autoValidate();
 				organizationInput.addValidator(new Validator() {
 					@Override
@@ -130,6 +129,12 @@ public class MyVaadinUI extends UI {
 					@Override
 					public void valueChange(ValueChangeEvent event) {
 						Notification.show("" + event.getProperty().getValue());
+					}
+				});
+				organizationInput.addFocusListener(new FocusListener() {
+					@Override
+					public void focus(FocusEvent event) {
+						Notification.show("FOCUS");
 					}
 				});
 
