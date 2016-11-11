@@ -5,9 +5,6 @@ import ast.unicore.view.webcomponent.paperinput.PaperInputState;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.data.Validator;
-import com.vaadin.ui.JavaScriptFunction;
-
-import elemental.json.JsonArray;
 
 /**
  * Componente de vaadin del lado del servidor representante del componente paper-textarea de polymer.
@@ -82,28 +79,5 @@ public class PaperTextArea extends AbstractPaperInput<String> {
 	@Override
 	public void autoValidate() {
 		throw new UnsupportedOperationException("Operacion no soportada por " + getClass().getSimpleName());
-	}
-
-	protected void addHandleChangeCallback() {
-		addFunction("handleChange", new JavaScriptFunction() {
-			@Override
-			public void call(JsonArray arguments) {
-				System.out.println(PaperTextArea.class.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
-				wrappedField.setValue(arguments.getString(0));
-				getState().inputValue = arguments.getString(0);
-				// getState().inputInvalid = arguments.getBoolean(1);
-			}
-		});
-	}
-
-	protected void addHandleFocusCallback() {
-		addFunction("handleFocus", new JavaScriptFunction() {
-			@Override
-			public void call(JsonArray arguments) {
-				Class<PaperTextArea> clazz = PaperTextArea.class;
-				System.out.println(clazz.getSimpleName() + "#handleFocus: " + arguments.getString(0));
-				wrappedField.focus();
-			}
-		});
 	}
 }

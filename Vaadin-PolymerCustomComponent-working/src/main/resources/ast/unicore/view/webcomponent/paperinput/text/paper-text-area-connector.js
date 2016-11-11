@@ -28,7 +28,7 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextArea = function() {
 
 	/* Listener de eventos de foco */
 	component().addEventListener("focus", function(e) {
-		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#focus:");
+		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextArea#focus:");
 		connector.handleFocus(component().value);
 	});
 
@@ -36,7 +36,7 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextArea = function() {
 	 * Agrego listener para eventos "change" de paper-input.
 	 */
 	component().addEventListener("change", function(e) {
-		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#change:");
+		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextArea#change:");
 		console.log(e);
 		connector.handleChange(component().value, component().invalid);
 	});
