@@ -442,6 +442,8 @@ public class MyVaadinUI extends UI {
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
+			head.prependElement("meta").attr("name", "viewport").attr("content", "width=device-width, initial-scale=1.0");
+
 			{
 				Element script = response.getDocument().createElement("script");
 				script.attr("src", "VAADIN/webcomponents/bower_components/webcomponentsjs/webcomponents-lite.min.js");
