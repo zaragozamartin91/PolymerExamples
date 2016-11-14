@@ -1,12 +1,10 @@
 package ast.unicore.view.webcomponent.paperinput;
 
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
-import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
@@ -201,26 +199,9 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(clazz.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
+				System.out.println(clazz.getSimpleName() + "#handleChange: " + arguments.getString(0));
 				wrappedField.setValue(arguments.getString(0));
 				getState().inputValue = arguments.getString(0);
-				// getState().inputInvalid = arguments.getBoolean(1);
-			}
-		});
-	}
-
-	@SuppressWarnings({ "unchecked", "serial" })
-	protected void addHandleFocusCallback() {
-		final Class<?> clazz = this.getClass();
-		addFunction("handleFocus", new JavaScriptFunction() {
-			@Override
-			public void call(JsonArray arguments) {
-				System.out.println(clazz.getSimpleName() + "#handleFocus: " + arguments.getString(0));
-				Collection<FocusListener> listeners = (Collection<FocusListener>) wrappedField.getListeners(FocusEvent.class);
-				for (FocusListener listener : listeners) {
-					listener.focus(new FocusEvent(wrappedField));
-				}
-
 			}
 		});
 	}

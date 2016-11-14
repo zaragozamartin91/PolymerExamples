@@ -29,7 +29,6 @@ public class PaperTextArea extends AbstractPaperInput<String> {
 		getState().inputLabel = label;
 
 		addHandleChangeCallback();
-		addHandleFocusCallback();
 	}
 
 	/**
