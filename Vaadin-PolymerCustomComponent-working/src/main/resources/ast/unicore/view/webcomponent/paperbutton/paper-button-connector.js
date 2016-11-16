@@ -12,26 +12,22 @@
  */
 ast_unicore_view_webcomponent_paperbutton_PaperButton = function() {
 	var connector = this;
-	var e = this.getElement();
+	var element = this.getElement();
 
-	e.innerHTML = '<paper-button raised></paper-button>';
-
-	function component() {
-		return e.firstChild;
-	}
+	var component = document.createElement('paper-button');
+	component.raised = true;
+	element.appendChild(component);
 
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#onStateChange");
 
-		component().disabled = this.getState().buttonDisabled;
-		component().innerHTML = this.getState().buttonLabel;
-		component().style.width = this.getState().widthToSet;
+		component.disabled = this.getState().buttonDisabled;
+		component.innerHTML = this.getState().buttonLabel;
+		component.style.width = this.getState().widthToSet;
 	}
 
-	component().addEventListener('click', function(e) {
+	component.addEventListener('click', function(e) {
 		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#click:");
-		console.log(e);
-		console.log("calling connector.handleClick");
 		connector.handleClick();
 	});
 };

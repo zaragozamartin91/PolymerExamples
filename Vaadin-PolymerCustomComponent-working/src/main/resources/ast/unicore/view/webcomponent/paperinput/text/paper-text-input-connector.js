@@ -19,13 +19,11 @@
  */
 ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	var connector = this;
-	var e = this.getElement();
+	var element = this.getElement();
 
-	e.innerHTML = '<paper-input></paper-input>';
-
-	function component() {
-		return e.firstChild;
-	}
+	var component = document.createElement('paper-input');
+	element.appendChild(component);
+	// e.innerHTML = '<paper-input></paper-input>';
 
 	/*
 	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
@@ -34,26 +32,26 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextInput#onStateChange");
 
-		component().value = this.getState().inputValue;
-		component().label = this.getState().inputLabel;
-		component().required = this.getState().inputRequired;
-		component().errorMessage = this.getState().inputErrorMessage;
-		component().pattern = this.getState().inputPattern;
-		component().disabled = this.getState().inputDisabled;
-		component().invalid = this.getState().inputInvalid;
+		component.value = this.getState().inputValue;
+		component.label = this.getState().inputLabel;
+		component.required = this.getState().inputRequired;
+		component.errorMessage = this.getState().inputErrorMessage;
+		component.pattern = this.getState().inputPattern;
+		component.disabled = this.getState().inputDisabled;
+		component.invalid = this.getState().inputInvalid;
 
-		component().validate();
+		component.validate();
 	}
 
 	/* Listener de eventos de foco */
-	component().addEventListener("focus", function(e) {
+	component.addEventListener("focus", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#focus:");
-		connector.handleFocus(component().value);
+		connector.handleFocus(component.value);
 	});
 
 	/* Agrego listener para eventos "change" de paper-input. */
-	component().addEventListener("change", function(e) {
+	component.addEventListener("change", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#change:");
-		connector.handleChange(component().value, component().invalid);
+		connector.handleChange(component.value, component.invalid);
 	});
 };

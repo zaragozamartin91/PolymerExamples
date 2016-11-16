@@ -51,7 +51,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Theme("dawn")
 @SuppressWarnings("serial")
-public class MyVaadinUI extends UI {
+public class BigTestUI extends UI {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
 	private PaperTextInput organizationInput;
@@ -81,7 +81,6 @@ public class MyVaadinUI extends UI {
 		});
 
 		addComponentsButton.addClickListener(new ClickListener() {
-
 			@Override
 			public void buttonClick() {
 				organizationCombo = new PaperCombo("Organizaciones");
@@ -358,15 +357,6 @@ public class MyVaadinUI extends UI {
 		});
 		layout.addComponent(clearCombosButton);
 
-		// TextField textField = new TextField("LAME");
-		// textField.addValueChangeListener(new ValueChangeListener() {
-		// @Override
-		// public void valueChange(ValueChangeEvent event) {
-		// System.out.println("LAME CHANGED VALUE!");
-		// }
-		// });
-		// textField.setValue("NEW VALUE");
-
 		layout.addComponent(new PaperButton("PaperCombo#clear()", new ClickListener() {
 			@Override
 			public void buttonClick() {
@@ -401,7 +391,7 @@ public class MyVaadinUI extends UI {
 	}
 
 	@WebServlet(value = "/*", asyncSupported = true)
-	@VaadinServletConfiguration(productionMode = false, ui = MyVaadinUI.class)
+	@VaadinServletConfiguration(productionMode = false, ui = BigTestUI.class)
 	public static class Servlet extends VaadinServlet {
 		@Override
 		protected void servletInitialized() throws ServletException {
@@ -434,16 +424,14 @@ public class MyVaadinUI extends UI {
 			// add polymer for older browsers
 			// -------------------------------------------------
 			// Element polymer = response.getDocument().createElement("script");
-			// polymer.attr("src",
-			// "VAADIN/webcomponents/polymer-platform/platform.js");
+			// polymer.attr("src", "VAADIN/webcomponents/polymer-platform/platform.js");
 			// head.appendChild(polymer);
 			// ---------------------------------------------------------------------------------
 
 			// add es6 support for older browsers
 			// ----------------------------------------------
 			// Element traceur = response.getDocument().createElement("script");
-			// traceur.attr("src",
-			// "VAADIN/webcomponents/traceur-runtime/traceur-runtime.min.js");
+			// traceur.attr("src", "VAADIN/webcomponents/traceur-runtime/traceur-runtime.min.js");
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
@@ -488,10 +476,5 @@ public class MyVaadinUI extends UI {
 			this.name = name;
 			this.id = id;
 		}
-	}
-
-	public static void main(String[] args) {
-		int i = 1;
-		System.out.println(Double.compare(1.000, i));
 	}
 }

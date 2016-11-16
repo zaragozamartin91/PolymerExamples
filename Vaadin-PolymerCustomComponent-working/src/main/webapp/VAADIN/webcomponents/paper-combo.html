@@ -1,91 +1,88 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/paper-item/paper-item.html">
-<link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import"
+	href="bower_components/paper-listbox/paper-listbox.html">
+<link rel="import"
+	href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <dom-module id="paper-combo">
-  <style>
-  paper-dropdown-menu {
-      /* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
-      width: 100%;
-    }
-  </style>
-  
-  <template>
-    <paper-dropdown-menu 
-      id="theDrop" 
-      required={{dropRequired}} 
-      label={{dropLabel}} 
-      disabled="{{dropDisabled}}"
-      on-iron-select="handleSelect" >
-      
-        <paper-listbox id="theList" class="dropdown-content"></paper-listbox>
-        
-    </paper-dropdown-menu>
-  </template>
+<style>
+paper-dropdown-menu {
+	/* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
+	width: 100%;
+}
+</style>
 
-  <!-- Creates the element's prototype and registers it -->
-  <script>
-    Polymer({
-      is: 'paper-combo',
-      properties: {
-        dropLabel: {
-          type:String,
-          value:"",
-          notify: true,
-          reflectToAttribute: true
-        },
-        dropRequired: {
-          type: Boolean,
-          value: false,
-          notify: true,
-          reflectToAttribute: true
-        },
-        selectedLabel:  {
-          type:String,
-          value: ""
-        },
-        dropDisabled: {
-          type: Boolean,
-          value: false,
-          notify: true,
-          reflectToAttribute: true
-        },
-        captions: {
-          type: Array
-        }
-      },
-      setCaptions: function(captions) {
-        this.captions = captions;
-        var self = this;
-        console.log("paper-combo#setCaptions: " + captions);
-        Polymer.dom(self.$.theList).innerHTML="";
-        
-        captions.forEach(function(caption){
-          var newItem = document.createElement('paper-item');
-            newItem.innerHTML = caption;
-              
-            console.log("paper-combo::adding item: " + caption);
-            Polymer.dom(self.$.theList).appendChild(newItem);
-        });
-      },
-      setSelected: function(caption) {
-        var index = this.captions.indexOf(caption);
-        this.$.theList.selected = index;
-      },
-      setVoid: function() {
-        this.$.theList.selected = undefined;
-      },
-      handleSelect: function(e) {
-        console.log("paper-combo#handleSelect");
-        this.selectedLabel = this.$.theDrop.selectedItemLabel;
-        
-        console.log("this.$.theDrop.selectedItemLabel: " + this.$.theDrop.selectedItemLabel);
-        console.log("this.$.theList.selected: " + this.$.theList.selected);
-        
-        this.fire('selected',{ selected:this.selectedLabel });
-      }
-    });
-  </script>
+<template> <paper-dropdown-menu id="theDrop"
+	required={{dropRequired}} label={{dropLabel}}
+	disabled="{{dropDisabled}}" on-iron-select="handleSelect">
 
-</dom-module>
+<paper-listbox id="theList" class="dropdown-content"></paper-listbox> </paper-dropdown-menu> </template>
+
+<!-- Creates the element's prototype and registers it --> <script>
+	Polymer({
+		is : 'paper-combo',
+		properties : {
+			dropLabel : {
+				type : String,
+				value : "",
+				notify : true,
+				reflectToAttribute : true
+			},
+			dropRequired : {
+				type : Boolean,
+				value : false,
+				notify : true,
+				reflectToAttribute : true
+			},
+			selectedLabel : {
+				type : String,
+				value : ""
+			},
+			dropDisabled : {
+				type : Boolean,
+				value : false,
+				notify : true,
+				reflectToAttribute : true
+			},
+			captions : {
+				type : Array
+			}
+		},
+		ready : function() {
+			console.log("PAPER-COMBO READY!!!");
+		},
+		setCaptions : function(captions) {
+			this.captions = captions;
+			var self = this;
+			console.log("paper-combo#setCaptions: " + captions);
+			Polymer.dom(self.$.theList).innerHTML = "";
+
+			captions.forEach(function(caption) {
+				var newItem = document.createElement('paper-item');
+				newItem.innerHTML = caption;
+
+				console.log("paper-combo::adding item: " + caption);
+				Polymer.dom(self.$.theList).appendChild(newItem);
+			});
+		},
+		setSelected : function(caption) {
+			var index = this.captions.indexOf(caption);
+			this.$.theList.selected = index;
+		},
+		setVoid : function() {
+			this.$.theList.selected = undefined;
+		},
+		handleSelect : function(e) {
+			console.log("paper-combo#handleSelect");
+			this.selectedLabel = this.$.theDrop.selectedItemLabel;
+
+			console.log("this.$.theDrop.selectedItemLabel: " + this.$.theDrop.selectedItemLabel);
+			console.log("this.$.theList.selected: " + this.$.theList.selected);
+
+			this.fire('selected', {
+				selected : this.selectedLabel
+			});
+		}
+	});
+</script> </dom-module>
