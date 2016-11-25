@@ -1,6 +1,6 @@
 package ast.unicore.view.webcomponent.papercombo;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.vaadin.annotations.JavaScript;
@@ -158,6 +158,17 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	/**
+	 * Establece la altura del listado de opciones del combo.
+	 * 
+	 * @param height
+	 *            Altura del listado, por ejemplo: "300px".
+	 */
+	public void settDropdownContentHeight(String height) {
+		getState().dropdownContentHeight = height;
+		markAsDirty();
+	}
+
+	/**
 	 * Listener de cambio de valor.
 	 * 
 	 * @author martin.zaragoza
@@ -167,8 +178,8 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 */
 	public static abstract class ValueChangeListener<DataType> {
 		/**
-		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo. Si {@link PaperCombo#INVALID_KEY} se
-		 * encuentra seleccionado, el metodo no se ejecutara.
+		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo. Si {@link PaperCombo#INVALID_KEY} se encuentra seleccionado, el metodo no se
+		 * ejecutara.
 		 * 
 		 * @param selectedItemCaption
 		 *            Caption del item seleccionado.
@@ -215,7 +226,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	private void resetItems() {
-		items = new HashMap<>();
+		items = new LinkedHashMap<>();
 	}
 
 	private void resetSelectedCaption() {

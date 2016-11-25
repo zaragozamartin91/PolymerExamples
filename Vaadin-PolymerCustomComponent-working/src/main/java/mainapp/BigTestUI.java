@@ -48,6 +48,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 @Theme("dawn")
 @SuppressWarnings("serial")
@@ -279,6 +280,34 @@ public class BigTestUI extends UI {
 			}
 		});
 
+		PaperButton addPopupButton = new PaperButton("Abrir popup", new ClickListener() {
+			@Override
+			public void buttonClick() {
+				UI ui = BigTestUI.getCurrent();
+				Window window = new Window("Combo popup");
+
+				PaperCombo combo = new PaperCombo("Opciones");
+				for (int i = 0; i < 20; i++) {
+					combo.addItem("item_" + i);
+				}
+				int windowHeightPx = 400;
+				String comboHeight = (windowHeightPx * 0.75) + "px";
+				combo.settDropdownContentHeight(comboHeight);
+
+				VerticalLayout windowContent = new VerticalLayout(combo);
+				windowContent.setMargin(true);
+				windowContent.setSpacing(true);
+				window.setContent(windowContent);
+
+				window.setWidth("300px");
+				window.setHeight(windowHeightPx + "px");
+				window.setClosable(true);
+				window.center();
+				window.setModal(true);
+				ui.addWindow(window);
+			}
+		});
+
 		final PaperButton addComboItemButton = new PaperButton("Agregar organizacion", new ClickListener() {
 			@Override
 			public void buttonClick() {
@@ -324,14 +353,15 @@ public class BigTestUI extends UI {
 			}
 		});
 
+		layout.addComponent(addComponentsButton);
+
+		layout.addComponent(addPopupButton);
+
 		layout.addComponent(addComboItemButton);
 		addComboItemButton.setWidth("100%");
 
 		layout.addComponent(comboStateButton);
 		comboStateButton.setWidth("75%");
-
-		layout.addComponent(addComponentsButton);
-		// addComponentsButton.setClickShortcut(KeyCode.ENTER);
 
 		layout.addComponent(validateButton);
 		layout.addComponent(toggleVisible);

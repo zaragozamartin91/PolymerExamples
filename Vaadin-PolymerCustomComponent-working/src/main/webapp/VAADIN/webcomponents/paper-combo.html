@@ -1,25 +1,31 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/paper-item/paper-item.html">
-<link rel="import"
-	href="bower_components/paper-listbox/paper-listbox.html">
-<link rel="import"
-	href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <dom-module id="paper-combo">
-<style>
-paper-dropdown-menu {
-	/* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
-	width: 100%;
-}
-</style>
 
-<template> <paper-dropdown-menu id="theDrop"
-	required={{dropRequired}} label={{dropLabel}}
-	disabled="{{dropDisabled}}" on-iron-select="handleSelect">
+<template>
+	<style>
+	paper-dropdown-menu {
+		/* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
+		width: 100%;
+	},
+	</style>
+ 
+	<paper-dropdown-menu 
+		id="theDrop"
+		required={{dropRequired}} 
+		label={{dropLabel}}
+		disabled="{{dropDisabled}}" 
+		on-iron-select="handleSelect" >
+	
+		<paper-listbox id="theList" class="dropdown-content"></paper-listbox> 
+	</paper-dropdown-menu> 
+</template>
 
-<paper-listbox id="theList" class="dropdown-content"></paper-listbox> </paper-dropdown-menu> </template>
-
-<!-- Creates the element's prototype and registers it --> <script>
+<!-- Creates the element's prototype and registers it --> 
+<script>
 	Polymer({
 		is : 'paper-combo',
 		properties : {
@@ -50,7 +56,7 @@ paper-dropdown-menu {
 			}
 		},
 		ready : function() {
-			console.log("PAPER-COMBO READY!!!");
+			console.log("paper-combo#ready");
 		},
 		setCaptions : function(captions) {
 			this.captions = captions;
@@ -62,7 +68,7 @@ paper-dropdown-menu {
 				var newItem = document.createElement('paper-item');
 				newItem.innerHTML = caption;
 
-				console.log("paper-combo::adding item: " + caption);
+				console.log("paper-combo#setCaptions::adding item: " + caption);
 				Polymer.dom(self.$.theList).appendChild(newItem);
 			});
 		},
@@ -83,6 +89,10 @@ paper-dropdown-menu {
 			this.fire('selected', {
 				selected : this.selectedLabel
 			});
+		},
+		setDropdownContentHeight: function(height) {
+			Polymer.dom(this.root).querySelector('.dropdown-content').style.maxHeight = height;
 		}
 	});
-</script> </dom-module>
+</script> 
+</dom-module>
