@@ -109,9 +109,7 @@ public class BigTestUI extends UI {
 				peopleCombo.addValueChangeListener(comboValueChangeListener);
 
 				organizationInput = new PaperTextInput("Nombre organizacion");
-				// organizationInput.setPattern("[a-zA-Z ]+");
-				// organizationInput.setErrorMessage("Nombre de organizacion invalido!");
-				organizationInput.setRequired(true);
+				organizationInput.setRequired(true, "Campo no puede ser vacio [REQUERIDO]!");
 				organizationInput.setValue("ACCUSYS");
 				layout.addComponent(organizationInput);
 				organizationInput.setWidth("60%");
@@ -121,7 +119,7 @@ public class BigTestUI extends UI {
 					public void validate(Object value) throws InvalidValueException {
 						Notification.show("Validando: " + value);
 						if (value == null || value.toString().isEmpty()) {
-							throw new InvalidValueException("Campo no puede ser vacio!");
+							throw new InvalidValueException("Campo no puede ser vacio [VALIDADOR]!");
 						}
 					}
 				});
@@ -141,6 +139,7 @@ public class BigTestUI extends UI {
 				PaperTextArea paperTextArea = new PaperTextArea("Descripcion empresa");
 				paperTextArea.setWidth("100%");
 				layout.addComponent(paperTextArea);
+				paperTextArea.autoValidate();
 				paperTextArea.addValidator(new Validator() {
 					@Override
 					public void validate(Object value) throws InvalidValueException {

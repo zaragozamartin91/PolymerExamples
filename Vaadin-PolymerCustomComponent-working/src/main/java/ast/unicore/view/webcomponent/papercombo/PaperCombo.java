@@ -219,7 +219,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		addFunction("handleSelected", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
+				// System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
 				setSelectedItemCaption(arguments.getString(0));
 			}
 		});
