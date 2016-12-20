@@ -673,301 +673,309 @@
             }
         </style>
 
-        <!--SE AGREGA PARA QUE SEA RESPONSIVE EN MOBILE-->
-        <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">  -->
+<!--SE AGREGA PARA QUE SEA RESPONSIVE EN MOBILE-->
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">  -->
 
-        <!-- Responsive table starts here -->
-        <!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
-        <div class="table-responsive-vertical shadow-z-1">
-            <!-- Table starts here -->
-            <table id="table" class="table table-hover table-mc-light-blue">
-                <thead>
-                    <tr>
-                    </tr>
-                </thead>
+<!-- Responsive table starts here -->
+<!-- For correct display on small screens you must add 'data-title' to each 'td' in your table -->
+<div class="table-responsive-vertical shadow-z-1">
+    <!-- Table starts here -->
+    <table id="table" class="table table-hover table-mc-light-blue">
+        <thead>
+            <tr>
+            </tr>
+        </thead>
 
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-
-
-    </template>
-
-    <!-- Creates the element's prototype and registers it -->
-    <script>
-    Polymer({
-      is: 'responsive-table-multi',
-      properties: {
-        columns: {
-            type: Array,
-            notify: true,
-            reflectToAttribute: true,
-            value: function() {return [];}
-        },
-        initRows: {
-            type: Array,
-            notify: true,
-            reflectToAttribute: true,
-            value: function() {return [];}
-        },
-        rows: {
-            type: Array,
-            value: function() {return [];}
-        }
-      },
-      ready: function() {
-        console.log(this.$.table);
-            
-        var table = $(this.$.table);
-
-        // Table bordered
-        $('#table-bordered').change(function() {
-            var value = $( this ).val();
-            table.removeClass('table-bordered').addClass(value);
-        });
-
-        // Table striped
-        $('#table-striped').change(function() {
-            var value = $( this ).val();
-            table.removeClass('table-striped').addClass(value);
-        });
-
-        // Table hover
-        $('#table-hover').change(function() {
-            var value = $( this ).val();
-            table.removeClass('table-hover').addClass(value);
-        });
-
-        // Table color
-        $('#table-color').change(function() {
-            var value = $(this).val();
-            table.removeClass(/^table-mc-/).addClass(value);
-        });
+        <tbody>
+        </tbody>
+    </table>
+</div>
 
 
-        // jQuery’s hasClass and removeClass on steroids
-        // by Nikita Vasilyev
-        // https://github.com/NV/jquery-regexp-classes
-        (function(removeClass) {
+</template>
 
-            jQuery.fn.removeClass = function( value ) {
-                if ( value && typeof value.test === "function" ) {
-                    for ( var i = 0, l = this.length; i < l; i++ ) {
-                        var elem = this[i];
-                        if ( elem.nodeType === 1 && elem.className ) {
-                            var classNames = elem.className.split( /\s+/ );
+<!-- Creates the element's prototype and registers it -->
+<script>
+        Polymer({
+            is: 'responsive-table-multi',
+            properties: {
+                columns: {
+                    type: Array,
+                    notify: true,
+                    reflectToAttribute: true,
+                    value: function () { return []; }
+                },
+                initRows: {
+                    type: Array,
+                    notify: true,
+                    reflectToAttribute: true,
+                    value: function () { return []; }
+                },
+                rows: {
+                    type: Array,
+                    value: function () { return []; }
+                }
+            },
+            ready: function () {
+                console.log(this.$.table);
 
-                            for ( var n = classNames.length; n--; ) {
-                                if ( value.test(classNames[n]) ) {
-                                    classNames.splice(n, 1);
+                var table = $(this.$.table);
+
+                // Table bordered
+                $('#table-bordered').change(function () {
+                    var value = $(this).val();
+                    table.removeClass('table-bordered').addClass(value);
+                });
+
+                // Table striped
+                $('#table-striped').change(function () {
+                    var value = $(this).val();
+                    table.removeClass('table-striped').addClass(value);
+                });
+
+                // Table hover
+                $('#table-hover').change(function () {
+                    var value = $(this).val();
+                    table.removeClass('table-hover').addClass(value);
+                });
+
+                // Table color
+                $('#table-color').change(function () {
+                    var value = $(this).val();
+                    table.removeClass(/^table-mc-/).addClass(value);
+                });
+
+
+                // jQuery’s hasClass and removeClass on steroids
+                // by Nikita Vasilyev
+                // https://github.com/NV/jquery-regexp-classes
+                (function (removeClass) {
+
+                    jQuery.fn.removeClass = function (value) {
+                        if (value && typeof value.test === "function") {
+                            for (var i = 0, l = this.length; i < l; i++) {
+                                var elem = this[i];
+                                if (elem.nodeType === 1 && elem.className) {
+                                    var classNames = elem.className.split(/\s+/);
+
+                                    for (var n = classNames.length; n--;) {
+                                        if (value.test(classNames[n])) {
+                                            classNames.splice(n, 1);
+                                        }
+                                    }
+                                    elem.className = jQuery.trim(classNames.join(" "));
                                 }
                             }
-                            elem.className = jQuery.trim( classNames.join(" ") );
+                        } else {
+                            removeClass.call(this, value);
                         }
+                        return this;
                     }
-                } else {
-                    removeClass.call(this, value);
+
+                })(jQuery.fn.removeClass);
+
+                this.columns.forEach(function (column) {
+                    this.appendHeader(column.name);
+                }, this);
+
+                this.initRows.forEach(this.addArrayRow, this);
+            },
+            /* Agrega un encabezado al DOM de la tabla. */
+            appendHeader: function (caption) {
+                var theadRow = this.$$("#table thead tr");
+                var th = document.createElement("th");
+                th.innerHTML = caption;
+                Polymer.dom(theadRow).appendChild(th);
+            },
+            /* Agrega una columna a la tabla. */
+            addColumn: function (column) {
+                var newCol = column;
+
+                // si el parametro column es un string -> creo una columna nueva simple cuyo nombre es igual al parametro
+                if (typeof column === "string") {
+                    newCol = { name: column };
                 }
-                return this;
-            }
 
-        })(jQuery.fn.removeClass);
+                if (newCol.name) {
+                    this.appendHeader(newCol.name);
+                    this.columns.push(newCol);
+                } else {
+                    console.log(newCol + " no es una columna valida!");
+                }
+            },
+            /* Transforma una fila estilo ARRAY en una fila estilo OBJECT (mapa columna->valor) */
+            arrayRowToObjectRow: function (arrayRow) {
+                var rowObject = {};
+                var colIndex = 0;
 
-        this.columns.forEach(function(column){
-            this.appendHeader(column.name);
-        }, this);
+                this.columns.forEach(function (column) {
+                    rowObject[column.name] = arrayRow[colIndex];
+                    colIndex++;
+                }, this);
 
-        this.initRows.forEach(this.addArrayRow, this);
-      },
-      /* Agrega un encabezado al DOM de la tabla. */
-      appendHeader: function(caption){
-        var theadRow = this.$$("#table thead tr");
-        var th = document.createElement("th");
-        th.innerHTML = caption;
-        Polymer.dom(theadRow).appendChild(th);
-      },
-      /* Agrega una columna a la tabla. */
-      addColumn: function(column) {
-        var newCol = column;
-
-        // si el parametro column es un string -> creo una columna nueva simple cuyo nombre es igual al parametro
-        if(typeof column === "string") {
-            newCol = {name:column};
-        }
-        
-        if(newCol.name) {
-            this.appendHeader(newCol.name);
-            this.columns.push(newCol);
-        } else {
-            console.log(newCol + " no es una columna valida!");
-        }
-      },
-      /* Transforma una fila estilo ARRAY en una fila estilo OBJECT (mapa columna->valor) */
-      arrayRowToObjectRow: function(arrayRow) {
-          var rowObject = {};
-          var colIndex = 0;
-          
-          this.columns.forEach(function(column){
-              rowObject[column.name] = arrayRow[colIndex];
-              colIndex++;
-          }, this);
-
-          return rowObject;
-      },
-      /* Transforma una fila estilo OBJECT (mapa columna->valor) en una fila estilo ARRAY. */
-      objectRowToArrayRow: function(rowObject) {
-          var row = [];
-          this.columns.forEach(function(column) {
-              var data = rowObject[column.name] || "";
-              row.push(data);
-          });
-          return row;
-      },
-      /* Agrega una fila de tipo objeto o array. */
-      addRow: function(row) {
-          if (row.constructor === Array) {
-              this.addArrayRow(row);
-          } else {
-              this.addObjectRow(row);
-          }
-      },
-      // limpia todas las filas y las vuelve a establecer.
-      setRows: function(rows) {
-          this.clearRows();
-          rows.forEach(this.addRow, this);
-      },
-      /* Agrega una fila tipo OBJECT */
-      addObjectRow: function(rowObject) {
-          var row = this.objectRowToArrayRow(rowObject);
-          this.addArrayRow(row);
-      },
-      /* Agrega una fila tipo ARRAY. Metodo principal para agregar filas. */
-      addArrayRow: function(row) {
-          var tr = document.createElement('tr');
-          var colIndex = 0;
-          var rowIndex = this.rows.length;
-
-          var rowObject = {};
-
-          row.forEach(function(data) {
-              var self = this;
-
-              var td = document.createElement('td');
-              var column = this.columns[colIndex];
-              rowObject[column.name] = data;
-              
-              Polymer.dom(td).setAttribute('data-title', column.name);
-              
-              if(column.icon) {
-                // si la columna es de tipo boton_icono -> se agrega un click listener al boton que dispare un evento con la informacion de la fila.
-                var iconButton = document.createElement('paper-icon-button');
-                Polymer.dom(iconButton).setAttribute('icon',column.icon);
-                Polymer.dom(iconButton).setAttribute('name',column.name);
-                iconButton.addEventListener('click', function() {
-                    self.fire('icon-click', {row:rowObject, column: column, rowIndex:rowIndex});
+                return rowObject;
+            },
+            /* Transforma una fila estilo OBJECT (mapa columna->valor) en una fila estilo ARRAY. */
+            objectRowToArrayRow: function (rowObject) {
+                var row = [];
+                this.columns.forEach(function (column) {
+                    var data = rowObject[column.name] || "";
+                    row.push(data);
                 });
-                Polymer.dom(td).appendChild(iconButton);
-              } else {
-                td.innerHTML = data;
-              }
-              
-              Polymer.dom(tr).appendChild(td);
-              ++colIndex;
-          }, this);
+                return row;
+            },
+            /* Agrega una fila de tipo objeto o array. */
+            addRow: function (row) {
+                if (row.constructor === Array) {
+                    this.addArrayRow(row);
+                } else {
+                    this.addObjectRow(row);
+                }
+            },
+            // limpia todas las filas y las vuelve a establecer.
+            setRows: function (rows) {
+                this.clearRows();
+                rows.forEach(this.addRow, this);
+            },
+            /* Agrega una fila tipo OBJECT */
+            addObjectRow: function (rowObject) {
+                var row = this.objectRowToArrayRow(rowObject);
+                this.addArrayRow(row);
+            },
+            /* crea un icon-button presionable. */
+            createIconButton: function (column, rowObject, rowIndex) {
+                var self = this;
 
-          var tbody = this.$$("#table tbody");
-          Polymer.dom(tbody).appendChild(tr);
+                var iconButton = document.createElement('paper-icon-button');
+                Polymer.dom(iconButton).setAttribute('icon', column.icon);
+                Polymer.dom(iconButton).setAttribute('name', column.name);
+                iconButton.addEventListener('click', function () {
+                    self.fire('icon-click', { row: rowObject, column: column, rowIndex: rowIndex });
+                });
+                
+                return iconButton;
+            },
+            /* Agrega una fila tipo ARRAY. Metodo principal para agregar filas. */
+            addArrayRow: function (row) {
+                var tr = document.createElement('tr');
+                var colIndex = 0;
+                var rowIndex = this.rows.length;
 
-          this.rows.push(rowObject);
-      },
-      /* Limpia las filas */ 
-      clearRows: function() {
-          var tbody = this.$$("#table tbody");
-          tbody.innerHTML = "";
-          this.rows = [];
-      }, 
-      /* Elimina las columnas y las filas de la tabla. */
-      clearColumns: function() {
-          this.clearRows();
-          var theadRow = this.$$("#table thead tr");
-          theadRow.innerHTML = "";
-          this.columns = [];
-      }, 
-      /* Elimina las columnas y filas de la tabla y establece columnas nuevas. */
-      setColumns: function(columns) {
-          this.clearColumns();
-          columns.forEach(this.addColumn,this);
-      }, 
-      /* Obtiene el indice de una columna de this.columns a partir de su nombre. */
-      columnIndex : function(colId) {
-          if(typeof colId === "number") {
-              return colId;
-          }
+                var rowObject = {};
 
-          var NOT_FOUND = -1;
-          for(var i=0; i< this.columns.length; i++) {
-              if(colId === this.columns[i].name) {
-                  return i;
-              }
-          }
-          return NOT_FOUND;
-      },
-      /* Obtiene una columna a partir de un id de columna (indice de columna o nombre de columna). */ 
-      column: function(colId) {
-          if(typeof colId === "string") {
-              return this.columns[this.columnIndex(colId)];
-          } else {
-              return this.columns[colId];
-          }
-      },
-      /* Obtiene y/o establece el valor de una celda a partir de un indice de fila, y un id de columna (indice de columna o nombre de columna). */ 
-      value: function(rowIndex, colId, newVal, tds) { 
-          var colIndex = this.columnIndex(colId);
-          var column = this.columns[colIndex];
+                row.forEach(function (data) {
+                    var self = this;
 
-          // si newVal NO ES UNDEFINED -> modifico el valor de la celda
-          if(newVal) {
-              this.rows[rowIndex][column.name] = newVal;
-              if(!column.icon) {
-                  // para evitar realizar un query por cada modificacion de valor, se verifica si las celdas se pasaron como parametro
-                  var __tds = tds || Polymer.dom(this.root).querySelectorAll('tbody tr td');
-                  var tdIndex = rowIndex * this.columns.length + colIndex;
-                  __tds[tdIndex].innerHTML = newVal;
-              }
-          }
+                    var td = document.createElement('td');
+                    var column = this.columns[colIndex];
+                    rowObject[column.name] = data;
 
-          return this.rows[rowIndex][column.name];
-      },
-      /* Establece una fila. */
-      setRow: function(rowIndex, row) {
-          if(row instanceof Array) {
-              row = this.arrayRowToObjectRow(row);
-          }
+                    Polymer.dom(td).setAttribute('data-title', column.name);
 
-          var tds = Polymer.dom(this.root).querySelectorAll('tbody tr td');
-          this.columns.forEach(function(column) {
-              this.value(rowIndex, column.name, row[column.name], tds)
-          }, this);
-      },
-      /* Elimina una fila. */
-      deleteRow: function(rowIndex) {
-          if(rowIndex >= this.rows.length) {
-              return false;
-          }
+                    if (column.icon) {
+                        // si la columna es de tipo boton_icono -> se agrega un click listener al boton que dispare un evento con la informacion de la fila.
+                        var iconButton = this.createIconButton(column, rowObject, rowIndex);
+                        Polymer.dom(td).appendChild(iconButton);
+                    } else {
+                        td.innerHTML = data;
+                    }
 
-          // elimino la fila en la tabla
-          var tbodyRows = Polymer.dom(this.root).querySelectorAll('tbody tr');
-          var tr = tbodyRows[rowIndex];
-          var tbody = Polymer.dom(this.root).querySelector('tbody');
-          Polymer.dom(tbody).removeChild(tr);
+                    Polymer.dom(tr).appendChild(td);
+                    ++colIndex;
+                }, this);
 
-          // elimino la fila de la propiedad "filas"
-          this.rows.splice(rowIndex, 1);
+                var tbody = this.$$("#table tbody");
+                Polymer.dom(tbody).appendChild(tr);
 
-          return true;
-      }
-    });
-  </script>
+                this.rows.push(rowObject);
+            },
+            /* Limpia las filas */
+            clearRows: function () {
+                var tbody = this.$$("#table tbody");
+                tbody.innerHTML = "";
+                this.rows = [];
+            },
+            /* Elimina las columnas y las filas de la tabla. */
+            clearColumns: function () {
+                this.clearRows();
+                var theadRow = this.$$("#table thead tr");
+                theadRow.innerHTML = "";
+                this.columns = [];
+            },
+            /* Elimina las columnas y filas de la tabla y establece columnas nuevas. */
+            setColumns: function (columns) {
+                this.clearColumns();
+                columns.forEach(this.addColumn, this);
+            },
+            /* Obtiene el indice de una columna de this.columns a partir de su nombre. */
+            columnIndex: function (colId) {
+                if (typeof colId === "number") {
+                    return colId;
+                }
+
+                var NOT_FOUND = -1;
+                for (var i = 0; i < this.columns.length; i++) {
+                    if (colId === this.columns[i].name) {
+                        return i;
+                    }
+                }
+                return NOT_FOUND;
+            },
+            /* Obtiene una columna a partir de un id de columna (indice de columna o nombre de columna). */
+            column: function (colId) {
+                if (typeof colId === "string") {
+                    return this.columns[this.columnIndex(colId)];
+                } else {
+                    return this.columns[colId];
+                }
+            },
+            /* Obtiene y/o establece el valor de una celda a partir de un indice de fila, y un id de columna (indice de columna o nombre de columna). */
+            value: function (rowIndex, colId, newVal, tds) {
+                var colIndex = this.columnIndex(colId);
+                var column = this.columns[colIndex];
+
+                // si newVal NO ES UNDEFINED -> modifico el valor de la celda
+                if (newVal) {
+                    this.rows[rowIndex][column.name] = newVal;
+                    if (!column.icon) {
+                        // para evitar realizar un query por cada modificacion de valor, se verifica si las celdas se pasaron como parametro
+                        var __tds = tds || Polymer.dom(this.root).querySelectorAll('tbody tr td');
+                        var tdIndex = rowIndex * this.columns.length + colIndex;
+                        __tds[tdIndex].innerHTML = newVal;
+                    }
+                }
+
+                return this.rows[rowIndex][column.name];
+            },
+            /* Establece una fila. */
+            setRow: function (rowIndex, row) {
+                if (row instanceof Array) {
+                    row = this.arrayRowToObjectRow(row);
+                }
+
+                var tds = Polymer.dom(this.root).querySelectorAll('tbody tr td');
+                this.columns.forEach(function (column) {
+                    this.value(rowIndex, column.name, row[column.name], tds)
+                }, this);
+            },
+            /* Elimina una fila. */
+            deleteRow: function (rowIndex) {
+                if (rowIndex >= this.rows.length) {
+                    return false;
+                }
+
+                // elimino la fila en la tabla
+                var tbodyRows = Polymer.dom(this.root).querySelectorAll('tbody tr');
+                var tr = tbodyRows[rowIndex];
+                var tbody = Polymer.dom(this.root).querySelector('tbody');
+                Polymer.dom(tbody).removeChild(tr);
+
+                // elimino la fila de la propiedad "filas"
+                this.rows.splice(rowIndex, 1);
+
+                return true;
+            }
+        });
+    </script>
 
 </dom-module>
