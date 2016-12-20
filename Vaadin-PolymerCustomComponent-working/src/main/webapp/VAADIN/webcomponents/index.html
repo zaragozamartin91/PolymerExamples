@@ -26,7 +26,7 @@
   <link rel="import" href="paper-wb-checkbox.html">
   <link rel="import" href="my-map.html">
   <link rel="import" href="paper-data-table.html">
-  <link rel="import" href="responsive-table.html">
+  <link rel="import" href="responsive-table-multi.html">
 
   <link rel="import" href="ssn-input.html">
 
@@ -77,10 +77,10 @@
             ]'>
   </paper-data-table>
 
-  <responsive-table 
+  <responsive-table-multi 
     columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"Like","icon":"favorite"}]' 
     init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
-  </responsive-table>
+  </responsive-table-multi>
 
   <paper-input-container always-float-label auto-validate attr-for-value="value">
     <label>Social Security Number</label>
@@ -96,7 +96,7 @@
           var countriesCombo = document.querySelector('#countriesCombo');
           countriesCombo.setCaptions(["arg","chile","brasil"]);
 
-          document.querySelector('responsive-table').addEventListener('icon-click', function(e) {
+          document.querySelector('responsive-table-multi').addEventListener('icon-click', function(e) {
               console.log(e.detail);
           });
         });
