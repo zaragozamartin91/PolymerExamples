@@ -90,6 +90,9 @@ public class BigTestUI extends UI {
 				organizationCombo.addItem("Claro", "Empresa de claro");
 				organizationCombo.addItem("Movistar", "Empresa movistar");
 				organizationCombo.addItem("Geotex", "Empresa geotex");
+				organizationCombo.addItem("Geotex", "Empresa geotexxx");
+				organizationCombo.addItem("Geotex", "EMPRESA GEOTEX");
+				organizationCombo.addItem("Movistar", "Empresa MOVISTAR");
 				organizationCombo.setWidth("100%");
 				PaperCombo.ValueChangeListener<String> comboValueChangeListener = new PaperCombo.ValueChangeListener<String>() {
 					@Override

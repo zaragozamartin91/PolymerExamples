@@ -1,63 +1,61 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="bower_components/jquery-3.1.1.min/index.js"></script>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
+  <script src="bower_components/jquery-3.1.1.min/index.js"></script>
+
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
     </script>
 
-    <link rel="import" href="bower_components/polymer/polymer.html">
-    <link rel="import" href="bower_components/paper-input/paper-input.html">
-    <link rel="import" href="bower_components/paper-item/paper-item.html">
-    <link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
-    <link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-    <link rel="import" href="bower_components/paper-button/paper-button.html">
-    <link rel="import" href="paper-autocomplete-input.html">
-    <link rel="import" href="bower_components/paper-styles/paper-styles.html">
+  <link rel="import" href="bower_components/polymer/polymer.html">
+  <link rel="import" href="bower_components/paper-input/paper-input.html">
+  <link rel="import" href="bower_components/paper-item/paper-item.html">
+  <link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
+  <link rel="import" href="bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="paper-autocomplete-input.html">
+  <link rel="import" href="bower_components/paper-styles/paper-styles.html">
 
-    <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
-    <link rel="import" href="bower_components/iron-icons/iron-icons.html">
-    <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+  <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 
-    <link rel="import" href="paper-combo.html">
-    <link rel="import" href="paper-wb-checkbox.html">
-    <link rel="import" href="my-map.html">
-    <link rel="import" href="paper-data-table.html">
-    <link rel="import" href="responsive-table.html">    
+  <link rel="import" href="paper-combo.html">
+  <link rel="import" href="paper-wb-checkbox.html">
+  <link rel="import" href="my-map.html">
+  <link rel="import" href="paper-data-table.html">
+  <link rel="import" href="responsive-table.html">
 
-  </head>
-  <body>
-    <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!" ></paper-input>
-    <paper-input auto-validate label="Ingrese nombre" disabled="disabled" ></paper-input>
+  <link rel="import" href="ssn-input.html">
 
-  <paper-autocomplete-input id="input1"
-    max-suggestions="4" 
-    prefetch-url="/countries.json" 
-    placeholder="Countries">
+</head>
+
+<body>
+  <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!"></paper-input>
+  <paper-input auto-validate label="Ingrese nombre" disabled="disabled"></paper-input>
+
+  <paper-autocomplete-input id="input1" max-suggestions="4" prefetch-url="/countries.json" placeholder="Countries">
   </paper-autocomplete-input>
 
-  <paper-autocomplete-input id="input2"
-      local-candidates='["clinton","trump"]'
-    placeholder="Enter US candidate" 
-    max-suggestions="4" ></paper-autocomplete-input>
+  <paper-autocomplete-input id="input2" local-candidates='["clinton","trump"]' placeholder="Enter US candidate" max-suggestions="4"></paper-autocomplete-input>
 
-    <paper-combo id="peopleCombo" drop-label="People"></paper-combo>
-    <br/>
-    <paper-combo id="countriesCombo" drop-label="Countries"></paper-combo>
-    <br/>
+  <paper-combo id="peopleCombo" drop-label="People"></paper-combo>
+  <br/>
+  <paper-combo id="countriesCombo" drop-label="Countries"></paper-combo>
+  <br/>
 
-    <paper-checkbox checked="checked"> single</paper-checkbox>
-    <paper-checkbox > married</paper-checkbox>
+  <paper-checkbox checked="checked"> single</paper-checkbox>
+  <paper-checkbox> married</paper-checkbox>
 
-    <paper-wb-checkbox label="CASADO" checked></paper-wb-checkbox>
+  <paper-wb-checkbox label="CASADO" checked></paper-wb-checkbox>
 
-    <my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>   
+  <my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>
 
-    <paper-icon-button icon="favorite" title="heart"></paper-icon-button>
+  <paper-icon-button icon="favorite" title="heart"></paper-icon-button>
 
-    <paper-data-table data='[
+  <paper-data-table data='[
               {
                 "title": "miss",
                 "first": "donna",
@@ -76,15 +74,21 @@
                 "last": "butler",
                 "age": 27
               }
-            ]' >
-      </paper-data-table>
+            ]'>
+  </paper-data-table>
 
-      <responsive-table 
-        columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"Like","icon":"favorite"}]'
-        init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
-      </responsive-table>
-            
-      <script>
+  <responsive-table 
+    columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"Like","icon":"favorite"}]' 
+    init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
+  </responsive-table>
+
+  <paper-input-container always-float-label auto-validate attr-for-value="value">
+    <label>Social Security Number</label>
+    <ssn-input class="paper-input-input"></ssn-input>
+    <paper-input-error>SSN invalid!</paper-input-error>
+  </paper-input-container>
+
+  <script>
         $(document).ready(function(){
           var peopleCombo = document.querySelector('#peopleCombo');
           peopleCombo.setCaptions(["martin","exe","julio"]);
@@ -97,5 +101,6 @@
           });
         });
       </script>
-  </body>
+</body>
+
 </html>

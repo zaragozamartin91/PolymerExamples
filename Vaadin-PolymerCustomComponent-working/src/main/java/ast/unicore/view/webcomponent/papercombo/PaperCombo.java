@@ -63,17 +63,15 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Item propiamente dicho.
 	 * @throws InvalidKeyException
 	 *             Cuando la clave/caption del item a agregar sea nula o igual a {@link PaperCombo#INVALID_KEY}.
-	 * @throws DuplicateItemException
-	 *             Cuando se quieran agregar dos items con claves iguales.
 	 */
-	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException, DuplicateItemException {
+	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException /* , DuplicateItemException */{
 		if (itemCaption == null || INVALID_KEY.equals(itemCaption)) {
 			throw new InvalidKeyException("La clave " + itemCaption + " es invalida!");
 		}
 
-		if (items.containsKey(itemCaption)) {
-			throw new DuplicateItemException("La clave " + itemCaption + " ya esta contenida dentro del combo!");
-		}
+		// if (items.containsKey(itemCaption)) {
+		// throw new DuplicateItemException("La clave " + itemCaption + " ya esta contenida dentro del combo!");
+		// }
 
 		items.put(itemCaption, item);
 		getState().captions = items.keySet().toArray(new String[0]);
