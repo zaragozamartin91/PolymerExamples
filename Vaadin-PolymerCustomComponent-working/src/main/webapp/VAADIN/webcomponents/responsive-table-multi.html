@@ -843,14 +843,14 @@
                 this.addArrayRow(row);
             },
             /* crea un icon-button presionable. */
-            createIconButton: function (column, rowObject, rowIndex) {
+            createIconButton: function (column, iconName, rowObject, rowIndex) {
                 var self = this;
 
                 var iconButton = document.createElement('paper-icon-button');
-                Polymer.dom(iconButton).setAttribute('icon', column.icon);
-                Polymer.dom(iconButton).setAttribute('name', column.name);
+                Polymer.dom(iconButton).setAttribute('icon', iconName);
+                Polymer.dom(iconButton).setAttribute('name', iconName);
                 iconButton.addEventListener('click', function () {
-                    self.fire('icon-click', { row: rowObject, column: column, rowIndex: rowIndex });
+                    self.fire('icon-click', { row: rowObject, column: column, rowIndex: rowIndex, icon:iconName });
                 });
                 
                 return iconButton;
@@ -872,10 +872,12 @@
 
                     Polymer.dom(td).setAttribute('data-title', column.name);
 
-                    if (column.icon) {
-                        // si la columna es de tipo boton_icono -> se agrega un click listener al boton que dispare un evento con la informacion de la fila.
-                        var iconButton = this.createIconButton(column, rowObject, rowIndex);
-                        Polymer.dom(td).appendChild(iconButton);
+                    if (column.icons) {
+                        /* si la columna tiene iconos asociados, los mismos son agregados. */
+                        column.icons.forEach( function(iconName) {
+                            var iconButton = this.createIconButton(column, iconName, rowObject, rowIndex);
+                            Polymer.dom(td).appendChild(iconButton);
+                        }, this);
                     } else {
                         td.innerHTML = data;
                     }
@@ -937,7 +939,8 @@
                 // si newVal NO ES UNDEFINED -> modifico el valor de la celda
                 if (newVal) {
                     this.rows[rowIndex][column.name] = newVal;
-                    if (!column.icon) {
+                    // el valor de una celda sera modificado solo si la columna de dicha celda NO tiene iconos asociados.
+                    if (!column.icons) {
                         // para evitar realizar un query por cada modificacion de valor, se verifica si las celdas se pasaron como parametro
                         var __tds = tds || Polymer.dom(this.root).querySelectorAll('tbody tr td');
                         var tdIndex = rowIndex * this.columns.length + colIndex;
