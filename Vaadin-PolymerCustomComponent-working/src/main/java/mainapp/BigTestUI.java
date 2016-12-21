@@ -74,13 +74,6 @@ public class BigTestUI extends UI {
 
 		PaperButton addComponentsButton = new PaperButton("Agregar componentes");
 
-		layout.addComponentAttachListener(new ComponentAttachListener() {
-			@Override
-			public void componentAttachedToContainer(ComponentAttachEvent event) {
-				System.out.println("Componente agregado");
-			}
-		});
-
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
@@ -263,19 +256,33 @@ public class BigTestUI extends UI {
 						}
 					}
 				}));
-				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"), new IconColumn("Remove", "delete"));
+
+				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", new IconColumn("Actions", "save", "delete"));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
-				responsiveTable.addRow(1, "Martin", 1.5, "_", "_");
-				responsiveTable.addRow(2, "Julio", 2.2, "_", "_");
-				responsiveTable.addRow(3, "Exequiel", 3.7, "_", "_");
+				responsiveTable.addRow(1, "Martin", 1200.5, "_");
+				responsiveTable.addRow(2, "Julio", 2500.25, "_");
+				responsiveTable.addRow(3, "Exequiel", 3750.71, "_");
 				responsiveTable.addClickListener(new ResponsiveTable.ClickListener() {
 					@Override
-					public void iconClick(Column column, Map<String, Object> row, int rowIndex) {
-						if ("Remove".equals(column.name)) {
-							responsiveTable.removeRow(rowIndex);
-						} else {
-							Notification.show(row.toString());
+					public void iconClick(Column column, Map<String, Object> row, int rowIndex, String iconName) {
+						switch (iconName) {
+							case "delete":
+								responsiveTable.removeRow(rowIndex);
+								break;
+							case "save":
+								String rowData = rowDataInput.getValue() == null ? "" : rowDataInput.getValue();
+								if (!rowData.isEmpty()) {
+									if (rowData.contains(":")) {
+										Map<String, Object> rowMap = parseRowAsMap(rowData);
+										responsiveTable.setRow(rowIndex, rowMap);
+									} else {
+										List<Object> values = parseRowAsValues(rowData);
+										responsiveTable.setRow(rowIndex, values.toArray());
+									}
+									Notification.show("GUARDANDO: " + row);
+									break;
+								}
 						}
 					}
 				});

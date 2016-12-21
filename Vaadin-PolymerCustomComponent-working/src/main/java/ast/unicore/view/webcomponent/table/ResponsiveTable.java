@@ -33,7 +33,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 *            Columnas de la tabla.
 	 */
 	public ResponsiveTable(Object... columns) {
-		List<Map<String, String>> columnList = new ArrayList<>();
+		List<Map<String, Object>> columnList = new ArrayList<>();
 
 		for (Object col : columns) {
 			Column column = parseColumn(col);
@@ -91,8 +91,10 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		 * @param rowIndex
 		 *            Indice TEMPORAL de la fila en la tabla (El indice es temporal dado que si la tabla se modifica, el valor del indice de la fila puede
 		 *            modificarse).
+		 * @param iconName
+		 *            Nombre del icono que se presiono.
 		 */
-		public void iconClick(Column column, Map<String, Object> row, int rowIndex);
+		public void iconClick(Column column, Map<String, Object> row, int rowIndex, String iconName);
 	}
 
 	/**
@@ -273,7 +275,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		if (getState().columns.size() == values.length) {
 			Map<String, Object> row = new LinkedHashMap<>();
 			int i = 0;
-			for (Map<String, String> column : getState().columns) {
+			for (Map<String, Object> column : getState().columns) {
 				row.put(Column.fromMap(column).name, values[i++]);
 			}
 			return row;
@@ -282,7 +284,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		}
 	}
 
-	protected void init(List<Map<String, String>> columns) {
+	protected void init(List<Map<String, Object>> columns) {
 		getState().columns = columns;
 		addHandleClickCallback();
 	}
@@ -296,10 +298,11 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 				for (ClickListener clickListener : clickListeners) {
 					Column column = Column.fromJsonObject(eventDetail.getObject("column"));
 					int rowIndex = new Double(eventDetail.getNumber("rowIndex")).intValue();
+					String iconName = eventDetail.getString("icon");
 
 					Map<String, Object> row = getRow(rowIndex);
 
-					clickListener.iconClick(column, row, rowIndex);
+					clickListener.iconClick(column, row, rowIndex, iconName);
 				}
 			}
 		});

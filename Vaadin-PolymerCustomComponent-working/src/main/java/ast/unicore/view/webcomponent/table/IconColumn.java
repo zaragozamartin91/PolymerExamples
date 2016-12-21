@@ -1,7 +1,12 @@
 package ast.unicore.view.webcomponent.table;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
+import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 
 /**
@@ -13,49 +18,45 @@ import elemental.json.JsonObject;
  *
  */
 public class IconColumn extends Column {
-	public static final String ICON_KEY = "icon";
-	public final String icon;
+	public static final String ICONS_KEY = "icons";
+	public final String icons;
 
 	/**
 	 * Crea una columna de tipo icono con un nombre y un ID de icono.
 	 * 
 	 * @param name
 	 *            Nombre/caption de columna.
-	 * @param icon
-	 *            Icono de columna.
+	 * @param icons
+	 *            Iconos de la columna.
 	 */
-	public IconColumn(String name, String icon) {
+	public IconColumn(String name, String... icons) {
 		super(name);
-		this.icon = icon;
+		this.icons = StringUtils.join(icons, ",");
 	}
 
 	@Override
-	public Map<String, String> toMap() {
-		Map<String, String> map = super.toMap();
-		map.put(ICON_KEY, icon);
+	public Map<String, Object> toMap() {
+		Map<String, Object> map = super.toMap();
+		map.put(ICONS_KEY, icons);
 		return map;
 	}
 
 	/**
-	 * Crea un {@link IconColumn} a partir de un mapa con claves {@link Column#NAME_KEY} y {@link IconColumn#ICON_KEY}.
-	 * 
-	 * @param map
-	 *            Mapa a partir del cual crear la columna.
-	 * @return Nueva columna de tipo icono.
-	 */
-	public static IconColumn fromMap(Map<String, String> map) {
-		return new IconColumn(map.get(NAME_KEY), map.get(ICON_KEY));
-	}
-
-	/**
-	 * Crea un {@link IconColumn} a partir de un objeto json con claves {@link Column#NAME_KEY} y
-	 * {@link IconColumn#ICON_KEY}.
+	 * Crea un {@link IconColumn} a partir de un objeto json con claves {@link Column#NAME_KEY} y {@link IconColumn#ICONS_KEY}.
 	 * 
 	 * @param jsonObject
 	 *            Objeto json a partir del cual crear la columna.
 	 * @return Nueva columna de tipo icono.
 	 */
 	public static IconColumn fromJsonObject(JsonObject jsonObject) {
-		return new IconColumn(jsonObject.getString(NAME_KEY), jsonObject.getString(ICON_KEY));
+		JsonArray iconsJsonArray = jsonObject.getArray(ICONS_KEY);
+		int iconCount = iconsJsonArray.length();
+		List<String> icons = new ArrayList<>();
+
+		for (int i = 0; i < iconCount; i++) {
+			icons.add(iconsJsonArray.getString(i));
+		}
+
+		return new IconColumn(jsonObject.getString(NAME_KEY), icons.toArray(new String[0]));
 	}
 }
