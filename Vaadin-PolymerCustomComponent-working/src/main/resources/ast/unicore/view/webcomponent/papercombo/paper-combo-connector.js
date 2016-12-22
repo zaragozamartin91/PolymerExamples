@@ -19,7 +19,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		component.setCaptions(this.getState().captions);
 		component.setSelected(this.getState().selectedLabel);
 
-		if (this.getState().dropdownContentHeight && this.getState().dropdownContentHeight != "") {
+		if (this.getState().dropdownContentHeight) {
 			component.setDropdownContentHeight(this.getState().dropdownContentHeight);
 		}
 	}

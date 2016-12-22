@@ -10,5 +10,5 @@ public class PaperComboState extends JavaScriptComponentState {
 	public boolean dropRequired;
 	public boolean dropDisabled;
 	public String[] captions;
-	public String dropdownContentHeight;
+	public String dropdownContentHeight = "300px";
 }

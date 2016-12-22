@@ -257,7 +257,7 @@ public class BigTestUI extends UI {
 					}
 				}));
 
-				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", new IconColumn("Actions", "save", "delete"));
+				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", IconColumn.newEmptynamed("save", "delete"));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
 				responsiveTable.addRow(1, "Martin", 1200.5, "_");
@@ -299,9 +299,9 @@ public class BigTestUI extends UI {
 				for (int i = 0; i < 20; i++) {
 					combo.addItem("item_" + i);
 				}
-				int windowHeightPx = 400;
-				String comboHeight = (windowHeightPx * 0.75) + "px";
-				combo.settDropdownContentHeight(comboHeight);
+				int windowHeightPx = 150;
+				// String comboHeight = 200 + "px";
+				// combo.settDropdownContentHeight(comboHeight);
 
 				VerticalLayout windowContent = new VerticalLayout(combo);
 				windowContent.setMargin(true);

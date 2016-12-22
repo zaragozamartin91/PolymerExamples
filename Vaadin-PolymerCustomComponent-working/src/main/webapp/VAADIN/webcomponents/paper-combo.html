@@ -5,66 +5,63 @@
 
 <dom-module id="paper-combo">
 
-<template>
-	<style>
+	<template>
+		<style>
 	paper-dropdown-menu {
 		/* Anchura del 100% para poder jugar con la anchura desde el lado de vaadin. */
 		width: 100%;
-	},
+	}
+	#contentWrapper {
+		overflow: auto;
+	}
 	</style>
- 
-	<paper-dropdown-menu 
-		id="theDrop"
-		required={{dropRequired}} 
-		label={{dropLabel}}
-		disabled="{{dropDisabled}}" 
-		on-iron-select="handleSelect" >
-	
-		<paper-listbox id="theList" class="dropdown-content"></paper-listbox> 
-	</paper-dropdown-menu> 
+
+<paper-dropdown-menu id="theDrop" required={{dropRequired}} label={{dropLabel}} disabled="{{dropDisabled}}" on-iron-select="handleSelect">
+	<paper-listbox id="theList" class="dropdown-content"></paper-listbox>
+</paper-dropdown-menu>
 </template>
 
-<!-- Creates the element's prototype and registers it --> 
+<!-- Creates the element's prototype and registers it -->
 <script>
 	Polymer({
-		is : 'paper-combo',
-		properties : {
-			dropLabel : {
-				type : String,
-				value : "",
-				notify : true,
-				reflectToAttribute : true
+		is: 'paper-combo',
+		properties: {
+			dropLabel: {
+				type: String,
+				value: "",
+				notify: true,
+				reflectToAttribute: true
 			},
-			dropRequired : {
-				type : Boolean,
-				value : false,
-				notify : true,
-				reflectToAttribute : true
+			dropRequired: {
+				type: Boolean,
+				value: false,
+				notify: true,
+				reflectToAttribute: true
 			},
-			selectedLabel : {
-				type : String,
-				value : ""
+			selectedLabel: {
+				type: String,
+				value: ""
 			},
-			dropDisabled : {
-				type : Boolean,
-				value : false,
-				notify : true,
-				reflectToAttribute : true
+			dropDisabled: {
+				type: Boolean,
+				value: false,
+				notify: true,
+				reflectToAttribute: true
 			},
-			captions : {
-				type : Array
+			captions: {
+				type: Array
 			}
 		},
-		ready : function() {
+		ready: function () {
 			console.log("paper-combo#ready");
 		},
-		setCaptions : function(captions) {
+		setCaptions: function (captions) {
 			this.captions = captions;
 			var self = this;
 			console.log("paper-combo#setCaptions: " + captions);
 			Polymer.dom(self.$.theList).innerHTML = "";
 
-			captions.forEach(function(caption) {
+			captions.forEach(function (caption) {
 				var newItem = document.createElement('paper-item');
 				newItem.innerHTML = caption;
 
@@ -72,14 +69,14 @@
 				Polymer.dom(self.$.theList).appendChild(newItem);
 			});
 		},
-		setSelected : function(caption) {
+		setSelected: function (caption) {
 			var index = this.captions.indexOf(caption);
 			this.$.theList.selected = index;
 		},
-		setVoid : function() {
+		setVoid: function () {
 			this.$.theList.selected = undefined;
 		},
-		handleSelect : function(e) {
+		handleSelect: function (e) {
 			console.log("paper-combo#handleSelect");
 			this.selectedLabel = this.$.theDrop.selectedItemLabel;
 
@@ -87,12 +84,12 @@
 			console.log("this.$.theList.selected: " + this.$.theList.selected);
 
 			this.fire('selected', {
-				selected : this.selectedLabel
+				selected: this.selectedLabel
 			});
 		},
-		setDropdownContentHeight: function(height) {
+		setDropdownContentHeight: function (height) {
 			Polymer.dom(this.root).querySelector('.dropdown-content').style.maxHeight = height;
 		}
 	});
-</script> 
+</script>
 </dom-module>

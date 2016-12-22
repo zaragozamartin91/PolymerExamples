@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 
@@ -29,9 +27,9 @@ public class IconColumn extends Column {
 	 * @param icons
 	 *            Iconos de la columna.
 	 */
-	public IconColumn(String name, String... icons) {
+	private IconColumn(String name, String... icons) {
 		super(name);
-		this.icons = StringUtils.join(icons, ",");
+		this.icons = joinStrings(",", icons);
 	}
 
 	@Override
@@ -39,6 +37,30 @@ public class IconColumn extends Column {
 		Map<String, Object> map = super.toMap();
 		map.put(ICONS_KEY, icons);
 		return map;
+	}
+
+	/**
+	 * Crea una columna tipo icono con un nombre determinado.
+	 * 
+	 * @param name
+	 *            Nombre de columna.
+	 * @param icons
+	 *            Iconos de la columna.
+	 * @return columna tipo icono con un nombre determinado.
+	 */
+	public static IconColumn newNamed(String name, String... icons) {
+		return new IconColumn(name, icons);
+	}
+
+	/**
+	 * Crea una nueva columna tipo icono con nombre vacio.
+	 * 
+	 * @param icons
+	 *            Iconos de la columna.
+	 * @return nueva columna tipo icono con nombre vacio.
+	 */
+	public static IconColumn newEmptynamed(String... icons) {
+		return new IconColumn(" ", icons);
 	}
 
 	/**
@@ -58,5 +80,30 @@ public class IconColumn extends Column {
 		}
 
 		return new IconColumn(jsonObject.getString(NAME_KEY), icons.toArray(new String[0]));
+	}
+
+	/**
+	 * Concatena un conjunto de strings para que sea uno solo.
+	 * 
+	 * @param delim
+	 *            Delimitador a utilizar.
+	 * @param elems
+	 *            Elementos a concatenar.
+	 * @return String con elementos separados por 'delim'. Si no hay elementos a concatenar o es nulo, entonces se retorna vacio.
+	 */
+	private String joinStrings(String delim, String... elems) {
+		if (elems == null || elems.length == 0) {
+			return "";
+		}
+
+		StringBuilder sb = new StringBuilder(elems[0]);
+		if (elems.length > 0) {
+			for (int i = 1; i < elems.length; i++) {
+				Object elem = elems[i];
+				sb.append("," + elem);
+			}
+		}
+
+		return sb.toString();
 	}
 }
