@@ -84,11 +84,11 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 
 	@SuppressWarnings({ "unchecked" })
 	protected void addHandleFocusCallback() {
-		final Class<?> clazz = this.getClass();
+		// final Class<?> clazz = this.getClass();
 		addFunction("handleFocus", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(clazz.getSimpleName() + "#handleFocus: " + arguments.getString(0));
+				// System.out.println(clazz.getSimpleName() + "#handleFocus: " + arguments.getString(0));
 				Collection<FocusListener> listeners = (Collection<FocusListener>) wrappedField.getListeners(FocusEvent.class);
 				for (FocusListener listener : listeners) {
 					listener.focus(new FocusEvent(wrappedField));
@@ -100,11 +100,11 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 
 	@Override
 	protected void addHandleChangeCallback() {
-		final Class<?> clazz = this.getClass();
+		// final Class<?> clazz = this.getClass();
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(clazz.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
+				// System.out.println(clazz.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
 				wrappedField.setValue(arguments.getString(0));
 				getState().inputValue = arguments.getString(0);
 				// getState().inputInvalid = arguments.getBoolean(1);

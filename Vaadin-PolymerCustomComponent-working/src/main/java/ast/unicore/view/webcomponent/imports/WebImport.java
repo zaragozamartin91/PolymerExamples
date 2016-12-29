@@ -12,7 +12,8 @@ public enum WebImport {
 	PAPER_TEXTAREA("VAADIN/webcomponents/bower_components/paper-input/paper-textarea.html"),
 	PAPER_CHECKBOX("VAADIN/webcomponents/paper-wb-checkbox.html"),
 	IRON_ICONS("VAADIN/webcomponents/bower_components/iron-icons/iron-icons.html"),
-	RESPONSIVE_TABLE("VAADIN/webcomponents/responsive-table.html");
+	EDITOR_ICONS("VAADIN/webcomponents/bower_components/iron-icons/editor-icons.html"),
+	RESPONSIVE_TABLE("VAADIN/webcomponents/responsive-table-multi.html");
 
 	public final String path;
 

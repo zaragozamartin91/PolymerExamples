@@ -4,7 +4,6 @@ import ast.unicore.view.webcomponent.paperinput.AbstractPaperInput;
 import ast.unicore.view.webcomponent.paperinput.PaperInputState;
 
 import com.vaadin.annotations.JavaScript;
-import com.vaadin.data.Validator;
 
 /**
  * Componente de vaadin del lado del servidor representante del componente paper-textarea de polymer.
@@ -63,20 +62,20 @@ public class PaperTextArea extends AbstractPaperInput<String> {
 		setInputValid();
 	}
 
-	/**
-	 * Agrega un validador del contenido.
-	 * 
-	 * @param newValidator
-	 *            Nuevo validador.
-	 * @return this.
-	 */
-	@Override
-	public void addValidator(final Validator validator) {
-		wrappedField.addValidator(validator);
-	}
+	// /**
+	// * Agrega un validador del contenido.
+	// *
+	// * @param newValidator
+	// * Nuevo validador.
+	// * @return this.
+	// */
+	// @Override
+	// public void addValidator(final Validator validator) {
+	// wrappedField.addValidator(validator);
+	// }
 
-	@Override
-	public void autoValidate() {
-		throw new UnsupportedOperationException("Operacion no soportada por " + getClass().getSimpleName());
-	}
+	// @Override
+	// public void autoValidate() {
+	// throw new UnsupportedOperationException("Operacion no soportada por " + getClass().getSimpleName());
+	// }
 }

@@ -2,9 +2,8 @@ ast_unicore_view_webcomponent_table_ResponsiveTable = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	var component = document.createElement('responsive-table');
+	var component = document.createElement('responsive-table-multi');
 	element.appendChild(component);
-	// e.innerHTML = '<responsive-table></responsive-table>';
 
 	function arraysEqual(arr1, arr2) {
 		return JSON.stringify(arr1) == JSON.stringify(arr2);
@@ -17,12 +16,9 @@ ast_unicore_view_webcomponent_table_ResponsiveTable = function() {
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_table_ResponsiveTable#onStateChange:");
 
-		if (arraysDifferent(this.getState().columns, component.columns)) {
-			console.log("Estableciendo columnas:");
-			console.log(this.getState().columns);
-			component.setColumns(this.getState().columns);
-		}
+		component.setColumns(this.getState().columns);
 
+		/*Si las filas del lado del server son distintas a las del componente de polymer, vuelvo a establecerlas.*/
 		if (arraysDifferent(this.getState().rows, component.rows)) {
 			console.log("Estableciendo filas:");
 			console.log(this.getState().rows);

@@ -1,6 +1,6 @@
 package ast.unicore.view.webcomponent.papercombo;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.vaadin.annotations.JavaScript;
@@ -63,17 +63,15 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Item propiamente dicho.
 	 * @throws InvalidKeyException
 	 *             Cuando la clave/caption del item a agregar sea nula o igual a {@link PaperCombo#INVALID_KEY}.
-	 * @throws DuplicateItemException
-	 *             Cuando se quieran agregar dos items con claves iguales.
 	 */
-	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException, DuplicateItemException {
+	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException /* , DuplicateItemException */{
 		if (itemCaption == null || INVALID_KEY.equals(itemCaption)) {
 			throw new InvalidKeyException("La clave " + itemCaption + " es invalida!");
 		}
 
-		if (items.containsKey(itemCaption)) {
-			throw new DuplicateItemException("La clave " + itemCaption + " ya esta contenida dentro del combo!");
-		}
+		// if (items.containsKey(itemCaption)) {
+		// throw new DuplicateItemException("La clave " + itemCaption + " ya esta contenida dentro del combo!");
+		// }
 
 		items.put(itemCaption, item);
 		getState().captions = items.keySet().toArray(new String[0]);
@@ -158,6 +156,17 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	/**
+	 * Establece la altura del listado de opciones del combo.
+	 * 
+	 * @param height
+	 *            Altura del listado, por ejemplo: "300px".
+	 */
+	public void settDropdownContentHeight(String height) {
+		getState().dropdownContentHeight = height;
+		markAsDirty();
+	}
+
+	/**
 	 * Listener de cambio de valor.
 	 * 
 	 * @author martin.zaragoza
@@ -167,8 +176,8 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 */
 	public static abstract class ValueChangeListener<DataType> {
 		/**
-		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo. Si {@link PaperCombo#INVALID_KEY} se
-		 * encuentra seleccionado, el metodo no se ejecutara.
+		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo. Si {@link PaperCombo#INVALID_KEY} se encuentra seleccionado, el metodo no se
+		 * ejecutara.
 		 * 
 		 * @param selectedItemCaption
 		 *            Caption del item seleccionado.
@@ -208,14 +217,14 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		addFunction("handleSelected", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
+				// System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
 				setSelectedItemCaption(arguments.getString(0));
 			}
 		});
 	}
 
 	private void resetItems() {
-		items = new HashMap<>();
+		items = new LinkedHashMap<>();
 	}
 
 	private void resetSelectedCaption() {

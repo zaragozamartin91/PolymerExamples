@@ -11,6 +11,7 @@ import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
 
+import ast.unicore.view.webcomponent.icons.iron.IronIcon;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 
@@ -33,7 +34,7 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 *            Columnas de la tabla.
 	 */
 	public ResponsiveTable(Object... columns) {
-		List<Map<String, String>> columnList = new ArrayList<>();
+		List<Map<String, Object>> columnList = new ArrayList<>();
 
 		for (Object col : columns) {
 			Column column = parseColumn(col);
@@ -50,17 +51,36 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 *            Valores de fila a agregar.
 	 */
 	public void addRow(Map<String, Object> rowMap) {
-		if (rowMap.size() == getState().columns.size()) {
+		List<Map<String, Object>> columns = getState().columns;
+
+		/* si la cantidad de elementos en el mapa de la fila coincide con la cantidad de columnas, entonces la fila se agrega facilmente. */
+		if (rowMap.size() == columns.size()) {
 			Set<Entry<String, Object>> rowEntries = rowMap.entrySet();
 			for (Entry<String, Object> rowEntry : rowEntries) {
-				rowEntry.setValue(rowEntry.getValue() == null ? "" : rowEntry.getValue());
+				rowEntry.setValue(rowEntry.getValue() == null ? "_" : rowEntry.getValue());
 			}
 
 			getState().rows.add(rowMap);
 			markAsDirty();
-		} else {
-			throw new IllegalArgumentException("Cantidad de valores ingresados no corresponden con cantidad de columnas de la tabla");
+			return;
 		}
+
+		List<Map<String, Object>> iconColumns = getIconColumns();
+		/*
+		 * si la cantidad de columnas es igual a la cantidad de columnas tipo ICONO + la cantidad de elementos del mapa de la fila, se agrega la fila con
+		 * valores DUMMY para las columnas ICONO.
+		 */
+		if (columns.size() == (iconColumns.size() + rowMap.size())) {
+			for (Map<String, Object> iconColumn : iconColumns) {
+				rowMap.put(Column.fromMap(iconColumn).name, "_");
+			}
+
+			getState().rows.add(rowMap);
+			markAsDirty();
+			return;
+		}
+
+		throw new IllegalArgumentException("Cantidad incorrecta de elementos de la fila");
 	}
 
 	/**
@@ -91,8 +111,12 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		 * @param rowIndex
 		 *            Indice TEMPORAL de la fila en la tabla (El indice es temporal dado que si la tabla se modifica, el valor del indice de la fila puede
 		 *            modificarse).
+		 * @param icon
+		 *            Icono clickeado.
+		 * 
+		 * @see IronIcon
 		 */
-		public void iconClick(Column column, Map<String, Object> row, int rowIndex);
+		public void iconClick(Column column, Map<String, Object> row, int rowIndex, IronIcon icon);
 	}
 
 	/**
@@ -269,20 +293,45 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		}
 	}
 
+	/**
+	 * Construye un mapa fila a partir de un conjunto de valores.
+	 * 
+	 * @param values
+	 *            Valores a partir de los cuales crear la fila.
+	 * @return Nuevo mapa fila.
+	 */
 	protected Map<String, Object> buildRow(Object... values) {
-		if (getState().columns.size() == values.length) {
+		List<Map<String, Object>> columns = getState().columns;
+
+		/* si la cantidad de elementos pasados es igual a la cantidad de columnas, entonces se construye la fila facilmente. */
+		if (columns.size() == values.length) {
 			Map<String, Object> row = new LinkedHashMap<>();
 			int i = 0;
-			for (Map<String, String> column : getState().columns) {
+			for (Map<String, Object> column : columns) {
 				row.put(Column.fromMap(column).name, values[i++]);
 			}
 			return row;
-		} else {
-			throw new IllegalArgumentException("Cantidad de valores ingresados no corresponden con cantidad de columnas de la tabla");
 		}
+
+		/* Si la cantidad de valores de */
+		List<Map<String, Object>> iconColumns = getIconColumns();
+		if (columns.size() == (iconColumns.size() + values.length)) {
+			Map<String, Object> row = new LinkedHashMap<>();
+			int i = 0;
+			List<Map<String, Object>> regularColumns = getRegularColumns();
+			for (Map<String, Object> regularColumn : regularColumns) {
+				row.put(Column.fromMap(regularColumn).name, values[i++]);
+			}
+			for (Map<String, Object> iconColumn : iconColumns) {
+				row.put(Column.fromMap(iconColumn).name, "_");
+			}
+			return row;
+		}
+
+		throw new IllegalArgumentException("Cantidad de elementos de fila invalida!");
 	}
 
-	protected void init(List<Map<String, String>> columns) {
+	protected void init(List<Map<String, Object>> columns) {
 		getState().columns = columns;
 		addHandleClickCallback();
 	}
@@ -295,13 +344,53 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 				JsonObject eventDetail = arguments.getObject(0);
 				for (ClickListener clickListener : clickListeners) {
 					Column column = Column.fromJsonObject(eventDetail.getObject("column"));
+
 					int rowIndex = new Double(eventDetail.getNumber("rowIndex")).intValue();
+
+					String iconName = eventDetail.getString("icon");
+					IronIcon icon = IronIcon.fromString(iconName);
 
 					Map<String, Object> row = getRow(rowIndex);
 
-					clickListener.iconClick(column, row, rowIndex);
+					clickListener.iconClick(column, row, rowIndex, icon);
 				}
 			}
 		});
+	}
+
+	/**
+	 * Obtiene todas las columnas de tipo ICONO.
+	 * 
+	 * @return columnas de tipo ICONO.
+	 */
+	private List<Map<String, Object>> getIconColumns() {
+		List<Map<String, Object>> columns = getState().columns;
+		List<Map<String, Object>> iconColumns = new ArrayList<>();
+
+		for (Map<String, Object> column : columns) {
+			if (IconColumn.isIconColumn(column)) {
+				iconColumns.add(column);
+			}
+		}
+
+		return iconColumns;
+	}
+
+	/**
+	 * Obtiene todas las columnas de tipo NORMAL (es decir, sin icono asignado).
+	 * 
+	 * @return columnas de tipo NORMAL.
+	 */
+	private List<Map<String, Object>> getRegularColumns() {
+		List<Map<String, Object>> columns = getState().columns;
+		List<Map<String, Object>> regularColumns = new ArrayList<>();
+
+		for (Map<String, Object> column : columns) {
+			if (IconColumn.isRegularColumn(column)) {
+				regularColumns.add(column);
+			}
+		}
+
+		return regularColumns;
 	}
 }

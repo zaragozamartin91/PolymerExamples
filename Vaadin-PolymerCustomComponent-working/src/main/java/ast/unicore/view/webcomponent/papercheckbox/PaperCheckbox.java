@@ -115,7 +115,7 @@ public class PaperCheckbox extends AbstractJavaScriptComponent {
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(PaperCheckbox.class.getSimpleName() + "#handleChange: " + arguments.getBoolean(0));
+				// System.out.println(PaperCheckbox.class.getSimpleName() + "#handleChange: " + arguments.getBoolean(0));
 				wrappedCheckBox.setValue(arguments.getBoolean(0));
 			}
 		});

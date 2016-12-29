@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 
 import org.jsoup.nodes.Element;
 
+import ast.unicore.view.webcomponent.icons.iron.IronIcon;
 import ast.unicore.view.webcomponent.imports.WebImport;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
@@ -48,6 +49,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 @Theme("dawn")
 @SuppressWarnings("serial")
@@ -73,13 +75,6 @@ public class BigTestUI extends UI {
 
 		PaperButton addComponentsButton = new PaperButton("Agregar componentes");
 
-		layout.addComponentAttachListener(new ComponentAttachListener() {
-			@Override
-			public void componentAttachedToContainer(ComponentAttachEvent event) {
-				System.out.println("Componente agregado");
-			}
-		});
-
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
@@ -89,6 +84,9 @@ public class BigTestUI extends UI {
 				organizationCombo.addItem("Claro", "Empresa de claro");
 				organizationCombo.addItem("Movistar", "Empresa movistar");
 				organizationCombo.addItem("Geotex", "Empresa geotex");
+				organizationCombo.addItem("Geotex", "Empresa geotexxx");
+				organizationCombo.addItem("Geotex", "EMPRESA GEOTEX");
+				organizationCombo.addItem("Movistar", "Empresa MOVISTAR");
 				organizationCombo.setWidth("100%");
 				PaperCombo.ValueChangeListener<String> comboValueChangeListener = new PaperCombo.ValueChangeListener<String>() {
 					@Override
@@ -108,9 +106,7 @@ public class BigTestUI extends UI {
 				peopleCombo.addValueChangeListener(comboValueChangeListener);
 
 				organizationInput = new PaperTextInput("Nombre organizacion");
-				// organizationInput.setPattern("[a-zA-Z ]+");
-				// organizationInput.setErrorMessage("Nombre de organizacion invalido!");
-				organizationInput.setRequired(true);
+				organizationInput.setRequired(true, "Campo no puede ser vacio [REQUERIDO]!");
 				organizationInput.setValue("ACCUSYS");
 				layout.addComponent(organizationInput);
 				organizationInput.setWidth("60%");
@@ -120,7 +116,7 @@ public class BigTestUI extends UI {
 					public void validate(Object value) throws InvalidValueException {
 						Notification.show("Validando: " + value);
 						if (value == null || value.toString().isEmpty()) {
-							throw new InvalidValueException("Campo no puede ser vacio!");
+							throw new InvalidValueException("Campo no puede ser vacio [VALIDADOR]!");
 						}
 					}
 				});
@@ -140,6 +136,7 @@ public class BigTestUI extends UI {
 				PaperTextArea paperTextArea = new PaperTextArea("Descripcion empresa");
 				paperTextArea.setWidth("100%");
 				layout.addComponent(paperTextArea);
+				paperTextArea.autoValidate();
 				paperTextArea.addValidator(new Validator() {
 					@Override
 					public void validate(Object value) throws InvalidValueException {
@@ -260,22 +257,66 @@ public class BigTestUI extends UI {
 						}
 					}
 				}));
-				responsiveTable = new ResponsiveTable("ID", "Name", "Job", new IconColumn("Like", "favorite"), new IconColumn("Remove", "delete"));
+
+				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", IconColumn.newEmptynamed(IronIcon.EDIT, IronIcon.DELETE));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
-				responsiveTable.addRow(1, "Martin", 1.5, "_", "_");
-				responsiveTable.addRow(2, "Julio", 2.2, "_", "_");
-				responsiveTable.addRow(3, "Exequiel", 3.7, "_", "_");
+				responsiveTable.addRow(1, "Martin", 1200.5, "_");
+				responsiveTable.addRow(2, "Julio", 2500.25, "_");
+				responsiveTable.addRow(3, "Exequiel", 3750.71, "_");
 				responsiveTable.addClickListener(new ResponsiveTable.ClickListener() {
 					@Override
-					public void iconClick(Column column, Map<String, Object> row, int rowIndex) {
-						if ("Remove".equals(column.name)) {
-							responsiveTable.removeRow(rowIndex);
-						} else {
-							Notification.show(row.toString());
+					public void iconClick(Column column, Map<String, Object> row, int rowIndex, IronIcon icon) {
+						switch (icon) {
+							case DELETE:
+								responsiveTable.removeRow(rowIndex);
+								break;
+							case EDIT:
+								String rowData = rowDataInput.getValue() == null ? "" : rowDataInput.getValue();
+								if (!rowData.isEmpty()) {
+									if (rowData.contains(":")) {
+										Map<String, Object> rowMap = parseRowAsMap(rowData);
+										responsiveTable.setRow(rowIndex, rowMap);
+									} else {
+										List<Object> values = parseRowAsValues(rowData);
+										responsiveTable.setRow(rowIndex, values.toArray());
+									}
+									Notification.show("GUARDANDO: " + row);
+									break;
+								}
+							default:
+								break;
 						}
 					}
 				});
+			}
+		});
+
+		PaperButton addPopupButton = new PaperButton("Abrir popup", new ClickListener() {
+			@Override
+			public void buttonClick() {
+				UI ui = BigTestUI.getCurrent();
+				Window window = new Window("Combo popup");
+
+				PaperCombo combo = new PaperCombo("Opciones");
+				for (int i = 0; i < 20; i++) {
+					combo.addItem("item_" + i);
+				}
+				int windowHeightPx = 150;
+				// String comboHeight = 200 + "px";
+				// combo.settDropdownContentHeight(comboHeight);
+
+				VerticalLayout windowContent = new VerticalLayout(combo);
+				windowContent.setMargin(true);
+				windowContent.setSpacing(true);
+				window.setContent(windowContent);
+
+				window.setWidth("300px");
+				window.setHeight(windowHeightPx + "px");
+				window.setClosable(true);
+				window.center();
+				window.setModal(true);
+				ui.addWindow(window);
 			}
 		});
 
@@ -324,14 +365,15 @@ public class BigTestUI extends UI {
 			}
 		});
 
+		layout.addComponent(addComponentsButton);
+
+		layout.addComponent(addPopupButton);
+
 		layout.addComponent(addComboItemButton);
 		addComboItemButton.setWidth("100%");
 
 		layout.addComponent(comboStateButton);
 		comboStateButton.setWidth("75%");
-
-		layout.addComponent(addComponentsButton);
-		// addComponentsButton.setClickShortcut(KeyCode.ENTER);
 
 		layout.addComponent(validateButton);
 		layout.addComponent(toggleVisible);

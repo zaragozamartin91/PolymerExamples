@@ -27,13 +27,13 @@ public class Column {
 	}
 
 	/**
-	 * Retorna una representacion de la columna como un mapa con clave {@link Column#NAME_KEY}.
+	 * Retorna una representacion de la columna como un mapa.
 	 * 
-	 * @return representacion de la columna como un mapa con clave {@link Column#NAME_KEY}.
+	 * @return representacion de la columna como un mapa.
 	 */
 	@SuppressWarnings("serial")
-	public Map<String, String> toMap() {
-		return new HashMap<String, String>() {
+	public Map<String, Object> toMap() {
+		return new HashMap<String, Object>() {
 			{
 				put(NAME_KEY, name);
 			}
@@ -47,8 +47,8 @@ public class Column {
 	 *            Mapa a partir del cual crear la columna.
 	 * @return columna de tabla responsiva.
 	 */
-	public static Column fromMap(Map<String, String> map) {
-		return new Column(map.get(NAME_KEY));
+	public static Column fromMap(Map<String, Object> map) {
+		return new Column(map.get(NAME_KEY).toString());
 	}
 
 	/**

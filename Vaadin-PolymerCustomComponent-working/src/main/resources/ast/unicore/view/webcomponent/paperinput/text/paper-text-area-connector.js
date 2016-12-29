@@ -21,7 +21,7 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextArea = function() {
 		component.disabled = this.getState().inputDisabled;
 		component.invalid = this.getState().inputInvalid;
 
-		component.validate();
+		// component.validate();
 	}
 
 	/*

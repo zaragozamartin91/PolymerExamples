@@ -10,8 +10,7 @@ import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
 
 /**
- * Componente de vaadin del lado del servidor representante del componente
- * paper-button de polymer.
+ * Componente de vaadin del lado del servidor representante del componente paper-button de polymer.
  * 
  * @author martin.zaragoza
  *
@@ -132,9 +131,9 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 
 	private void addHandleClickCallback() {
 		addFunction("handleClick", new JavaScriptFunction() {
+			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(PaperButton.class.getSimpleName() + "#handleClick");
-
+				// System.out.println(PaperButton.class.getSimpleName() + "#handleClick");
 				wrappedButton.click();
 			}
 		});

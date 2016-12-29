@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
@@ -18,10 +19,10 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	protected AtomicBoolean autoValidate = new AtomicBoolean(false);
 	protected TextField wrappedField = new TextField();
 
+	private Validator requiredValidator;
+
 	/**
 	 * Habilita la validacion del campo automatica. La misma se disparara cada vez que el campo cambie de valor. No se lanzaran excepciones.
-	 * 
-	 * @return this.
 	 */
 	@SuppressWarnings("serial")
 	public void autoValidate() {
@@ -43,7 +44,6 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	 * 
 	 * @param valueChangeListener
 	 *            Listener a agregar.
-	 * @return this.
 	 */
 	public void addValueChangeListener(final ValueChangeListener valueChangeListener) {
 		wrappedField.addValueChangeListener(valueChangeListener);
@@ -78,29 +78,36 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	 * Establece si el Input es requerido.
 	 * 
 	 * @param isRequired
-	 *            True si es requerido, false caso contrario.
+	 *            True si es requerido, false en caso contrario.
+	 * @param errorMessage
+	 *            [OPCIONAL] Mensaje de error a mostrar luego de validar el campo.
 	 */
-	public void setRequired(boolean isRequired, String... errorMessage) {
-		this.getState().inputRequired = isRequired;
-		if (errorMessage != null && errorMessage.length > 0) {
-			setErrorMessage(errorMessage[0]);
+	public synchronized void setRequired(boolean isRequired, String... errorMessage) {
+		final String errMsg = (errorMessage == null || errorMessage.length == 0) ? "" : errorMessage[0];
+
+		if (isRequired) {
+			Validator newValidator = new Validator() {
+				@Override
+				public void validate(Object value) throws InvalidValueException {
+					if (value == null || value.toString().isEmpty()) {
+						throw new InvalidValueException(errMsg);
+					}
+				}
+			};
+			if (requiredValidator == null) {
+				this.addValidator(newValidator);
+			} else {
+				this.removeValidator(requiredValidator);
+			}
+			requiredValidator = newValidator;
+		} else {
+			if (requiredValidator != null) {
+				// si seteo al campo como NO requerido y YA existe un validador, entonces remuevo el validador existente.
+				removeValidator(requiredValidator);
+				requiredValidator = null;
+			}
 		}
-
-		markAsDirty();
 	}
-
-	// /**
-	// * Establece el patron de validacion del campo como una expresion regular. Si el contenido del input no cumple con
-	// * la expresion regular, se lo marcara como invalido.
-	// *
-	// * @param pattern
-	// * Expresion regular de validacion del campo. Ej: [A-Za-z]+ es expresion regular de caracteres
-	// * alfabeticos SIN espacios ni numeros.
-	// */
-	// public void setPattern(String pattern) {
-	// this.getState().inputPattern = pattern;
-	// markAsDirty();
-	// }
 
 	@Override
 	public void setEnabled(boolean isEnabled) {
@@ -130,30 +137,86 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	 *             En caso que el valor del paper input sea invalido segun los validadores asignados.
 	 */
 	public void validate() {
-		wrappedField.validate();
+		try {
+			wrappedField.validate();
+			setInputValid();
+		} catch (InvalidValueException e) {
+			String errMsg = buildSimpleErrorMessage(e);
+			setErrorMessage(errMsg);
+			setInputInvalid();
+			throw e;
+		}
 	}
 
 	/**
-	 * Agrega un validador del contenido.
+	 * Construye un mensaje de error complejo a partir de todas las causas de error de validacion del campo.
 	 * 
-	 * @param newValidator
-	 *            Nuevo validador.
-	 * @return this.
+	 * @param e
+	 *            {@link InvalidInputException} a partir de la cual construir el mensaje de error.
+	 * @return mensaje de error complejo a partir de todas las causas de error de validacion del campo.
 	 */
-	@SuppressWarnings("serial")
-	public void addValidator(final Validator validator) {
-		wrappedField.addValidator(new Validator() {
-			@Override
-			public void validate(Object value) throws InvalidValueException {
-				try {
-					validator.validate(value);
-				} catch (InvalidValueException e) {
-					setErrorMessage(e.getMessage());
-					setInputInvalid();
-					throw e;
+	protected String buildFullErrorMessage(InvalidValueException e) {
+		if (e.getMessage() == null) {
+			StringBuilder errorMessageBuilder = new StringBuilder();
+
+			InvalidValueException[] causes = e.getCauses();
+			if (causes == null) {
+				return "";
+			}
+
+			for (int i = 0; i < causes.length; i++) {
+				boolean notLast = (i + 1) < causes.length;
+				InvalidValueException cause = causes[i];
+				errorMessageBuilder.append(buildFullErrorMessage(cause));
+				if (notLast) {
+					errorMessageBuilder.append(" & ");
 				}
 			}
-		});
+
+			return errorMessageBuilder.toString();
+		} else {
+			return e.getMessage();
+		}
+	}
+
+	/**
+	 * Construye un mensaje de error simple teniendo en cuenta unicamente una de las causas de error de validacion del campo.
+	 * 
+	 * @param e
+	 *            {@link InvalidInputException} a partir de la cual construir el mensaje de error.
+	 * @return mensaje de error simple teniendo en cuenta unicamente una de las causas de error de validacion del campo.
+	 */
+	protected String buildSimpleErrorMessage(InvalidValueException e) {
+		if (e.getMessage() == null) {
+			InvalidValueException[] causes = e.getCauses();
+			if (causes == null) {
+				return "";
+			} else {
+				return buildSimpleErrorMessage(causes[0]);
+			}
+		} else {
+			return e.getMessage();
+		}
+	}
+
+	/**
+	 * Agrega un validador del contenido. El mensaje de error a mostrar por invalidez del campo es el mensaje que acompaña al {@link InvalidValueException}.
+	 * 
+	 * @param validator
+	 *            Validador a agregar.
+	 */
+	public void addValidator(final Validator validator) {
+		wrappedField.addValidator(validator);
+	}
+
+	/**
+	 * Elimina un validador de campo.
+	 * 
+	 * @param validator
+	 *            Validador a eliminar.
+	 */
+	public void removeValidator(Validator validator) {
+		wrappedField.removeValidator(validator);
 	}
 
 	/**
@@ -178,7 +241,7 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	}
 
 	/**
-	 * Marca el input como invalido.
+	 * Marca el input como INVALIDO.
 	 */
 	protected void setInputInvalid() {
 		getState().inputInvalid = true;
@@ -186,7 +249,7 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	}
 
 	/**
-	 * Marca el input como invalido.
+	 * Marca el input como VALIDO.
 	 */
 	protected void setInputValid() {
 		getState().inputInvalid = false;
@@ -195,11 +258,11 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 
 	@SuppressWarnings("serial")
 	protected void addHandleChangeCallback() {
-		final Class<?> clazz = this.getClass();
+		// final Class<?> clazz = this.getClass();
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				System.out.println(clazz.getSimpleName() + "#handleChange: " + arguments.getString(0));
+				// System.out.println(clazz.getSimpleName() + "#handleChange: " + arguments.getString(0));
 				wrappedField.setValue(arguments.getString(0));
 				getState().inputValue = arguments.getString(0);
 			}
