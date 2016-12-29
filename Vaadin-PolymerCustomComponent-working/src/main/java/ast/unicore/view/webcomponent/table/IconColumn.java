@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import ast.unicore.view.webcomponent.icons.iron.IronIcon;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 
@@ -27,9 +28,13 @@ public class IconColumn extends Column {
 	 * @param icons
 	 *            Iconos de la columna.
 	 */
-	private IconColumn(String name, String... icons) {
+	private IconColumn(String name, IronIcon... icons) {
 		super(name);
-		this.icons = joinStrings(",", icons);
+		List<String> stringIcons = new ArrayList<>();
+		for (IronIcon ironIcon : icons) {
+			stringIcons.add(ironIcon.name);
+		}
+		this.icons = joinStrings(",", stringIcons.toArray(new String[0]));
 	}
 
 	@Override
@@ -48,7 +53,7 @@ public class IconColumn extends Column {
 	 *            Iconos de la columna.
 	 * @return columna tipo icono con un nombre determinado.
 	 */
-	public static IconColumn newNamed(String name, String... icons) {
+	public static IconColumn newNamed(String name, IronIcon... icons) {
 		return new IconColumn(name, icons);
 	}
 
@@ -59,28 +64,44 @@ public class IconColumn extends Column {
 	 *            Iconos de la columna.
 	 * @return nueva columna tipo icono con nombre vacio.
 	 */
-	public static IconColumn newEmptynamed(String... icons) {
+	public static IconColumn newEmptynamed(IronIcon... icons) {
 		return new IconColumn(" ", icons);
 	}
 
-	/**
-	 * Crea un {@link IconColumn} a partir de un objeto json con claves {@link Column#NAME_KEY} y {@link IconColumn#ICONS_KEY}.
-	 * 
-	 * @param jsonObject
-	 *            Objeto json a partir del cual crear la columna.
-	 * @return Nueva columna de tipo icono.
-	 */
-	public static IconColumn fromJsonObject(JsonObject jsonObject) {
-		JsonArray iconsJsonArray = jsonObject.getArray(ICONS_KEY);
-		int iconCount = iconsJsonArray.length();
-		List<String> icons = new ArrayList<>();
-
-		for (int i = 0; i < iconCount; i++) {
-			icons.add(iconsJsonArray.getString(i));
+	public static boolean isIconColumn(Object obj) {
+		if (obj instanceof IconColumn) {
+			return true;
 		}
 
-		return new IconColumn(jsonObject.getString(NAME_KEY), icons.toArray(new String[0]));
+		if (obj instanceof Map) {
+			return ((Map<?, ?>) obj).containsKey(ICONS_KEY);
+		}
+
+		return false;
 	}
+
+	public static boolean isRegularColumn(Object obj) {
+		return !isIconColumn(obj);
+	}
+
+	// /**
+	// * Crea un {@link IconColumn} a partir de un objeto json con claves {@link Column#NAME_KEY} y {@link IconColumn#ICONS_KEY}.
+	// *
+	// * @param jsonObject
+	// * Objeto json a partir del cual crear la columna.
+	// * @return Nueva columna de tipo icono.
+	// */
+	// public static IconColumn fromJsonObject(JsonObject jsonObject) {
+	// JsonArray iconsJsonArray = jsonObject.getArray(ICONS_KEY);
+	// int iconCount = iconsJsonArray.length();
+	// List<String> icons = new ArrayList<>();
+	//
+	// for (int i = 0; i < iconCount; i++) {
+	// icons.add(iconsJsonArray.getString(i));
+	// }
+	//
+	// return new IconColumn(jsonObject.getString(NAME_KEY), icons.toArray(new String[0]));
+	// }
 
 	/**
 	 * Concatena un conjunto de strings para que sea uno solo.

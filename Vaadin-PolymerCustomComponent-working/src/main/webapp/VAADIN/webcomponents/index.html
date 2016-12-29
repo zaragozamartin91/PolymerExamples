@@ -6,8 +6,7 @@
 
   <script src="bower_components/jquery-3.1.1.min/index.js"></script>
 
-  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
-    </script>
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
   <link rel="import" href="bower_components/polymer/polymer.html">
   <link rel="import" href="bower_components/paper-input/paper-input.html">
@@ -20,6 +19,7 @@
 
   <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
   <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/iron-icons/editor-icons.html">
   <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 
   <link rel="import" href="paper-combo.html">
@@ -76,8 +76,7 @@
             ]'>
   </paper-data-table>
 
-  <responsive-table-multi 
-    columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","update"]}]' 
+  <responsive-table-multi columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","editor:mode-edit"]}]'
     init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
   </responsive-table-multi>
 
@@ -88,18 +87,22 @@
   </paper-input-container>
 
   <script>
-        $(document).ready(function(){
-          var peopleCombo = document.querySelector('#peopleCombo');
-          peopleCombo.setCaptions(["martin","exe","julio"]);
+    window.addEventListener('WebComponentsReady', function (e) {
+      console.log("WebComponentsReady");
+    });
 
-          var countriesCombo = document.querySelector('#countriesCombo');
-          countriesCombo.setCaptions(["arg","chile","brasil"]);
+    $(document).ready(function () {
+      var peopleCombo = document.querySelector('#peopleCombo');
+      peopleCombo.setCaptions(["martin", "exe", "julio"]);
 
-          document.querySelector('responsive-table-multi').addEventListener('icon-click', function(e) {
-              console.log(e.detail);
-          });
-        });
-      </script>
+      var countriesCombo = document.querySelector('#countriesCombo');
+      countriesCombo.setCaptions(["arg", "chile", "brasil"]);
+
+      document.querySelector('responsive-table-multi').addEventListener('icon-click', function (e) {
+        console.log(e.detail);
+      });
+    });
+  </script>
 </body>
 
 </html>

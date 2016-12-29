@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 
 import org.jsoup.nodes.Element;
 
+import ast.unicore.view.webcomponent.icons.iron.IronIcon;
 import ast.unicore.view.webcomponent.imports.WebImport;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
@@ -257,7 +258,7 @@ public class BigTestUI extends UI {
 					}
 				}));
 
-				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", IconColumn.newEmptynamed("save", "delete"));
+				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", IconColumn.newEmptynamed(IronIcon.EDIT, IronIcon.DELETE));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
 				responsiveTable.addRow(1, "Martin", 1200.5, "_");
@@ -265,12 +266,12 @@ public class BigTestUI extends UI {
 				responsiveTable.addRow(3, "Exequiel", 3750.71, "_");
 				responsiveTable.addClickListener(new ResponsiveTable.ClickListener() {
 					@Override
-					public void iconClick(Column column, Map<String, Object> row, int rowIndex, String iconName) {
-						switch (iconName) {
-							case "delete":
+					public void iconClick(Column column, Map<String, Object> row, int rowIndex, IronIcon icon) {
+						switch (icon) {
+							case DELETE:
 								responsiveTable.removeRow(rowIndex);
 								break;
-							case "save":
+							case EDIT:
 								String rowData = rowDataInput.getValue() == null ? "" : rowDataInput.getValue();
 								if (!rowData.isEmpty()) {
 									if (rowData.contains(":")) {
@@ -283,6 +284,8 @@ public class BigTestUI extends UI {
 									Notification.show("GUARDANDO: " + row);
 									break;
 								}
+							default:
+								break;
 						}
 					}
 				});
