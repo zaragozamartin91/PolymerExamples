@@ -1,5 +1,12 @@
-*/bower_components/*
+*/bower_components/
 */node_modules/*
+target/
+.settings/
+.apt_generated/
+src/main/webapp/VAADIN/webcomponents/bower_components/*
+src/main/webapp/VAADIN/webcomponents/bower_components/
+bower_components
+Vaadin-PolymerCustomComponent-working/src/main/webapp/VAADIN/webcomponents/bower_components/*/*
+Vaadin-PolymerCustomComponent-working/.settings
 Vaadin-PolymerCustomComponent-working/.classpath
-Vaadin-PolymerCustomComponent-working/.settings/org.eclipse.wst.common.component
-
+Vaadin-PolymerCustomComponent-working/target
