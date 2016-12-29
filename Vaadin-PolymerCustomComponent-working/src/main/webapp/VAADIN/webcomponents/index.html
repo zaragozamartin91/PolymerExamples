@@ -37,6 +37,8 @@
   <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!"></paper-input>
   <paper-input auto-validate label="Ingrese nombre" disabled="disabled"></paper-input>
 
+  <paper-input type="date" id="date-input"></paper-input>
+
   <paper-combo id="peopleCombo" drop-label="People"></paper-combo>
   <br/>
   <paper-combo id="countriesCombo" drop-label="Countries"></paper-combo>
@@ -73,15 +75,10 @@
             ]'>
   </paper-data-table>
 
-  <responsive-table-multi columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","editor:mode-edit"]}]'
+  <responsive-table-multi 
+    columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","editor:mode-edit"]}]'
     init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
   </responsive-table-multi>
-
-  <paper-input-container always-float-label auto-validate attr-for-value="value">
-    <label>Social Security Number</label>
-    <ssn-input class="paper-input-input"></ssn-input>
-    <paper-input-error>SSN invalid!</paper-input-error>
-  </paper-input-container>
 
   <script>
     window.addEventListener('WebComponentsReady', function (e) {

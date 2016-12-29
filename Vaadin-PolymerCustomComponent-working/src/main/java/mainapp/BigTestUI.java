@@ -47,6 +47,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -107,6 +108,7 @@ public class BigTestUI extends UI {
 
 				organizationInput = new PaperTextInput("Nombre organizacion");
 				organizationInput.setRequired(true, "Campo no puede ser vacio [REQUERIDO]!");
+				organizationInput.setEnabled(false);
 				organizationInput.setValue("ACCUSYS");
 				layout.addComponent(organizationInput);
 				organizationInput.setWidth("60%");
@@ -170,6 +172,16 @@ public class BigTestUI extends UI {
 				disabledInput = new PaperTextInput("Disabled!");
 				disabledInput.disable();
 				layout.addComponent(disabledInput);
+
+				final PaperTextInput disabledSetter = new PaperTextInput("Modifica disabled input");
+				disabledSetter.addValueChangeListener(new ValueChangeListener() {
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+//						disabledInput.setEnabled(true);
+						disabledInput.setValue(event.getProperty().getValue().toString());
+					}
+				});
+				layout.addComponent(disabledSetter);
 
 				marriedCheck = new PaperCheckbox("Casado");
 				marriedCheck.addValueChangeListener(new PaperCheckbox.ValueChangeListener() {
@@ -492,6 +504,12 @@ public class BigTestUI extends UI {
 				script.attr("src", "VAADIN/webcomponents/bower_components/jquery-3.1.1.min/index.js");
 				head.appendChild(script);
 			}
+
+			// {
+			// Element script = response.getDocument().createElement("script");
+			// script.attr("src", "VAADIN/webcomponents/initScript.js");
+			// head.appendChild(script);
+			// }
 
 			{
 				Element script = response.getDocument().createElement("script");
