@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script src="bower_components/jquery-3.1.1.min/index.js"></script>
+  </script>
 
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <link rel="import" href="bower_components/polymer/polymer.html">
   <link rel="import" href="bower_components/paper-input/paper-input.html">
   <link rel="import" href="bower_components/paper-item/paper-item.html">
   <link rel="import" href="bower_components/paper-listbox/paper-listbox.html">
@@ -36,11 +36,6 @@
 <body>
   <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!"></paper-input>
   <paper-input auto-validate label="Ingrese nombre" disabled="disabled"></paper-input>
-
-  <paper-autocomplete-input id="input1" max-suggestions="4" prefetch-url="/countries.json" placeholder="Countries">
-  </paper-autocomplete-input>
-
-  <paper-autocomplete-input id="input2" local-candidates='["clinton","trump"]' placeholder="Enter US candidate" max-suggestions="4"></paper-autocomplete-input>
 
   <paper-combo id="peopleCombo" drop-label="People"></paper-combo>
   <br/>

@@ -190,16 +190,19 @@ public class BigTestUI extends UI {
 						System.out.println("agreeCheck cambio a " + value);
 					}
 				});
-				layout.addComponent(new HorizontalLayout(agreeCheck, new PaperButton("PaperCheckbox#getValue()", new PaperButton.ClickListener() {
-					@Override
-					public void buttonClick() {
-						Notification.show("De acuerdo: " + agreeCheck.getValue());
-					}
-				})));
+				layout.addComponent(new HorizontalLayout(agreeCheck,
+						new PaperButton("PaperCheckbox#getValue()", new PaperButton.ClickListener() {
+							@Override
+							public void buttonClick() {
+								Notification.show("De acuerdo: " + agreeCheck.getValue());
+							}
+						})));
 
-				// PRUEBA RESPONSIVE TABLE ------------------------------------------------------------------------------------------------------
+				// PRUEBA RESPONSIVE TABLE
+				// ------------------------------------------------------------------------------------------------------
 
-				final PaperTextInput rowDataInput = new PaperTextInput("Ingresa fila como: valor1,valor2,... || clave1:valor1, clave2:valor2, ...");
+				final PaperTextInput rowDataInput = new PaperTextInput(
+						"Ingresa fila como: valor1,valor2,... || clave1:valor1, clave2:valor2, ...");
 				rowDataInput.setWidth("50%");
 				PaperButton rowAddButton = new PaperButton("Agregar fila", new ClickListener() {
 					@Override
@@ -258,7 +261,8 @@ public class BigTestUI extends UI {
 					}
 				}));
 
-				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", IconColumn.newEmptynamed(IronIcon.EDIT, IronIcon.DELETE));
+				responsiveTable = new ResponsiveTable("ID", "Name", "Salary",
+						IconColumn.newEmptynamed(IronIcon.EDIT, IronIcon.DELETE));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
 				responsiveTable.addRow(1, "Martin", 1200.5, "_");
@@ -268,24 +272,24 @@ public class BigTestUI extends UI {
 					@Override
 					public void iconClick(Column column, Map<String, Object> row, int rowIndex, IronIcon icon) {
 						switch (icon) {
-							case DELETE:
-								responsiveTable.removeRow(rowIndex);
-								break;
-							case EDIT:
-								String rowData = rowDataInput.getValue() == null ? "" : rowDataInput.getValue();
-								if (!rowData.isEmpty()) {
-									if (rowData.contains(":")) {
-										Map<String, Object> rowMap = parseRowAsMap(rowData);
-										responsiveTable.setRow(rowIndex, rowMap);
-									} else {
-										List<Object> values = parseRowAsValues(rowData);
-										responsiveTable.setRow(rowIndex, values.toArray());
-									}
-									Notification.show("GUARDANDO: " + row);
-									break;
+						case DELETE:
+							responsiveTable.removeRow(rowIndex);
+							break;
+						case EDIT:
+							String rowData = rowDataInput.getValue() == null ? "" : rowDataInput.getValue();
+							if (!rowData.isEmpty()) {
+								if (rowData.contains(":")) {
+									Map<String, Object> rowMap = parseRowAsMap(rowData);
+									responsiveTable.setRow(rowIndex, rowMap);
+								} else {
+									List<Object> values = parseRowAsValues(rowData);
+									responsiveTable.setRow(rowIndex, values.toArray());
 								}
-							default:
+								Notification.show("GUARDANDO: " + row);
 								break;
+							}
+						default:
+							break;
 						}
 					}
 				});
@@ -451,7 +455,8 @@ public class BigTestUI extends UI {
 	/**
 	 * This injects polymer.js and es6 support polyfils directly into host page.
 	 *
-	 * Better compatibility and good approach if you have multiple webcomponents in the app.
+	 * Better compatibility and good approach if you have multiple webcomponents
+	 * in the app.
 	 */
 	public static BootstrapListener polymerInjector = new BootstrapListener() {
 
@@ -466,24 +471,21 @@ public class BigTestUI extends UI {
 			// add polymer for older browsers
 			// -------------------------------------------------
 			// Element polymer = response.getDocument().createElement("script");
-			// polymer.attr("src", "VAADIN/webcomponents/polymer-platform/platform.js");
+			// polymer.attr("src",
+			// "VAADIN/webcomponents/polymer-platform/platform.js");
 			// head.appendChild(polymer);
 			// ---------------------------------------------------------------------------------
 
 			// add es6 support for older browsers
 			// ----------------------------------------------
 			// Element traceur = response.getDocument().createElement("script");
-			// traceur.attr("src", "VAADIN/webcomponents/traceur-runtime/traceur-runtime.min.js");
+			// traceur.attr("src",
+			// "VAADIN/webcomponents/traceur-runtime/traceur-runtime.min.js");
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
-			head.prependElement("meta").attr("name", "viewport").attr("content", "width=device-width, initial-scale=1.0");
-
-			{
-				Element script = response.getDocument().createElement("script");
-				script.attr("src", "VAADIN/webcomponents/bower_components/webcomponentsjs/webcomponents-lite.min.js");
-				head.appendChild(script);
-			}
+			head.prependElement("meta").attr("name", "viewport").attr("content",
+					"width=device-width, initial-scale=1.0");
 
 			{
 				Element script = response.getDocument().createElement("script");
@@ -491,13 +493,11 @@ public class BigTestUI extends UI {
 				head.appendChild(script);
 			}
 
-			// {
-			// Element link = response.getDocument().createElement("link");
-			// link.attr("rel", "import");
-			// link.attr("href",
-			// "VAADIN/webcomponents/bower_components/vaadin-core-elements/vaadin-core-elements.html");
-			// head.appendChild(link);
-			// }
+			{
+				Element script = response.getDocument().createElement("script");
+				script.attr("src", "VAADIN/webcomponents/bower_components/webcomponentsjs/webcomponents-lite.min.js");
+				head.appendChild(script);
+			}
 
 			WebImport[] webImports = WebImport.values();
 			for (WebImport webImport : webImports) {
