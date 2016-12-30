@@ -39,8 +39,14 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 		component.pattern = this.getState().inputPattern;
 		component.disabled = this.getState().inputDisabled;
 		component.invalid = this.getState().inputInvalid;
-
-		// component.validate();
+		
+		/*si el componente no tiene valor asignado o tiene valor vacio ("") y ademas se encuentra
+		 * deshabilitado, entonces le asigno un valor para que el caption  */
+		if(!component.value) {
+			if(component.disabled) {
+				component.value = " ";
+			}
+		}
 	}
 
 	/* Listener de eventos de foco */

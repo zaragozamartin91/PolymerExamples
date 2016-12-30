@@ -171,13 +171,14 @@ public class BigTestUI extends UI {
 
 				disabledInput = new PaperTextInput("Disabled!");
 				disabledInput.disable();
+				// disabledInput.setValue("Hola");
 				layout.addComponent(disabledInput);
 
 				final PaperTextInput disabledSetter = new PaperTextInput("Modifica disabled input");
 				disabledSetter.addValueChangeListener(new ValueChangeListener() {
 					@Override
 					public void valueChange(ValueChangeEvent event) {
-//						disabledInput.setEnabled(true);
+						// disabledInput.setEnabled(true);
 						disabledInput.setValue(event.getProperty().getValue().toString());
 					}
 				});
@@ -202,19 +203,17 @@ public class BigTestUI extends UI {
 						System.out.println("agreeCheck cambio a " + value);
 					}
 				});
-				layout.addComponent(new HorizontalLayout(agreeCheck,
-						new PaperButton("PaperCheckbox#getValue()", new PaperButton.ClickListener() {
-							@Override
-							public void buttonClick() {
-								Notification.show("De acuerdo: " + agreeCheck.getValue());
-							}
-						})));
+				layout.addComponent(new HorizontalLayout(agreeCheck, new PaperButton("PaperCheckbox#getValue()", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						Notification.show("De acuerdo: " + agreeCheck.getValue());
+					}
+				})));
 
 				// PRUEBA RESPONSIVE TABLE
 				// ------------------------------------------------------------------------------------------------------
 
-				final PaperTextInput rowDataInput = new PaperTextInput(
-						"Ingresa fila como: valor1,valor2,... || clave1:valor1, clave2:valor2, ...");
+				final PaperTextInput rowDataInput = new PaperTextInput("Ingresa fila como: valor1,valor2,... || clave1:valor1, clave2:valor2, ...");
 				rowDataInput.setWidth("50%");
 				PaperButton rowAddButton = new PaperButton("Agregar fila", new ClickListener() {
 					@Override
@@ -273,8 +272,7 @@ public class BigTestUI extends UI {
 					}
 				}));
 
-				responsiveTable = new ResponsiveTable("ID", "Name", "Salary",
-						IconColumn.newEmptynamed(IronIcon.EDIT, IronIcon.DELETE));
+				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", IconColumn.newEmptynamed(IronIcon.EDIT, IronIcon.DELETE));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
 				responsiveTable.addRow(1, "Martin", 1200.5, "_");
@@ -284,24 +282,24 @@ public class BigTestUI extends UI {
 					@Override
 					public void iconClick(Column column, Map<String, Object> row, int rowIndex, IronIcon icon) {
 						switch (icon) {
-						case DELETE:
-							responsiveTable.removeRow(rowIndex);
-							break;
-						case EDIT:
-							String rowData = rowDataInput.getValue() == null ? "" : rowDataInput.getValue();
-							if (!rowData.isEmpty()) {
-								if (rowData.contains(":")) {
-									Map<String, Object> rowMap = parseRowAsMap(rowData);
-									responsiveTable.setRow(rowIndex, rowMap);
-								} else {
-									List<Object> values = parseRowAsValues(rowData);
-									responsiveTable.setRow(rowIndex, values.toArray());
-								}
-								Notification.show("GUARDANDO: " + row);
+							case DELETE:
+								responsiveTable.removeRow(rowIndex);
 								break;
-							}
-						default:
-							break;
+							case EDIT:
+								String rowData = rowDataInput.getValue() == null ? "" : rowDataInput.getValue();
+								if (!rowData.isEmpty()) {
+									if (rowData.contains(":")) {
+										Map<String, Object> rowMap = parseRowAsMap(rowData);
+										responsiveTable.setRow(rowIndex, rowMap);
+									} else {
+										List<Object> values = parseRowAsValues(rowData);
+										responsiveTable.setRow(rowIndex, values.toArray());
+									}
+									Notification.show("GUARDANDO: " + row);
+									break;
+								}
+							default:
+								break;
 						}
 					}
 				});
@@ -467,8 +465,7 @@ public class BigTestUI extends UI {
 	/**
 	 * This injects polymer.js and es6 support polyfils directly into host page.
 	 *
-	 * Better compatibility and good approach if you have multiple webcomponents
-	 * in the app.
+	 * Better compatibility and good approach if you have multiple webcomponents in the app.
 	 */
 	public static BootstrapListener polymerInjector = new BootstrapListener() {
 
@@ -496,8 +493,7 @@ public class BigTestUI extends UI {
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
-			head.prependElement("meta").attr("name", "viewport").attr("content",
-					"width=device-width, initial-scale=1.0");
+			head.prependElement("meta").attr("name", "viewport").attr("content", "width=device-width, initial-scale=1.0");
 
 			{
 				Element script = response.getDocument().createElement("script");

@@ -5,3 +5,4 @@ target/
 .apt_generated/
 src/main/webapp/VAADIN/webcomponents/bower_components/*
 src/main/webapp/VAADIN/webcomponents/bower_components/
+/bin/
