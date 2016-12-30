@@ -30,31 +30,49 @@
 
   <script></script>
 
+  <style>
+    div.scales {
+      width:200px;
+      height:100px;
+      background-color:#FF00FF;
+      margin-left:200px;
+      margin-top:200px;
+      /*position:absolute;*/
+    }
+    div.scaleOn {
+      /*General*/
+      transform: translate(-25%, -10%) scale(0.5, 0.8);
+      
+    }
+  </style>
 </head>
 
 <body>
-  <paper-dialog-calendar ddmmyyyy></paper-dialog-calendar>
+  <div class="scales" onmouseover="this.className='scales scaleOn'" onmouseout="this.className='scales'"> I scale up and down
+</div>
 
-  <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!"></paper-input>
-  <paper-input auto-validate label="Ingrese nombre" disabled="disabled"></paper-input>
+<paper-dialog-calendar ddmmyyyy></paper-dialog-calendar>
 
-  <paper-input type="date" id="date-input"></paper-input>
+<paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!"></paper-input>
+<paper-input auto-validate label="Ingrese nombre" disabled="disabled"></paper-input>
 
-  <paper-combo id="peopleCombo" drop-label="People"></paper-combo>
-  <br/>
-  <paper-combo id="countriesCombo" drop-label="Countries"></paper-combo>
-  <br/>
+<paper-input type="date" id="date-input"></paper-input>
 
-  <paper-checkbox checked="checked"> single</paper-checkbox>
-  <paper-checkbox> married</paper-checkbox>
+<paper-combo id="peopleCombo" drop-label="People"></paper-combo>
+<br/>
+<paper-combo id="countriesCombo" drop-label="Countries"></paper-combo>
+<br/>
 
-  <paper-wb-checkbox label="CASADO" checked></paper-wb-checkbox>
+<paper-checkbox checked="checked"> single</paper-checkbox>
+<paper-checkbox> married</paper-checkbox>
 
-  <my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>
+<paper-wb-checkbox label="CASADO" checked></paper-wb-checkbox>
 
-  <paper-icon-button icon="favorite" title="heart"></paper-icon-button>
+<my-map drop-label="MY-MAP" items='[{"title":"martin"}]'></my-map>
 
-  <paper-data-table data='[
+<paper-icon-button icon="favorite" title="heart"></paper-icon-button>
+
+<paper-data-table data='[
               {
                 "title": "miss",
                 "first": "donna",
@@ -74,25 +92,25 @@
                 "age": 27
               }
             ]'>
-  </paper-data-table>
+</paper-data-table>
 
-  <responsive-table-multi columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","editor:mode-edit"]}]'
-    init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
-  </responsive-table-multi>
+<responsive-table-multi columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","editor:mode-edit"]}]'
+  init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
+</responsive-table-multi>
 
-  <script>
-    window.addEventListener('WebComponentsReady', function (e) {
-      var peopleCombo = document.querySelector('#peopleCombo');
-      peopleCombo.setCaptions(["martin", "exe", "julio"]);
+<script>
+  window.addEventListener('WebComponentsReady', function (e) {
+    var peopleCombo = document.querySelector('#peopleCombo');
+    peopleCombo.setCaptions(["martin", "exe", "julio"]);
 
-      var countriesCombo = document.querySelector('#countriesCombo');
-      countriesCombo.setCaptions(["arg", "chile", "brasil"]);
+    var countriesCombo = document.querySelector('#countriesCombo');
+    countriesCombo.setCaptions(["arg", "chile", "brasil"]);
 
-      document.querySelector('responsive-table-multi').addEventListener('icon-click', function (e) {
-        console.log(e.detail);
-      });
+    document.querySelector('responsive-table-multi').addEventListener('icon-click', function (e) {
+      console.log(e.detail);
     });
-  </script>
+  });
+</script>
 </body>
 
 </html>

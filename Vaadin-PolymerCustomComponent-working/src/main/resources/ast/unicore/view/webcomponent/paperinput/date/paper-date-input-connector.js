@@ -2,44 +2,57 @@
  * the server side component is used for the first time. 
  */
 
-/*
- * La siguiente funcion representa el inicializador del componente de polymer.
- * El nombre debe ser el prefijo de paquete reemplazando '.' por '_' seguido del
- * nombre de la clase de vaadin.
- */
 ast_unicore_view_webcomponent_paperinput_date_PaperDateInput = function() {
+	/* funcion que chequea el soporte del browser de determinado tipo de input. */
+	function checkInput(type) {
+		var input = document.createElement("input");
+		input.setAttribute("type", type);
+		return input.type == type;
+	}
+
 	var connector = this;
 	var element = this.getElement();
 
-	var component = document.createElement('paper-input');
-	component.type = "date";
-	element.appendChild(component);
-	// element.innerHTML = '<paper-input type="date"></paper-input>';
-
 	/*
-	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
-	 * servidor.
+	 * si el <input type="date" .../> es soportado, entonces se crea un
+	 * calendario de ese tipo. De lo contrario se crea un paper-dialog-calendar.
 	 */
+	var component;
+	if (checkInput('date')) {
+		component = document.createElement('paper-input');
+		component.type = "date";
+	} else {
+		component = document.createElement('paper-dialog-calendar');
+		component.isDialogCalendar = true;
+	}
+
+	element.appendChild(component);
+
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperinput_date_PaperDateInput#onStateChange:");
 
-		component.value = this.getState().inputValue;
-		component.label = this.getState().inputLabel;
-		component.required = this.getState().inputRequired;
+		if (component.isDialogCalendar) {
+			component.setValue(this.getState().inputValue);
+			component.allDisabled = this.getState().inputDisabled;
+		} else {
+			component.value = this.getState().inputValue;
+			component.label = this.getState().inputLabel;
+			component.pattern = this.getState().inputPattern;
+			component.required = this.getState().inputRequired;
+			component.disabled = this.getState().inputDisabled;
+			component.invalid = this.getState().inputInvalid;
+		}
+
 		component.errorMessage = this.getState().inputErrorMessage;
-		component.pattern = this.getState().inputPattern;
-		component.disabled = this.getState().inputDisabled;
-		component.invalid = this.getState().inputInvalid;
 
 		// component.validate();
 	}
 
 	/*
-	 * Agrego listener para eventos "change" de paper-input.
+	 * Agrego listener para eventos "change" de paper-input / paper-dialog-calendar.
 	 */
 	component.addEventListener("change", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_date_PaperDateInput#change:");
-		console.log(e);
-		connector.handleChange(component.value, component.invalid);
+		connector.handleChange(component.value);
 	});
 };
