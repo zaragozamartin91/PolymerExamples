@@ -26,14 +26,15 @@
   <link rel="import" href="paper-wb-checkbox.html">
   <link rel="import" href="paper-data-table.html">
   <link rel="import" href="responsive-table-multi.html">
-
-  <link rel="import" href="ssn-input.html">
+  <link rel="import" href="paper-dialog-calendar.html">
 
   <script></script>
 
 </head>
 
 <body>
+  <paper-dialog-calendar ddmmyyyy></paper-dialog-calendar>
+
   <paper-input auto-validate label="Ingrese nombre" required="required" error-message="Invalido!"></paper-input>
   <paper-input auto-validate label="Ingrese nombre" disabled="disabled"></paper-input>
 
@@ -75,8 +76,7 @@
             ]'>
   </paper-data-table>
 
-  <responsive-table-multi 
-    columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","editor:mode-edit"]}]'
+  <responsive-table-multi columns='[{"name":"ID"},{"name":"Name"},{"name":"Job"},{"name":"","icons":["save","delete","editor:mode-edit"]}]'
     init-rows='[["uno","dos","tres","cuatro"], ["cinco","seis","siete","ocho"], ["nueve","diez","once","doce"]]'>
   </responsive-table-multi>
 
