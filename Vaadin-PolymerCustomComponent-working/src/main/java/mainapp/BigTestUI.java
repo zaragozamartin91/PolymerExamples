@@ -168,6 +168,7 @@ public class BigTestUI extends UI {
 						Notification.show("" + event.getProperty().getValue());
 					}
 				});
+				paperDateInput.setWidth("100%");
 
 				disabledInput = new PaperTextInput("Disabled!");
 				disabledInput.disable();

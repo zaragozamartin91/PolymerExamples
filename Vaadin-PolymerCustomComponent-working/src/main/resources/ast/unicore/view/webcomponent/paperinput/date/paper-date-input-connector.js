@@ -34,6 +34,9 @@ ast_unicore_view_webcomponent_paperinput_date_PaperDateInput = function() {
 		if (component.isDialogCalendar) {
 			component.setValue(this.getState().inputValue);
 			component.allDisabled = this.getState().inputDisabled;
+			if (this.getState().inputWidth) {
+				component.setWidth(this.getState().inputWidth);
+			}
 		} else {
 			component.value = this.getState().inputValue;
 			component.label = this.getState().inputLabel;
@@ -49,7 +52,8 @@ ast_unicore_view_webcomponent_paperinput_date_PaperDateInput = function() {
 	}
 
 	/*
-	 * Agrego listener para eventos "change" de paper-input / paper-dialog-calendar.
+	 * Agrego listener para eventos "change" de paper-input /
+	 * paper-dialog-calendar.
 	 */
 	component.addEventListener("change", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_date_PaperDateInput#change:");

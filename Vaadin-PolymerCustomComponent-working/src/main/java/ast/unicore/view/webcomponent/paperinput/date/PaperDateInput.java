@@ -74,6 +74,13 @@ public class PaperDateInput extends AbstractPaperInput<Date> {
 	}
 
 	@Override
+	public void setWidth(String width) {
+		super.setWidth(width);
+		getState().inputWidth = width;
+		markAsDirty();
+	}
+
+	@Override
 	protected void addHandleChangeCallback() {
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override

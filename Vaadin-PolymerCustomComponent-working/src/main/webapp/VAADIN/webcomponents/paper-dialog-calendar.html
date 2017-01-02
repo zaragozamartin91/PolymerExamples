@@ -181,6 +181,19 @@
             }
             this._inputObserver();
         },
+        setWidth: function (width) {
+            if (width) {
+                var swidth = ("" + width).trim();
+                if (swidth.indexOf("%") >= 0) {
+                    var iwidth = parseInt(swidth.split("%")[0]);
+                    // la anchura maxima del campo es 95%
+                    swidth = (iwidth >= 95) ? "95%" : swidth;
+                    this.$.triggerCalendar.style.width = "3%";
+                }
+
+                this.$.dateInput.style.width = swidth;
+            }
+        },
         /* observador de cambios del selector de fechas. Obtiene la fecha del selector y se la asigna al paper-input.*/
         _pickerDateObserver: function (newValue, oldValue) {
             if (oldValue && newValue && oldValue.toString() == newValue.toString()) {
