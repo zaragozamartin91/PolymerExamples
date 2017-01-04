@@ -16,7 +16,10 @@ public enum IronIcon {
 	MENU("menu"),
 	INPUT("input"),
 	EDIT("editor:mode-edit"),
-	DELETE("delete");
+	DELETE("delete"),
+	SOCIAL_GROUP("social:group"),
+	GROUP_WORK("group-work"),
+	ALARM("alarm");
 
 	public final String name;
 

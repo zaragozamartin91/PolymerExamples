@@ -13,6 +13,7 @@ public enum WebImport {
 	PAPER_CHECKBOX("VAADIN/webcomponents/paper-wb-checkbox.html"),
 	IRON_ICONS("VAADIN/webcomponents/bower_components/iron-icons/iron-icons.html"),
 	EDITOR_ICONS("VAADIN/webcomponents/bower_components/iron-icons/editor-icons.html"),
+	SOCIAL_ICONS("VAADIN/webcomponents/bower_components/iron-icons/social-icons.html"),
 	RESPONSIVE_TABLE("VAADIN/webcomponents/responsive-table-multi.html"),
 	PAPER_DIALOG_CALENDAR("VAADIN/webcomponents/paper-dialog-calendar.html");
 

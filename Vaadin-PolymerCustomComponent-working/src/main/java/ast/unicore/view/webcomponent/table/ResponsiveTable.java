@@ -41,7 +41,22 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 			columnList.add(column.toMap());
 		}
 
-		init(columnList);
+		getState().columns = columnList;
+		addHandleClickCallback();
+	}
+
+	/**
+	 * Agrega una fila a partir de un conjunto de valores. La cantidad de valores pasados como parametro DEBE SER IGUAL a la cantidad de columnas de la tabla.
+	 * Si la tabla tiene columnas de tipo NO TEXTO -> pasar valores vacios como "".
+	 * 
+	 * @param values
+	 *            Valores de la fila. Si un valor de la fila corresponde a una columna de tipo NO TEXTO (por ejemplo columna con ICONOS) entonces asignar un
+	 *            valor vacio o dummy como "" o "_".
+	 */
+	public void addRow(Object... values) {
+		Map<String, Object> row = buildRow(values);
+		getState().rows.add(row);
+		markAsDirty();
 	}
 
 	/**
@@ -51,47 +66,33 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 *            Valores de fila a agregar.
 	 */
 	public void addRow(Map<String, Object> rowMap) {
-		List<Map<String, Object>> columns = getState().columns;
+		Map<String, Object> rowValues = completeRow(rowMap);
 
-		/* si la cantidad de elementos en el mapa de la fila coincide con la cantidad de columnas, entonces la fila se agrega facilmente. */
-		if (rowMap.size() == columns.size()) {
-			Set<Entry<String, Object>> rowEntries = rowMap.entrySet();
-			for (Entry<String, Object> rowEntry : rowEntries) {
-				rowEntry.setValue(rowEntry.getValue() == null ? "_" : rowEntry.getValue());
-			}
-
-			getState().rows.add(rowMap);
-			markAsDirty();
-			return;
-		}
-
-		List<Map<String, Object>> iconColumns = getIconColumns();
-		/*
-		 * si la cantidad de columnas es igual a la cantidad de columnas tipo ICONO + la cantidad de elementos del mapa de la fila, se agrega la fila con
-		 * valores DUMMY para las columnas ICONO.
-		 */
-		if (columns.size() == (iconColumns.size() + rowMap.size())) {
-			for (Map<String, Object> iconColumn : iconColumns) {
-				rowMap.put(Column.fromMap(iconColumn).name, "_");
-			}
-
-			getState().rows.add(rowMap);
-			markAsDirty();
-			return;
-		}
-
-		throw new IllegalArgumentException("Cantidad incorrecta de elementos de la fila");
+		getState().rows.add(rowValues);
+		markAsDirty();
 	}
 
 	/**
-	 * Agrega una fila a partir de un conjunto de valores. La cantidad de valores pasados como parametro DEBE SER IGUAL a la cantidad de columnas de la tabla.
-	 * Si la tabla tiene columnas de tipo ICONO -> pasar valores vacios como ""
+	 * Completa una fila. A partir de un mapa que representa los valores de una fila se retorna un mapa que contiene valores vacios (NO NULOS) para aquellos
+	 * valores faltantes en el mapa original de acuerdo a las columnas de la tabla. Ejemplo: <br/><br/>
 	 * 
-	 * @param values
+	 * columnas: nombre, edad -> completeRow({edad:25}) == {nombre:"", edad:25}.
+	 * 
+	 * @param rowMap
+	 *            Valores de fila.
+	 * @return Fila "completada" con valores vacios.
 	 */
-	public void addRow(Object... values) {
-		Map<String, Object> row = buildRow(values);
-		addRow(row);
+	private Map<String, Object> completeRow(Map<String, Object> rowMap) {
+		List<Map<String, Object>> columns = getState().columns;
+		Map<String, Object> rowValues = new LinkedHashMap<>(rowMap);
+
+		for (Map<String, Object> column : columns) {
+			String colName = Column.fromMap(column).name;
+			Object rowValue = rowValues.containsKey(colName) ? rowValues.get(colName) : "";
+			rowValues.put(colName, rowValue);
+		}
+
+		return rowValues;
 	}
 
 	/**
@@ -156,6 +157,47 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 
 			return wrapRow(deleted);
 		}
+	}
+
+	/**
+	 * Criterio de eliminacion de filas.
+	 * 
+	 * @author martin.zaragoza
+	 *
+	 */
+	public static interface RemoveCriteria {
+		/**
+		 * Determina si un criterio de eliminacion aplica.
+		 * 
+		 * @param rowValues
+		 *            Valores de la fila.
+		 * @return true si el criterio de eliminacion aplica, false en caso contrario.
+		 */
+		boolean matches(Map<String, Object> row);
+	}
+
+	/**
+	 * Elimina filas a partir de un criterio.
+	 * 
+	 * @param removeCriteria
+	 * @return
+	 */
+	public List<Map<String, Object>> removeRows(RemoveCriteria removeCriteria) {
+		List<Map<String, Object>> rows = getState().rows;
+		List<Map<String, Object>> deletedRows = new ArrayList<>();
+		List<Map<String, Object>> okRows = new ArrayList<>();
+
+		for (Map<String, Object> row : rows) {
+			if (removeCriteria.matches(row)) {
+				deletedRows.add(row);
+			} else {
+				okRows.add(row);
+			}
+		}
+
+		getState().rows = okRows;
+		markAsDirty();
+		return deletedRows;
 	}
 
 	/**
@@ -228,27 +270,27 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 		return setRow(rowIndex, row);
 	}
 
-	/**
-	 * Modifica una fila.
-	 * 
-	 * @param rowIndex
-	 *            Indice de fila (comienza de 0).
-	 * @param row
-	 *            Nuevos valores de fila.
-	 * @return Fila modificada.
-	 * 
-	 * @throws IndexOutOfBoundsException
-	 *             Si el indice de fila es igual o superior a cantidad de filas.
-	 */
-	public Map<String, Object> setRow(int rowIndex, Map<String, Object> row) {
-		if (rowIndex >= getRowCount()) {
-			throw new IndexOutOfBoundsException("Indice de fila igual o superior a cantidad de filas de la tabla");
-		}
-
-		getState().rows.set(rowIndex, row);
-		markAsDirty();
-		return wrapRow(row);
-	}
+	// /**
+	// * Modifica una fila.
+	// *
+	// * @param rowIndex
+	// * Indice de fila (comienza de 0).
+	// * @param row
+	// * Nuevos valores de fila.
+	// * @return Fila modificada.
+	// *
+	// * @throws IndexOutOfBoundsException
+	// * Si el indice de fila es igual o superior a cantidad de filas.
+	// */
+	// public Map<String, Object> setRow(int rowIndex, Map<String, Object> row) {
+	// if (rowIndex >= getRowCount()) {
+	// throw new IndexOutOfBoundsException("Indice de fila igual o superior a cantidad de filas de la tabla");
+	// }
+	//
+	// getState().rows.set(rowIndex, row);
+	// markAsDirty();
+	// return wrapRow(row);
+	// }
 
 	/**
 	 * Modifica una fila.
@@ -266,7 +308,30 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 	 */
 	public Map<String, Object> setRow(int rowIndex, Object... values) {
 		Map<String, Object> row = buildRow(values);
-		return setRow(rowIndex, row);
+
+		getState().rows.set(rowIndex, row);
+		markAsDirty();
+		return wrapRow(row);
+	}
+
+	/**
+	 * Modifica una fila.
+	 * 
+	 * @param rowIndex
+	 *            Indice de fila (comienza de 0).
+	 * @param row
+	 *            Nuevos valores de fila.
+	 * @return Fila modificada.
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 *             Si el indice de fila es igual o superior a cantidad de filas.
+	 */
+	public Map<String, Object> setRow(int rowIndex, Map<String, Object> row) {
+		Map<String, Object> rowValues = completeRow(row);
+
+		getState().rows.set(rowIndex, rowValues);
+		markAsDirty();
+		return wrapRow(rowValues);
 	}
 
 	/**
@@ -311,29 +376,9 @@ public class ResponsiveTable extends AbstractJavaScriptComponent {
 				row.put(Column.fromMap(column).name, values[i++]);
 			}
 			return row;
+		} else {
+			throw new IllegalArgumentException("Cantidad de elementos de fila invalida!");
 		}
-
-		/* Si la cantidad de valores de */
-		List<Map<String, Object>> iconColumns = getIconColumns();
-		if (columns.size() == (iconColumns.size() + values.length)) {
-			Map<String, Object> row = new LinkedHashMap<>();
-			int i = 0;
-			List<Map<String, Object>> regularColumns = getRegularColumns();
-			for (Map<String, Object> regularColumn : regularColumns) {
-				row.put(Column.fromMap(regularColumn).name, values[i++]);
-			}
-			for (Map<String, Object> iconColumn : iconColumns) {
-				row.put(Column.fromMap(iconColumn).name, "_");
-			}
-			return row;
-		}
-
-		throw new IllegalArgumentException("Cantidad de elementos de fila invalida!");
-	}
-
-	protected void init(List<Map<String, Object>> columns) {
-		getState().columns = columns;
-		addHandleClickCallback();
 	}
 
 	@SuppressWarnings("serial")
