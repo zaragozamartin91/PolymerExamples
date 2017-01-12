@@ -14,19 +14,6 @@ import javax.servlet.annotation.WebServlet;
 
 import org.jsoup.nodes.Element;
 
-import ast.unicore.view.webcomponent.icons.iron.IronIcon;
-import ast.unicore.view.webcomponent.imports.WebImport;
-import ast.unicore.view.webcomponent.paperbutton.PaperButton;
-import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
-import ast.unicore.view.webcomponent.papercheckbox.PaperCheckbox;
-import ast.unicore.view.webcomponent.papercombo.PaperCombo;
-import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
-import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
-import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
-import ast.unicore.view.webcomponent.table.Column;
-import ast.unicore.view.webcomponent.table.IconColumn;
-import ast.unicore.view.webcomponent.table.ResponsiveTable;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -52,6 +39,19 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import ast.unicore.view.webcomponent.icons.iron.IronIcon;
+import ast.unicore.view.webcomponent.imports.WebImport;
+import ast.unicore.view.webcomponent.paperbutton.PaperButton;
+import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
+import ast.unicore.view.webcomponent.papercheckbox.PaperCheckbox;
+import ast.unicore.view.webcomponent.papercombo.PaperCombo;
+import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
+import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
+import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
+import ast.unicore.view.webcomponent.table.Column;
+import ast.unicore.view.webcomponent.table.IconColumn;
+import ast.unicore.view.webcomponent.table.ResponsiveTable;
+
 @Theme("dawn")
 @SuppressWarnings("serial")
 public class BigTestUI extends UI {
@@ -73,6 +73,10 @@ public class BigTestUI extends UI {
 	protected void init(VaadinRequest request) {
 		final VerticalLayout layout = new VerticalLayout();
 		setContent(layout);
+
+		TextField sampleTextfield = new TextField("Prueba");
+		sampleTextfield.setWidth("70%");
+		layout.addComponent(sampleTextfield);
 
 		PaperButton addComponentsButton = new PaperButton("Agregar componentes");
 

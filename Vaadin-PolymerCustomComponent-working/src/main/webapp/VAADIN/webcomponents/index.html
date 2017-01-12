@@ -28,6 +28,15 @@
   <link rel="import" href="responsive-table-multi.html">
   <link rel="import" href="paper-dialog-calendar.html">
 
+
+  <!-- MATERIALIZE -->
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css" media="screen,projection"
+  />
+  <script type="text/javascript" src="bower_components/materialize/dist/js/materialize.min.js"></script>
+
+
+
   <script></script>
 
   <style>
@@ -44,12 +53,70 @@
       transform: translate(-25%, -10%) scale(0.5, 0.8);
       
     }
+
+    @font-face {
+      font-family: 'myFont';
+      src:  url('/bower_components/materialize/dist/fonts/Roboto-Bold.eot'); /* IE9 Compat Modes */
+      src:  url('/bower_components/materialize/dist/fonts/Roboto-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('/bower_components/materialize/dist/fonts/Roboto-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+            url('/bower_components/materialize/dist/fonts/Roboto-Bold.woff') format('woff'), /* Pretty Modern Browsers */
+            url('/bower_components/materialize/dist/fonts/Roboto-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+            url('/bower_components/materialize/dist/fonts/Roboto-Bold.svg#svgFontName') format('svg'); /* Legacy iOS */
+    }
+
+    p {
+      font-family: myFont;
+    }
   </style>
 </head>
 
 <body>
-  <div class="scales" onmouseover="this.className='scales scaleOn'" onmouseout="this.className='scales'"> I scale up and down
+
+<p>This is roboto text</p>
+
+<div class="row">
+  <form class="col s12">
+    <div class="row">
+      <div class="input-field col s6">
+        <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+        <label for="first_name">First Name</label>
+      </div>
+      <div class="input-field col s6">
+        <input id="last_name" type="text" class="validate">
+        <label for="last_name">Last Name</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input disabled value="I am not editable" id="disabled" type="text" class="validate">
+        <label for="disabled">Disabled</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="password" type="password" class="validate">
+        <label for="password">Password</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="email" type="email" class="validate">
+        <label for="email">Email</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        This is an inline input field:
+        <div class="input-field inline">
+          <input id="email" type="email" class="validate">
+          <label for="email" data-error="wrong" data-success="right">Email</label>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
+
+<div class="scales" onmouseover="this.className='scales scaleOn'" onmouseout="this.className='scales'"> I scale up and down</div>
 
 <paper-dialog-calendar ddmmyyyy></paper-dialog-calendar>
 
