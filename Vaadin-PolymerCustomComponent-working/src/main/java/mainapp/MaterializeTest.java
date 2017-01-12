@@ -34,7 +34,7 @@ import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
 
-@Theme("dawn")
+@Theme("mytheme")
 @SuppressWarnings("serial")
 public class MaterializeTest extends UI {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -131,7 +131,8 @@ public class MaterializeTest extends UI {
 	/**
 	 * This injects polymer.js and es6 support polyfils directly into host page.
 	 *
-	 * Better compatibility and good approach if you have multiple webcomponents in the app.
+	 * Better compatibility and good approach if you have multiple webcomponents
+	 * in the app.
 	 */
 	public static BootstrapListener polymerInjector = new BootstrapListener() {
 
@@ -159,7 +160,8 @@ public class MaterializeTest extends UI {
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
-			head.prependElement("meta").attr("name", "viewport").attr("content", "width=device-width, initial-scale=1.0");
+			head.prependElement("meta").attr("name", "viewport").attr("content",
+					"width=device-width, initial-scale=1.0");
 
 			{
 				Element script = response.getDocument().createElement("script");
@@ -173,13 +175,14 @@ public class MaterializeTest extends UI {
 				head.appendChild(script);
 			}
 
-			{
-				Element link = response.getDocument().createElement("link");
-				link.attr("rel", "stylesheet");
-				link.attr("media", "screen,projection");
-				link.attr("href", "VAADIN/webcomponents/bower_components/materialize/dist/css/materialize.min.css");
-				head.appendChild(link);
-			}
+			// {
+			// Element link = response.getDocument().createElement("link");
+			// link.attr("rel", "stylesheet");
+			// link.attr("media", "screen,projection");
+			// link.attr("href",
+			// "VAADIN/webcomponents/bower_components/materialize/dist/css/materialize.min.css");
+			// head.appendChild(link);
+			// }
 
 		}
 	};

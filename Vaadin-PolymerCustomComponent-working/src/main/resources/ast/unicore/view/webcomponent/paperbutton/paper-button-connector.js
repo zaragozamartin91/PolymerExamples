@@ -14,13 +14,15 @@ ast_unicore_view_webcomponent_paperbutton_PaperButton = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	// <button class="btn waves-effect waves-light" type="submit"
-	// name="action">Submit
-
+	/* la clase  materialize la invente en mytheme.scss para que el estilo se aplique solo a materialize sin contaminar los demas componentes. */
+	var materializeWrapper = document.createElement('div');
+	materializeWrapper.className = "materialize";
 	var component = document.createElement('button');
 	component.className = 'btn waves-effect waves-light white';
 	component.style.color = "black";
-	element.appendChild(component);
+	materializeWrapper.appendChild(component);
+	
+	element.appendChild(materializeWrapper);
 
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#onStateChange");

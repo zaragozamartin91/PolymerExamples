@@ -1,0 +1,11 @@
+@import "../valo/valo.scss";
+@import "materialize.scss";
+
+@mixin mytheme {
+	@include valo;
+	
+	// Insert your own theme rules here	
+	.materialize {
+		@include materialize;
+	}
+}

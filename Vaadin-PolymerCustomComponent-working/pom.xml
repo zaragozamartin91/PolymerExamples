@@ -74,6 +74,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-themes</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+        <dependency>
             <artifactId>dawn</artifactId>
             <groupId>org.peimari</groupId>
             <version>2</version>
@@ -90,6 +95,7 @@
             <version>1.6</version>
             <type>jar</type>
         </dependency>
+        
     </dependencies>
 
     <build>
