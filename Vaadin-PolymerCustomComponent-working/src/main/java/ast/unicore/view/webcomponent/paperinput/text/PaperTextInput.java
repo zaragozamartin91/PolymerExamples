@@ -60,19 +60,6 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 		return getState().inputValue;
 	}
 
-	// /**
-	// * Establece el patron de validacion del campo como una expresion regular. Si el contenido del input no cumple con
-	// * la expresion regular, se lo marcara como invalido.
-	// *
-	// * @param pattern
-	// * Expresion regular de validacion del campo. Ej: [A-Za-z]+ es expresion regular de caracteres
-	// * alfabeticos SIN espacios ni numeros.
-	// */
-	// public void setPattern(String pattern) {
-	// this.getState().inputPattern = pattern;
-	// markAsDirty();
-	// }
-
 	/**
 	 * Limpia el campo y lo restaura a su estado original.
 	 */
@@ -80,6 +67,14 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 	public void clear() {
 		setValue("");
 		setInputValid();
+	}
+
+	/**
+	 * Establece el tipo de input como password.
+	 */
+	public void setPasswordType() {
+		this.getState().inputType = "password";
+		markAsDirty();
 	}
 
 	@SuppressWarnings({ "unchecked" })

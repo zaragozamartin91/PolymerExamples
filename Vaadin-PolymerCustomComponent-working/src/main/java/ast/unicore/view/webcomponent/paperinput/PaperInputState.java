@@ -31,4 +31,9 @@ public class PaperInputState extends JavaScriptComponentState {
 	 * @see PaperDateInput#setWidth(String)
 	 */
 	public String inputWidth;
+
+	/**
+	 * Establece el tipo de de input. Soportados por ahora: text, password.
+	 */
+	public String inputType = "text";
 }

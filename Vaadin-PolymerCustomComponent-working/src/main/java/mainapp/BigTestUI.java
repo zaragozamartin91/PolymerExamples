@@ -106,9 +106,13 @@ public class BigTestUI extends UI {
 				peopleCombo.setWidth("50%");
 				peopleCombo.addValueChangeListener(comboValueChangeListener);
 
+				PaperTextInput passwordInput = new PaperTextInput("Ingrese password");
+				passwordInput.setPasswordType();
+				passwordInput.setWidth("35%");
+				layout.addComponent(passwordInput);
+
 				organizationInput = new PaperTextInput("Nombre organizacion");
 				organizationInput.setRequired(true, "Campo no puede ser vacio [REQUERIDO]!");
-				organizationInput.setEnabled(false);
 				organizationInput.setValue("ACCUSYS");
 				layout.addComponent(organizationInput);
 				organizationInput.setWidth("60%");
