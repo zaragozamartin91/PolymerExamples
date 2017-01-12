@@ -21,9 +21,20 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	var component = document.createElement('paper-input');
-	element.appendChild(component);
-	// e.innerHTML = '<paper-input></paper-input>';
+	var div = document.createElement('div');
+	div.className = 'input-field';
+	var input = document.createElement('input');
+	// input.id = "weirdInput";
+	input.type = "text";
+	input.className = "validate";
+	div.appendChild(input);
+	var label = document.createElement('label');
+	// label.setAttribute('for', 'weirdInput');
+	label.innerHTML = "Weird Input";
+	div.appendChild(label);
+	document.querySelector('body').appendChild(div);
+
+	element.appendChild(div);
 
 	/*
 	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
@@ -32,36 +43,39 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextInput#onStateChange");
 
-		component.value = this.getState().inputValue;
-		component.label = this.getState().inputLabel;
-		component.required = this.getState().inputRequired;
-		component.errorMessage = this.getState().inputErrorMessage;
-		component.pattern = this.getState().inputPattern;
-		component.disabled = this.getState().inputDisabled;
-		component.invalid = this.getState().inputInvalid;
-		component.type = this.getState().inputType;
+		input.value = this.getState().inputValue;
+		label.innerHTML = this.getState().inputLabel;
+		if (this.getState().inputValue) {
+			label.className = "active";
+		}
+		// component.required = this.getState().inputRequired;
+		// component.errorMessage = this.getState().inputErrorMessage;
+		// component.pattern = this.getState().inputPattern;
+		input.disabled = this.getState().inputDisabled;
+		// component.invalid = this.getState().inputInvalid;
+		input.type = this.getState().inputType || "text";
 
 		/*
 		 * si el componente no tiene valor asignado o tiene valor vacio ("") y
 		 * ademas se encuentra deshabilitado, entonces le asigno un valor para
 		 * que el caption
 		 */
-		if (!component.value) {
-			if (component.disabled) {
-				component.value = " ";
-			}
-		}
+		// if (!component.value) {
+		// if (component.disabled) {
+		// component.value = " ";
+		// }
+		// }
 	}
 
 	/* Listener de eventos de foco */
-	component.addEventListener("focus", function(e) {
+	input.addEventListener("focus", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#focus:");
-		connector.handleFocus(component.value);
+		connector.handleFocus(input.value);
 	});
 
 	/* Agrego listener para eventos "change" de paper-input. */
-	component.addEventListener("change", function(e) {
+	input.addEventListener("change", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_PaperInput#change:");
-		connector.handleChange(component.value, component.invalid);
+		connector.handleChange(input.value, input.invalid);
 	});
 };

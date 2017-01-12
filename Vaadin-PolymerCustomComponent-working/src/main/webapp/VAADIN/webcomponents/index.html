@@ -116,6 +116,12 @@
   </form>
 </div>
 
+      <div class="input-field">
+        <input id="weirdInput" type="text" class="validate">
+        <label for="weirdInput">Weird input</label>
+      </div>
+
+
 <div class="scales" onmouseover="this.className='scales scaleOn'" onmouseout="this.className='scales'"> I scale up and down</div>
 
 <paper-dialog-calendar ddmmyyyy></paper-dialog-calendar>
@@ -166,7 +172,24 @@
 </responsive-table-multi>
 
 <script>
+  $(document).ready(function() {
+    //$('body').append('<div class="input-field"><input id="weirdInput" type="text" class="validate"><label for="weirdInput">Weird input</label></div>');
+    var component = document.createElement('div');
+    component.className = 'input-field';
+    var input = document.createElement('input');
+    input.id = "weirdInput";
+    input.type = "text";
+    input.className = "validate";
+    component.appendChild(input);
+    var label = document.createElement('label');
+    label.setAttribute('for','weirdInput');
+    label.innerHTML = "Weird Input";
+    component.appendChild(label);
+    document.querySelector('body').appendChild(component);
+  });
+
   window.addEventListener('WebComponentsReady', function (e) {
+
     var peopleCombo = document.querySelector('#peopleCombo');
     peopleCombo.setCaptions(["martin", "exe", "julio"]);
 

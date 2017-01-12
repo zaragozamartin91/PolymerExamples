@@ -14,14 +14,18 @@ ast_unicore_view_webcomponent_paperbutton_PaperButton = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	var component = document.createElement('paper-button');
-	component.raised = true;
+	// <button class="btn waves-effect waves-light" type="submit"
+	// name="action">Submit
+
+	var component = document.createElement('button');
+	component.className = 'btn waves-effect waves-light white';
+	component.style.color = "black";
 	element.appendChild(component);
 
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#onStateChange");
 
-		component.disabled = this.getState().buttonDisabled;
+		// component.disabled = this.getState().buttonDisabled;
 		component.innerHTML = this.getState().buttonLabel;
 		component.style.width = this.getState().widthToSet;
 	}
