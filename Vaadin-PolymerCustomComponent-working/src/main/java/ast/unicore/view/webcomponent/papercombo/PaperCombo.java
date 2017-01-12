@@ -1,7 +1,10 @@
 package ast.unicore.view.webcomponent.papercombo;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.data.Property;
@@ -64,7 +67,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @throws InvalidKeyException
 	 *             Cuando la clave/caption del item a agregar sea nula o igual a {@link PaperCombo#INVALID_KEY}.
 	 */
-	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException /* , DuplicateItemException */{
+	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException /* , DuplicateItemException */ {
 		if (itemCaption == null || INVALID_KEY.equals(itemCaption)) {
 			throw new InvalidKeyException("La clave " + itemCaption + " es invalida!");
 		}
@@ -74,6 +77,21 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		// }
 
 		items.put(itemCaption, item);
+		getState().captions = items.keySet().toArray(new String[0]);
+		markAsDirty();
+
+		return this;
+	}
+
+	/**
+	 * Establece todos los items del combo.
+	 * 
+	 * @param items
+	 *            Nuevos items del combo.
+	 * @return this.
+	 */
+	public PaperCombo setItems(Map<String, Object> items) {
+		this.items = new LinkedHashMap<>(items);
 		getState().captions = items.keySet().toArray(new String[0]);
 		markAsDirty();
 
@@ -102,7 +120,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	/**
-	 * Establece el item seleccionado.
+	 * Establece el item seleccionado a partir de un caption.
 	 * 
 	 * @param itemCaption
 	 *            Caption del item a marcar como seleccionado.
@@ -120,6 +138,25 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		}
 
 		return this;
+	}
+
+	/**
+	 * Establece el item seleccionado.
+	 * 
+	 * @param item
+	 *            Item a establecer como seleccionado.
+	 * @return this.
+	 */
+	public PaperCombo setSelectedByItem(Object item) {
+		Set<Entry<String, Object>> entries = items.entrySet();
+		for (Entry<String, Object> entry : entries) {
+			if (item.equals(entry.getValue())) {
+				this.setSelected(entry.getKey());
+				return this;
+			}
+		}
+
+		throw new NonexistentKeyException("El item " + item + " no pertenece al combo!");
 	}
 
 	/**

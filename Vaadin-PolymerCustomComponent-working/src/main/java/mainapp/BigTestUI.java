@@ -228,9 +228,6 @@ public class BigTestUI extends UI {
 							if (rowData.contains(":")) {
 								Map<String, Object> rowMap = parseRowAsMap(rowData);
 								responsiveTable.addRow(rowMap);
-							} else {
-								List<Object> values = parseRowAsValues(rowData);
-								responsiveTable.addRow(values.toArray());
 							}
 						} catch (Exception e) {
 							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
@@ -267,9 +264,6 @@ public class BigTestUI extends UI {
 							if (rowData.contains(":")) {
 								Map<String, Object> rowMap = parseRowAsMap(rowData);
 								responsiveTable.setRow(rowIndex, rowMap);
-							} else {
-								List<Object> values = parseRowAsValues(rowData);
-								responsiveTable.setRow(rowIndex, values.toArray());
 							}
 						} catch (Exception e) {
 							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
@@ -280,9 +274,6 @@ public class BigTestUI extends UI {
 				responsiveTable = new ResponsiveTable("ID", "Name", "Salary", IconColumn.newEmptynamed(IronIcon.EDIT, IronIcon.DELETE));
 				layout.addComponent(responsiveTable);
 				responsiveTable.setWidth("100%");
-				responsiveTable.addRow(1, "Martin", 1200.5, "_");
-				responsiveTable.addRow(2, "Julio", 2500.25, "_");
-				responsiveTable.addRow(3, "Exequiel", 3750.71, "_");
 				responsiveTable.addClickListener(new ResponsiveTable.ClickListener() {
 					@Override
 					public void iconClick(Column column, Map<String, Object> row, int rowIndex, IronIcon icon) {
@@ -296,9 +287,6 @@ public class BigTestUI extends UI {
 									if (rowData.contains(":")) {
 										Map<String, Object> rowMap = parseRowAsMap(rowData);
 										responsiveTable.setRow(rowIndex, rowMap);
-									} else {
-										List<Object> values = parseRowAsValues(rowData);
-										responsiveTable.setRow(rowIndex, values.toArray());
 									}
 									Notification.show("GUARDANDO: " + row);
 									break;
