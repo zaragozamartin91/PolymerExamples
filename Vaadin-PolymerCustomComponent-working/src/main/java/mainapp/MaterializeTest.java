@@ -32,6 +32,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
+import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
 
@@ -110,6 +111,14 @@ public class MaterializeTest extends UI {
 				disabledInput.setValue("Valor");
 				disabledInput.disable();
 				layout.addComponent(disabledInput);
+
+				PaperCombo peopleCombo = new PaperCombo("Persona");
+				peopleCombo.addItem("Martin");
+				peopleCombo.addItem("Exe");
+				peopleCombo.addItem("Mauri");
+				peopleCombo.addItem("Roland");
+				layout.addComponent(peopleCombo);
+				peopleCombo.setWidth("50%");
 			}
 		});
 
