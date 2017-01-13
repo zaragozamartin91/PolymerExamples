@@ -14,30 +14,38 @@ ast_unicore_view_webcomponent_paperbutton_PaperButton = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	/*
-	 * la clase materialize la invente en mytheme.scss para que el estilo se
-	 * aplique solo a materialize sin contaminar los demas componentes.
-	 */
-	// var materializeWrapper = document.createElement('div');
-	// materializeWrapper.className = "materialize";
 	var component = document.createElement('button');
-	component.className = 'btn waves-effect waves-light white';
-	component.style.color = "black";
-	// materializeWrapper.appendChild(component);
-
-	// element.appendChild(materializeWrapper);
+	// component.className = 'btn waves-effect waves-light white';
+	// component.style.color = "black";
 	element.appendChild(materializeWrap(component));
 
 	this.onStateChange = function() {
-		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#onStateChange");
+		console
+				.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#onStateChange");
+
+		component.className = this.getState().buttonStyle;
 
 		// component.disabled = this.getState().buttonDisabled;
 		component.innerHTML = this.getState().buttonLabel;
-		component.style.width = this.getState().widthToSet;
-	}
+		var className = component.className.replace("disabled", "").trim();
+		if (this.getState().buttonDisabled) {
+			className += " disabled";
+		}
+		component.className = className;
 
-	component.addEventListener('click', function(e) {
-		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#click:");
-		connector.handleClick();
-	});
+		component.style.width = this.getState().widthToSet;
+		if (this.getState().widthToSet) {
+			component.style.padding = "0px";
+		}
+	};
+
+	component
+			.addEventListener(
+					'click',
+					function(e) {
+						console
+								.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#click:");
+						connector.handleClick();
+					});
+
 };

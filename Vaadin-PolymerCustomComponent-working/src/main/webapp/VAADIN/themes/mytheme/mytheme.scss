@@ -7,5 +7,9 @@
 	// Insert your own theme rules here	
 	.ast-materialize {
 		@include materialize;
+		
+		button.white {
+			color: black;
+		}
 	}
 }

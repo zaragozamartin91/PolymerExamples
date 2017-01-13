@@ -55,6 +55,12 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 		label.innerHTML = this.getState().inputLabel;
 		if (this.getState().inputValue) {
 			label.className = "active";
+		} else {
+			/* SI EL INPUT NO TIENE VALOR Y LA BANDERA 'INVALIDO' ESTA SETEADA (SI EL INPUT ES REQUERIDO POR EJMEPLO) ENTONCES 
+			 * FUERZO EL ESTADO ACTIVO DEL LABEL PARA QUE EL MENSAJE DE ERROR SE MUESTRE CORRECTAMENTE*/
+			if (this.getState().inputInvalid) {
+				label.className = "active";
+			}
 		}
 		// component.required = this.getState().inputRequired;
 		// component.errorMessage = this.getState().inputErrorMessage;
@@ -62,6 +68,15 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 		input.disabled = this.getState().inputDisabled;
 		// component.invalid = this.getState().inputInvalid;
 		input.type = this.getState().inputType || "text";
+
+		label.setAttribute('data-error', this.getState().inputErrorMessage || "");
+
+		var inputClassName = input.className;
+		inputClassName = inputClassName.replace("invalid", "").trim();
+		if (this.getState().inputInvalid) {
+			inputClassName += " invalid";
+		}
+		input.className = inputClassName;
 
 		/*
 		 * si el componente no tiene valor asignado o tiene valor vacio ("") y

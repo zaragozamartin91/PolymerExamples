@@ -12,6 +12,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.Validator;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -62,9 +63,18 @@ public class MaterializeTest extends UI {
 				PaperTextInput passwordInput = new PaperTextInput("Ingrese password");
 				passwordInput.setPasswordType();
 				passwordInput.setWidth("100%");
+				passwordInput.addValidator(new Validator() {
+					@Override
+					public void validate(Object value) throws InvalidValueException {
+						if (value.toString().length() < 4) {
+							throw new InvalidValueException("Password muy corto");
+						}
+					}
+				});
+				passwordInput.autoValidate();
 
 				organizationInput = new PaperTextInput("Nombre organizacion");
-				organizationInput.setRequired(true, "Campo no puede ser vacio [REQUERIDO]!");
+				// organizationInput.setRequired(true, "Campo no puede ser vacio [REQUERIDO]!");
 				organizationInput.setValue("ACCUSYS");
 				organizationInput.setWidth("100%");
 				organizationInput.autoValidate();
