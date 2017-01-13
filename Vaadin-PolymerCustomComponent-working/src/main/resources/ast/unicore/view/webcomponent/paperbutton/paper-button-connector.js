@@ -14,15 +14,19 @@ ast_unicore_view_webcomponent_paperbutton_PaperButton = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	/* la clase  materialize la invente en mytheme.scss para que el estilo se aplique solo a materialize sin contaminar los demas componentes. */
-	var materializeWrapper = document.createElement('div');
-	materializeWrapper.className = "materialize";
+	/*
+	 * la clase materialize la invente en mytheme.scss para que el estilo se
+	 * aplique solo a materialize sin contaminar los demas componentes.
+	 */
+	// var materializeWrapper = document.createElement('div');
+	// materializeWrapper.className = "materialize";
 	var component = document.createElement('button');
 	component.className = 'btn waves-effect waves-light white';
 	component.style.color = "black";
-	materializeWrapper.appendChild(component);
-	
-	element.appendChild(materializeWrapper);
+	// materializeWrapper.appendChild(component);
+
+	// element.appendChild(materializeWrapper);
+	element.appendChild(materializeWrap(component));
 
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperbutton_PaperButton#onStateChange");

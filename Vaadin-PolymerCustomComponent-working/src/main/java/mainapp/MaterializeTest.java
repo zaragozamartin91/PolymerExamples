@@ -131,8 +131,7 @@ public class MaterializeTest extends UI {
 	/**
 	 * This injects polymer.js and es6 support polyfils directly into host page.
 	 *
-	 * Better compatibility and good approach if you have multiple webcomponents
-	 * in the app.
+	 * Better compatibility and good approach if you have multiple webcomponents in the app.
 	 */
 	public static BootstrapListener polymerInjector = new BootstrapListener() {
 
@@ -160,12 +159,17 @@ public class MaterializeTest extends UI {
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
-			head.prependElement("meta").attr("name", "viewport").attr("content",
-					"width=device-width, initial-scale=1.0");
+			head.prependElement("meta").attr("name", "viewport").attr("content", "width=device-width, initial-scale=1.0");
 
 			{
 				Element script = response.getDocument().createElement("script");
 				script.attr("src", "VAADIN/webcomponents/bower_components/jquery-3.1.1.min/index.js");
+				head.appendChild(script);
+			}
+
+			{
+				Element script = response.getDocument().createElement("script");
+				script.attr("src", "VAADIN/webcomponents/materializeWrap.js");
 				head.appendChild(script);
 			}
 

@@ -21,10 +21,12 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	/* la clase  materialize la invente en mytheme.scss para que el estilo se aplique solo a materialize sin contaminar los demas componentes. */
-	var materializeWrapper = document.createElement('div');
-	materializeWrapper.className = "materialize";
-
+	/*
+	 * la clase materialize la invente en mytheme.scss para que el estilo se
+	 * aplique solo a materialize sin contaminar los demas componentes.
+	 */
+	// var materializeWrapper = document.createElement('div');
+	// materializeWrapper.className = "materialize";
 	var div = document.createElement('div');
 	div.className = 'input-field';
 	var input = document.createElement('input');
@@ -36,11 +38,11 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextInput = function() {
 	// label.setAttribute('for', 'weirdInput');
 	label.innerHTML = "Weird Input";
 	div.appendChild(label);
-	document.querySelector('body').appendChild(div);
-	
-	materializeWrapper.appendChild(div);
 
-	element.appendChild(materializeWrapper);
+	// materializeWrapper.appendChild(div);
+
+	// element.appendChild(materializeWrapper);
+	element.appendChild(materializeWrap(div));
 
 	/*
 	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
