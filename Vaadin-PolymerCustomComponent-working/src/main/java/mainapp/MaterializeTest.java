@@ -50,6 +50,7 @@ public class MaterializeTest extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		final VerticalLayout layout = new VerticalLayout();
+		layout.addStyleName("overflowy");
 		setContent(layout);
 
 		TextField sampleTextfield = new TextField("Prueba");
