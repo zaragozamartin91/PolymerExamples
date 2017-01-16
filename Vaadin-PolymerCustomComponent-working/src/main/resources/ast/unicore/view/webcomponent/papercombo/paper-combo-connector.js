@@ -2,7 +2,11 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	// $(element).append('<div class="ast-materialize"><div class="input-field col s12"><select><option value="" disabled selected>Choose your option</option><option value="1">Option 1</option>     <option value="2">Option 2</option>      <option value="3">Option 3</option>    </select>    <label>Materialize Select</label>  </div></div>');
+	// $(element).append('<div class="ast-materialize"><div class="input-field
+	// col s12"><select><option value="" disabled selected>Choose your
+	// option</option><option value="1">Option 1</option> <option
+	// value="2">Option 2</option> <option value="3">Option 3</option> </select>
+	// <label>Materialize Select</label> </div></div>');
 
 	var div = document.createElement('div');
 	div.className = 'input-field';
@@ -13,7 +17,10 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	div.appendChild(label);
 
 	// var component = document.createElement('paper-combo');
-	element.appendChild(materializeWrap(div));
+	var wrap = materializeWrap(div);
+	wrap.style.overflowY = "auto";
+	wrap.style.overflowX = "hidden";
+	element.appendChild(wrap);
 
 	function arraysEqual(arr1, arr2) {
 		return JSON.stringify(arr1) == JSON.stringify(arr2);
@@ -22,19 +29,19 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	function arraysDifferent(arr1, arr2) {
 		return !arraysEqual(arr1, arr2);
 	}
-	
+
 	function buildOption(caption) {
 		var option = document.createElement('option');
 		option.value = caption;
 		option.innerHTML = caption;
 		return option;
 	}
-	
+
 	function setCaptions(captions) {
-		captions.forEach( function(caption) {
+		captions.forEach(function(caption) {
 			var option = buildOption(caption);
 			select.appendChild(option);
-		} );
+		});
 	}
 
 	/*
@@ -43,11 +50,24 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	 */
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#onStateChange");
-		
+
 		this.getState().captions = this.getState().captions || [];
-		if( arraysDifferent(div.captions, this.getState().captions) ) {
+		if (arraysDifferent(div.captions, this.getState().captions)) {
 			setCaptions(this.getState().captions);
 			$(select).material_select();
+			// var inputSelectDropdown =
+			// wrap.querySelector('input.select-dropdown');
+			// var prevHeight = wrap.style.height;
+			// var drop = false;
+			// inputSelectDropdown.addEventListener('focus', function() {
+			// if (drop) {
+			// return;
+			// }
+			// wrap.style.height = "300px";
+			// });
+			// inputSelectDropdown.addEventListener('blur', function() {
+			// wrap.style.height = prevHeight;
+			// });
 		}
 		div.captions = this.getState().captions;
 
@@ -65,7 +85,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		// }
 	}
 
-	select.onchange = function(){
+	select.onchange = function() {
 		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#selected:");
 		connector.handleSelected(select.value);
 	};

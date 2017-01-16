@@ -24,11 +24,13 @@ import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
@@ -53,7 +55,8 @@ public class MaterializeTest extends UI {
 		sampleTextfield.setWidth("70%");
 		layout.addComponent(sampleTextfield);
 
-		PaperButton addComponentsButton = new PaperButton("Agregar componentes");
+		PaperButton addComponentsButton = new PaperButton("+");
+		addComponentsButton.setAsFloating();
 
 		Button sampleButton = new Button("sample button");
 		layout.addComponent(sampleButton);
@@ -61,6 +64,50 @@ public class MaterializeTest extends UI {
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
+				PaperButton addPopupButton = new PaperButton("Abrir popup", new ClickListener() {
+					@Override
+					public void buttonClick() {
+						UI ui = MaterializeTest.getCurrent();
+						Window window = new Window("Combo popup");
+
+						PaperCombo combo = new PaperCombo("Opciones");
+						for (int i = 0; i < 20; i++) {
+							combo.addItem("item_" + i);
+						}
+						int windowHeightPx = 150;
+						// String comboHeight = 200 + "px";
+						// combo.settDropdownContentHeight(comboHeight);
+
+						VerticalLayout windowContent = new VerticalLayout(combo);
+						windowContent.setMargin(true);
+						windowContent.setSpacing(true);
+						windowContent.setSizeFull();
+						window.setContent(windowContent);
+
+						window.setWidth("300px");
+						window.setHeight(windowHeightPx + "px");
+						window.setClosable(true);
+						window.center();
+						window.setModal(true);
+						ui.addWindow(window);
+					}
+				});
+				layout.addComponent(addPopupButton);
+
+				PaperCombo countryCombo = new PaperCombo("Pais");
+				countryCombo.addItem("argentina");
+				countryCombo.addItem("brasil");
+				countryCombo.addItem("paraguay");
+				countryCombo.addItem("uruguay");
+				countryCombo.addItem("eeuu");
+				countryCombo.addItem("canada");
+				countryCombo.addItem("mexico");
+				countryCombo.addItem("peru");
+				countryCombo.addItem("bolivia");
+				countryCombo.addItem("francia");
+				layout.addComponent(countryCombo);
+				countryCombo.setWidth("75%");
+
 				PaperTextInput passwordInput = new PaperTextInput("Ingrese password");
 				passwordInput.setPasswordType();
 				passwordInput.setWidth("100%");
@@ -112,21 +159,26 @@ public class MaterializeTest extends UI {
 				disabledInput.disable();
 				layout.addComponent(disabledInput);
 
-				PaperCombo peopleCombo = new PaperCombo("Persona");
-				peopleCombo.addItem("Martin");
-				peopleCombo.addItem("Exe");
-				peopleCombo.addItem("Mauri");
-				peopleCombo.addItem("Roland");
-				layout.addComponent(peopleCombo);
-				peopleCombo.setWidth("50%");
+				// PaperCombo peopleCombo = new PaperCombo("Persona");
+				// peopleCombo.addItem("Martin");
+				// peopleCombo.addItem("Exe");
+				// peopleCombo.addItem("Mauri");
+				// peopleCombo.addItem("Roland");
+				// layout.addComponent(peopleCombo);
+				// peopleCombo.setWidth("50%");
+
+				// PaperTextInput dummyInput = new PaperTextInput("dummy");
+				// layout.addComponent(dummyInput);
+
 			}
 		});
 
 		layout.addComponent(addComponentsButton);
-		addComponentsButton.setWidth("80%");
+		// addComponentsButton.setWidth("80%");
 
 		layout.setSizeUndefined();
 		layout.setWidth("100%");
+		// layout.setSizeFull();
 		layout.setMargin(true);
 		layout.setSpacing(true);
 	}
@@ -194,7 +246,7 @@ public class MaterializeTest extends UI {
 
 			{
 				Element script = response.getDocument().createElement("script");
-				script.attr("src", "VAADIN/webcomponents/bower_components/materialize/dist/js/materialize.min.js");
+				script.attr("src", "VAADIN/webcomponents/bower_components/materialize/dist/js/materialize.js");
 				head.appendChild(script);
 			}
 
