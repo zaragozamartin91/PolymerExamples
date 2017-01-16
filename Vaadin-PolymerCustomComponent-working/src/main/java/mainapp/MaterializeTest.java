@@ -24,6 +24,7 @@ import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
@@ -69,14 +70,19 @@ public class MaterializeTest extends UI {
 					public void buttonClick() {
 						UI ui = MaterializeTest.getCurrent();
 						Window window = new Window("Combo popup");
+						window.addStyleName("overflowy");
 
 						PaperCombo combo = new PaperCombo("Opciones");
 						for (int i = 0; i < 20; i++) {
 							combo.addItem("item_" + i);
 						}
+
+						// ComboBox combo = new ComboBox("Opciones");
+						// for (int i = 0; i < 20; i++) {
+						// combo.addItem("item_" + i);
+						// }
+
 						int windowHeightPx = 150;
-						// String comboHeight = 200 + "px";
-						// combo.settDropdownContentHeight(comboHeight);
 
 						VerticalLayout windowContent = new VerticalLayout(combo);
 						windowContent.setMargin(true);
@@ -122,7 +128,8 @@ public class MaterializeTest extends UI {
 				passwordInput.autoValidate();
 
 				organizationInput = new PaperTextInput("Nombre organizacion");
-				// organizationInput.setRequired(true, "Campo no puede ser vacio [REQUERIDO]!");
+				// organizationInput.setRequired(true, "Campo no puede ser vacio
+				// [REQUERIDO]!");
 				organizationInput.setValue("ACCUSYS");
 				organizationInput.setWidth("100%");
 				organizationInput.autoValidate();
@@ -202,7 +209,8 @@ public class MaterializeTest extends UI {
 	/**
 	 * This injects polymer.js and es6 support polyfils directly into host page.
 	 *
-	 * Better compatibility and good approach if you have multiple webcomponents in the app.
+	 * Better compatibility and good approach if you have multiple webcomponents
+	 * in the app.
 	 */
 	public static BootstrapListener polymerInjector = new BootstrapListener() {
 
@@ -230,7 +238,8 @@ public class MaterializeTest extends UI {
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
-			head.prependElement("meta").attr("name", "viewport").attr("content", "width=device-width, initial-scale=1.0");
+			head.prependElement("meta").attr("name", "viewport").attr("content",
+					"width=device-width, initial-scale=1.0");
 
 			{
 				Element script = response.getDocument().createElement("script");

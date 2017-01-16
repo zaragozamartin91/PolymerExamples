@@ -18,8 +18,8 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 
 	// var component = document.createElement('paper-combo');
 	var wrap = materializeWrap(div);
-	wrap.style.overflowY = "auto";
-	wrap.style.overflowX = "hidden";
+	// wrap.style.overflowY = "auto";
+	// wrap.style.overflowX = "hidden";
 	element.appendChild(wrap);
 
 	function arraysEqual(arr1, arr2) {
