@@ -2,21 +2,20 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	// $(element).append('<div class="ast-materialize"><div class="input-field
-	// col s12"><select><option value="" disabled selected>Choose your
-	// option</option><option value="1">Option 1</option> <option
-	// value="2">Option 2</option> <option value="3">Option 3</option> </select>
-	// <label>Materialize Select</label> </div></div>');
-
 	var div = document.createElement('div');
 	div.className = 'input-field';
-	div.captions = [];
+	div.captions = []; // guardo los valores en el div principal
 	var select = document.createElement('select');
 	div.appendChild(select);
+	var nullOption = document.createElement('option');
+	var NULL_VALUE = "__INVALID_KEY__";
+	nullOption.value = NULL_VALUE;
+	nullOption.innerHTML = " ";
+	nullOption.setAttribute("selected", "selected");
+	select.appendChild(nullOption);
 	var label = document.createElement('label');
 	div.appendChild(label);
 
-	// var component = document.createElement('paper-combo');
 	var wrap = materializeWrap(div);
 	// wrap.style.overflowY = "auto";
 	// wrap.style.overflowX = "hidden";
@@ -44,6 +43,24 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		});
 	}
 
+	function getOption(caption) {
+		if (caption) {
+			return select.querySelector('option[value="' + caption + '"]');
+		} else {
+			return nullOption;
+		}
+	}
+
+	function selectOption(caption) {
+		var option = getOption(caption);
+		if (option) {
+			option.setAttribute("selected", "selected");
+			$(select).material_select();
+		} else {
+			console.error("Elemento " + caption + " no existe!");
+		}
+	}
+
 	/*
 	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
 	 * servidor.
@@ -54,7 +71,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		this.getState().captions = this.getState().captions || [];
 		if (arraysDifferent(div.captions, this.getState().captions)) {
 			setCaptions(this.getState().captions);
-			$(select).material_select();
+			$(select).material_select(); // REINICIA EL SELECT DE MATERIALIZE
 			// var inputSelectDropdown =
 			// wrap.querySelector('input.select-dropdown');
 			// var prevHeight = wrap.style.height;
@@ -73,11 +90,12 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 
 		label.innerHTML = this.getState().dropLabel || "";
 		select.disabled = this.getState().dropDisabled;
+		this.getState().selectedLabel = this.getState().selectedLabel || NULL_VALUE;
+		if (select.value != this.getState().selectedLabel) {
+			selectOption(this.getState().selectedLabel);
+		}
 
 		// component.dropRequired = this.getState().dropRequired;
-		// component.dropLabel = this.getState().dropLabel;
-		// component.dropDisabled = this.getState().dropDisabled;
-		// component.setCaptions(this.getState().captions);
 		// component.setSelected(this.getState().selectedLabel);
 		//
 		// if (this.getState().dropdownContentHeight) {
@@ -86,7 +104,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	}
 
 	select.onchange = function() {
-		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#selected:");
+		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#selected: " + select.value);
 		connector.handleSelected(select.value);
 	};
 };

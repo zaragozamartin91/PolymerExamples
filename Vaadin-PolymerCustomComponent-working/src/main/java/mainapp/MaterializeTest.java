@@ -28,6 +28,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -35,6 +36,7 @@ import com.vaadin.ui.Window;
 
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
+import ast.unicore.view.webcomponent.papercombo.NonexistentKeyException;
 import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
@@ -101,7 +103,7 @@ public class MaterializeTest extends UI {
 				});
 				layout.addComponent(addPopupButton);
 
-				PaperCombo countryCombo = new PaperCombo("Pais");
+				final PaperCombo countryCombo = new PaperCombo("Pais");
 				countryCombo.addItem("argentina");
 				countryCombo.addItem("brasil");
 				countryCombo.addItem("paraguay");
@@ -114,6 +116,21 @@ public class MaterializeTest extends UI {
 				countryCombo.addItem("francia");
 				layout.addComponent(countryCombo);
 				countryCombo.setWidth("75%");
+
+				PaperTextInput countryInput = new PaperTextInput("Seleccione pais");
+				countryInput.addValueChangeListener(new ValueChangeListener() {
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+						String caption = event.getProperty().getValue().toString();
+						try {
+							countryCombo.setSelected(caption);
+						} catch (NonexistentKeyException e) {
+							Notification.show("elemento " + caption + " no existe!", Type.ERROR_MESSAGE);
+						}
+					}
+				});
+				layout.addComponent(countryInput);
+				countryInput.setWidth("30%");
 
 				PaperTextInput passwordInput = new PaperTextInput("Ingrese password");
 				passwordInput.setPasswordType();
@@ -210,8 +227,7 @@ public class MaterializeTest extends UI {
 	/**
 	 * This injects polymer.js and es6 support polyfils directly into host page.
 	 *
-	 * Better compatibility and good approach if you have multiple webcomponents
-	 * in the app.
+	 * Better compatibility and good approach if you have multiple webcomponents in the app.
 	 */
 	public static BootstrapListener polymerInjector = new BootstrapListener() {
 
@@ -239,8 +255,7 @@ public class MaterializeTest extends UI {
 			// head.appendChild(traceur);
 			// ---------------------------------------------------------------------------------
 
-			head.prependElement("meta").attr("name", "viewport").attr("content",
-					"width=device-width, initial-scale=1.0");
+			head.prependElement("meta").attr("name", "viewport").attr("content", "width=device-width, initial-scale=1.0");
 
 			{
 				Element script = response.getDocument().createElement("script");

@@ -77,6 +77,22 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 		markAsDirty();
 	}
 
+	/**
+	 * Establece el tipo de input como number.
+	 */
+	public void setNumberType() {
+		this.getState().inputType = "number";
+		markAsDirty();
+	}
+
+	/**
+	 * Establece el tipo de input como texto.
+	 */
+	public void setTextType() {
+		this.getState().inputType = "text";
+		markAsDirty();
+	}
+
 	@SuppressWarnings({ "unchecked" })
 	protected void addHandleFocusCallback() {
 		// final Class<?> clazz = this.getClass();

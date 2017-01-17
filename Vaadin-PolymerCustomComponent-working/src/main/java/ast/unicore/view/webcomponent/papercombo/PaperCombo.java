@@ -25,7 +25,7 @@ import elemental.json.JsonArray;
 @JavaScript({ "paper-combo-connector.js" })
 public final class PaperCombo extends AbstractJavaScriptComponent {
 	/**
-	 * INVALID_KEY__
+	 * __INVALID_KEY__
 	 */
 	public static final String INVALID_KEY = "__INVALID_KEY__";
 
