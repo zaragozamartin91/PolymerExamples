@@ -39,6 +39,7 @@ import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
 import ast.unicore.view.webcomponent.papercombo.NonexistentKeyException;
 import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
+import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
 
 @Theme("mytheme")
@@ -61,6 +62,7 @@ public class MaterializeTest extends UI {
 
 		PaperButton addComponentsButton = new PaperButton("+");
 		addComponentsButton.setAsFloating();
+		addComponentsButton.setBackColor("green");
 
 		Button sampleButton = new Button("sample button");
 		layout.addComponent(sampleButton);
@@ -195,6 +197,11 @@ public class MaterializeTest extends UI {
 				// PaperTextInput dummyInput = new PaperTextInput("dummy");
 				// layout.addComponent(dummyInput);
 
+				PaperTextArea organizationDescription = new PaperTextArea("Descripcion de empresa");
+				organizationDescription.setValue(
+						"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula luctus venenatis. Sed feugiat, augue ac sagittis semper, nulla libero dapibus turpis, et cursus quam urna et nisl. Integer elementum feugiat turpis eget fringilla. Aliquam viverra nibh ut tincidunt pharetra. Mauris a lacus eget turpis hendrerit elementum at id turpis. Pellentesque sit amet velit aliquam, egestas nulla id, varius lectus. Nam laoreet, nunc id egestas molestie, ligula orci accumsan mi, sed molestie dui magna at neque. Nam urna diam, ultrices nec lacinia a, egestas nec arcu. Maecenas faucibus nulla vel lorem sagittis pellentesque. Etiam venenatis ornare gravida.");
+				layout.addComponent(organizationDescription);
+				organizationDescription.setWidth("100%");
 			}
 		});
 

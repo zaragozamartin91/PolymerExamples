@@ -108,18 +108,4 @@ public class PaperTextInput extends AbstractPaperInput<String> {
 			}
 		});
 	}
-
-	@Override
-	protected void addHandleChangeCallback() {
-		// final Class<?> clazz = this.getClass();
-		addFunction("handleChange", new JavaScriptFunction() {
-			@Override
-			public void call(JsonArray arguments) {
-				// System.out.println(clazz.getSimpleName() + "#handleChange: " + arguments.getString(0) + "#" + arguments.getBoolean(1));
-				wrappedField.setValue(arguments.getString(0));
-				getState().inputValue = arguments.getString(0);
-				// getState().inputInvalid = arguments.getBoolean(1);
-			}
-		});
-	}
 }

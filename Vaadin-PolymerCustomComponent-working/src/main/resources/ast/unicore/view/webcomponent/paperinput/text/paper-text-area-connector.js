@@ -2,34 +2,40 @@ ast_unicore_view_webcomponent_paperinput_text_PaperTextArea = function() {
 	var connector = this;
 	var element = this.getElement();
 
-	var component = document.createElement('paper-textarea');
-	element.appendChild(component);
-	// e.innerHTML = '<paper-textarea></paper-textarea>';
+	var div = document.createElement('div');
+	div.className = 'input-field';
+	var input = document.createElement('textarea');
+	input.className = "materialize-textarea";
+	input.value = "";
+	div.appendChild(input);
+	var label = document.createElement('label');
+	div.appendChild(label);
 
-	/*
-	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
-	 * servidor.
-	 */
+	element.appendChild(materializeWrap(div));
+
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextArea#onStateChange");
 
-		component.value = this.getState().inputValue;
-		component.label = this.getState().inputLabel;
-		component.required = this.getState().inputRequired;
-		component.errorMessage = this.getState().inputErrorMessage;
-		component.pattern = this.getState().inputPattern;
-		component.disabled = this.getState().inputDisabled;
-		component.invalid = this.getState().inputInvalid;
-
-		// component.validate();
+		if (input.value != this.getState().inputValue) {
+			$(input).val(this.getState().inputValue);
+			$(input).trigger('autoresize');
+		}
+		label.innerHTML = this.getState().inputLabel;
+		if (this.getState().inputValue) {
+			label.className = "active";
+		}
+		input.disabled = this.getState().inputDisabled;
 	}
 
-	/*
-	 * Agrego listener para eventos "change" de paper-input.
-	 */
-	component.addEventListener("change", function(e) {
+	/* Listener de eventos de foco */
+	input.addEventListener("focus", function(e) {
+		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextArea#focus:");
+		connector.handleFocus(input.value);
+	});
+
+	/* Agrego listener para eventos "change" de paper-input. */
+	input.addEventListener("change", function(e) {
 		console.log("ast_unicore_view_webcomponent_paperinput_text_PaperTextArea#change:");
-		console.log(e);
-		connector.handleChange(component.value, component.invalid);
+		connector.handleChange(input.value, input.invalid);
 	});
 };

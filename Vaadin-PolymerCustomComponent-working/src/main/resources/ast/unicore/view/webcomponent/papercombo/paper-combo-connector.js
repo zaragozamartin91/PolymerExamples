@@ -12,6 +12,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	nullOption.value = NULL_VALUE;
 	nullOption.innerHTML = " ";
 	nullOption.setAttribute("selected", "selected");
+	nullOption.setAttribute("disabled", "disabled");
 	select.appendChild(nullOption);
 	var label = document.createElement('label');
 	div.appendChild(label);
