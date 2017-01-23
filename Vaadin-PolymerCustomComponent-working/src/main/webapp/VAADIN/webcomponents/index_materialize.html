@@ -46,29 +46,47 @@
             </div>
         </div>
 
+<!--
+      <input type="checkbox" id="test5" />
+      <label for="test5">Red</label> -->
+
+
     </div>
 
     <script>
-    $(document).ready(function () {
-        //$('body').append('<div class="input-field"><input id="weirdInput" type="text" class="validate"><label for="weirdInput">Weird input</label></div>');
-        var component = document.createElement('div');
-        component.className = 'input-field';
-        var input = document.createElement('input');
-        input.id = "weirdInput";
-        input.type = "text";
-        input.className = "validate";
-        component.appendChild(input);
-        var label = document.createElement('label');
-        label.setAttribute('for', 'weirdInput');
-        label.innerHTML = "Weird Input";
-        component.appendChild(label);
-        document.querySelector('body').appendChild(component);
-    });
+        $(document).ready(function () {
+            //$('body').append('<div class="input-field"><input id="weirdInput" type="text" class="validate"><label for="weirdInput">Weird input</label></div>');
+            var component = document.createElement('div');
+            component.className = 'input-field';
+            var input = document.createElement('input');
+            input.id = "weirdInput";
+            input.type = "text";
+            input.className = "validate";
+            component.appendChild(input);
+            var label = document.createElement('label');
+            label.setAttribute('for', 'weirdInput');
+            label.innerHTML = "Weird Input";
+            component.appendChild(label);
+            document.querySelector('body').appendChild(component);
 
-    $(document).ready(function () {
-        $('select').material_select();
-    });
-</script>
+            var input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = "check";
+            var label = document.createElement('label');
+            label.innerHTML = 'Red';
+            label.setAttribute('for',input.id);
+            var div = document.createElement('div');
+            div.appendChild(input);
+            div.appendChild(label);
+            //document.querySelector('body').appendChild(div);
+            document.querySelector('body').appendChild(input);
+            document.querySelector('body').appendChild(label);
+        });
+
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+    </script>
 </body>
 
 </html>

@@ -36,6 +36,7 @@ import com.vaadin.ui.Window;
 
 import ast.unicore.view.webcomponent.paperbutton.PaperButton;
 import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
+import ast.unicore.view.webcomponent.papercheckbox.PaperCheckbox;
 import ast.unicore.view.webcomponent.papercombo.NonexistentKeyException;
 import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
@@ -62,7 +63,7 @@ public class MaterializeTest extends UI {
 
 		PaperButton addComponentsButton = new PaperButton("+");
 		addComponentsButton.setAsFloating();
-		addComponentsButton.setBackColor("green");
+		addComponentsButton.setBackColor("pink lighten-3");
 
 		Button sampleButton = new Button("sample button");
 		layout.addComponent(sampleButton);
@@ -103,6 +104,11 @@ public class MaterializeTest extends UI {
 						ui.addWindow(window);
 					}
 				});
+
+				layout.addComponent(new PaperCheckbox("uno"));
+				layout.addComponent(new PaperCheckbox("dos"));
+				layout.addComponent(new PaperCheckbox("tres"));
+
 				layout.addComponent(addPopupButton);
 
 				final PaperCombo countryCombo = new PaperCombo("Pais");

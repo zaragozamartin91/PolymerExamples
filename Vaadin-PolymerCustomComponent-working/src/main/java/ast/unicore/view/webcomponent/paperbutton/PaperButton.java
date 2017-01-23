@@ -148,6 +148,8 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	 * 
 	 * @param backColor
 	 *            Color a establecer.
+	 * 
+	 * @see http://materializecss.com/color.html
 	 */
 	public void setBackColor(String backColor) {
 		this.backColor = backColor;
@@ -179,6 +181,7 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 				wrappedButton.click();
 			}
 		});
+
 	}
 
 	private String buildStyle() {
