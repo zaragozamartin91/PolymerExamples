@@ -2,6 +2,7 @@ package mainapp;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,6 +26,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
@@ -71,6 +73,24 @@ public class MaterializeTest extends UI {
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
+				paperDateInput = new PaperDateInput("fecha nacimiento");
+				layout.addComponent(paperDateInput);
+				paperDateInput.addValueChangeListener(new ValueChangeListener() {
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+						Notification.show(String.format("Fecha: %s", event.getProperty().getValue().toString()));
+					}
+				});
+				paperDateInput.setValue(Calendar.getInstance().getTime());
+
+				PaperButton getDateValueButton = new PaperButton("Obtener valor fecha", new ClickListener() {
+					@Override
+					public void buttonClick() {
+						Notification.show(String.format("Fecha: %s", paperDateInput.getValue().toString()));
+					}
+				});
+				layout.addComponent(getDateValueButton);
+
 				PaperButton addPopupButton = new PaperButton("Abrir popup", new ClickListener() {
 					@Override
 					public void buttonClick() {
@@ -104,12 +124,16 @@ public class MaterializeTest extends UI {
 						ui.addWindow(window);
 					}
 				});
+				layout.addComponent(addPopupButton);
 
-				layout.addComponent(new PaperCheckbox("uno"));
+				layout.addComponent(new PaperCheckbox("uno", false, new PaperCheckbox.ValueChangeListener() {
+					@Override
+					public void change(boolean value) {
+						Notification.show("" + value);
+					}
+				}));
 				layout.addComponent(new PaperCheckbox("dos"));
 				layout.addComponent(new PaperCheckbox("tres"));
-
-				layout.addComponent(addPopupButton);
 
 				final PaperCombo countryCombo = new PaperCombo("Pais");
 				countryCombo.addItem("argentina");

@@ -65,7 +65,7 @@ public class PaperDateInput extends AbstractPaperInput<Date> {
 	 */
 	@Override
 	public Date getValue() {
-		String strValue = getState().inputValue;
+		String strValue = wrappedField.getValue();
 		try {
 			return asDate(strValue);
 		} catch (ParseException e) {
@@ -85,9 +85,8 @@ public class PaperDateInput extends AbstractPaperInput<Date> {
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				// System.out.println(PaperDateInput.class.getSimpleName() + "#handleChange: " + arguments.getString(0));
 				wrappedField.setValue(arguments.getString(0));
-				getState().inputValue = arguments.getString(0);
+				// getState().inputValue = arguments.getString(0);
 			}
 		});
 	}
