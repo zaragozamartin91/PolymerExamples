@@ -44,6 +44,7 @@ import ast.unicore.view.webcomponent.papercombo.PaperCombo;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
+import ast.unicore.view.webcomponent.style.PaperStyle;
 
 @Theme("mytheme")
 @SuppressWarnings("serial")
@@ -56,7 +57,7 @@ public class MaterializeTest extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		final VerticalLayout layout = new VerticalLayout();
-		layout.addStyleName("overflowy");
+		layout.addStyleName(PaperStyle.OVERFLOWY.name);
 		setContent(layout);
 
 		TextField sampleTextfield = new TextField("Prueba");
@@ -96,7 +97,7 @@ public class MaterializeTest extends UI {
 					public void buttonClick() {
 						UI ui = MaterializeTest.getCurrent();
 						Window window = new Window("Combo popup");
-						window.addStyleName("overflowy");
+						window.addStyleName(PaperStyle.OVERFLOWY.name);
 
 						PaperCombo combo = new PaperCombo("Opciones");
 						for (int i = 0; i < 20; i++) {
