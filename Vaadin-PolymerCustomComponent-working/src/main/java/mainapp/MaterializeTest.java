@@ -126,7 +126,7 @@ public class MaterializeTest extends UI {
 				});
 				layout.addComponent(addPopupButton);
 
-				layout.addComponent(new PaperCheckbox("uno", false, new PaperCheckbox.ValueChangeListener() {
+				layout.addComponent(new PaperCheckbox("uno", true, new PaperCheckbox.ValueChangeListener() {
 					@Override
 					public void change(boolean value) {
 						Notification.show("" + value);

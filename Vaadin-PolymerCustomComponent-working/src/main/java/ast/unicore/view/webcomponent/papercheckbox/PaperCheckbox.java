@@ -45,11 +45,11 @@ public class PaperCheckbox extends AbstractJavaScriptComponent {
 		getState().checked = value;
 		wrappedCheckBox.setValue(value);
 
+		wrappedCheckBox.setImmediate(true);
+		addHandleChangeCallback();
 		for (ValueChangeListener listener : listeners) {
 			addValueChangeListener(listener);
 		}
-
-		addHandleChangeCallback();
 	}
 
 	/**
@@ -103,6 +103,7 @@ public class PaperCheckbox extends AbstractJavaScriptComponent {
 	 */
 	public PaperCheckbox setValue(boolean value) {
 		getState().checked = value;
+		wrappedCheckBox.setValue(value);
 		return this;
 	}
 
@@ -115,7 +116,6 @@ public class PaperCheckbox extends AbstractJavaScriptComponent {
 		addFunction("handleChange", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				// System.out.println(PaperCheckbox.class.getSimpleName() + "#handleChange: " + arguments.getBoolean(0));
 				wrappedCheckBox.setValue(arguments.getBoolean(0));
 			}
 		});
