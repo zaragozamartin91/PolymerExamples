@@ -51,28 +51,34 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			return nullOption;
 		}
 	}
+	
+	function handleValueChange() {
+		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#selected: " + select.value);
+		connector.handleSelected(select.value);
+	}
 
 	function selectOption(caption) {
 		var option = getOption(caption);
 		if (option) {
 			option.setAttribute("selected", "selected");
-			$(select).material_select();
+			// $(select).material_select();
+			var valueChange = select.value != caption; 
+			select.value = caption;
+			if(valueChange) {
+				handleValueChange();
+			}
 		} else {
 			console.error("Elemento " + caption + " no existe!");
 		}
 	}
 
-	/*
-	 * La siguiente funcion se ejecuta con cada cambio de estado del lado del
-	 * servidor.
-	 */
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#onStateChange");
 
 		this.getState().captions = this.getState().captions || [];
 		if (arraysDifferent(div.captions, this.getState().captions)) {
 			setCaptions(this.getState().captions);
-			$(select).material_select(); // REINICIA EL SELECT DE MATERIALIZE
+			
 			// var inputSelectDropdown =
 			// wrap.querySelector('input.select-dropdown');
 			// var prevHeight = wrap.style.height;
@@ -87,7 +93,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			// wrap.style.height = prevHeight;
 			// });
 		}
-		div.captions = this.getState().captions;
+		div.captions = this.getState().captions; // GUARDO LAS OPCIONES ACTUALES EN EL div PRINCIPAL
 
 		label.innerHTML = this.getState().dropLabel || "";
 		select.disabled = this.getState().dropDisabled;
@@ -96,16 +102,8 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			selectOption(this.getState().selectedLabel);
 		}
 
-		// component.dropRequired = this.getState().dropRequired;
-		// component.setSelected(this.getState().selectedLabel);
-		//
-		// if (this.getState().dropdownContentHeight) {
-		// component.setDropdownContentHeight(this.getState().dropdownContentHeight);
-		// }
+		$(select).material_select(); // REINICIA EL SELECT DE MATERIALIZE PARA ADECUARSE AL CAMBIO DE ESTADO
 	}
 
-	select.onchange = function() {
-		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#selected: " + select.value);
-		connector.handleSelected(select.value);
-	};
+	select.onchange = handleValueChange;
 };

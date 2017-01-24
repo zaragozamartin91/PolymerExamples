@@ -150,6 +150,20 @@ public class MaterializeTest extends UI {
 				layout.addComponent(countryCombo);
 				countryCombo.setWidth("75%");
 
+				PaperButton countryComboDisable = new PaperButton("deshabilitar combo", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						countryCombo.setEnabled(false);
+					}
+				});
+				PaperButton countryComboEnable = new PaperButton("Habilitar combo", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						countryCombo.setEnabled(true);
+					}
+				});
+				layout.addComponent(new HorizontalLayout(countryComboDisable, countryComboEnable));
+
 				PaperTextInput countryInput = new PaperTextInput("Seleccione pais");
 				countryInput.addValueChangeListener(new ValueChangeListener() {
 					@Override

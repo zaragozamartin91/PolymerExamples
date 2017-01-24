@@ -189,7 +189,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	public void setEnabled(boolean isEnabled) {
 		super.setEnabled(isEnabled);
 		this.getState().dropDisabled = !isEnabled;
-		markAsDirty();
+		// markAsDirty();
 	}
 
 	/**
