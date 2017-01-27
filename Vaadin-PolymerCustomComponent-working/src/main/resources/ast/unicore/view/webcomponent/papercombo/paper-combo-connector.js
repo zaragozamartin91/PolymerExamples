@@ -36,8 +36,15 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		option.innerHTML = caption;
 		return option;
 	}
+	
+	function resetOptions() {
+		select.innerHTML = "";
+		select.appendChild(nullOption);
+	}
 
 	function setCaptions(captions) {
+		resetOptions();
+		
 		captions.forEach(function(caption) {
 			var option = buildOption(caption);
 			select.appendChild(option);
