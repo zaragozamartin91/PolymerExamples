@@ -22,6 +22,13 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	// wrap.style.overflowX = "hidden";
 	element.appendChild(wrap);
 
+	/* VARIABLES UTILIZADAS PARA EL COMPACT DROP --------------------- */
+	var drop = false;
+	var prevInputHeight = undefined;
+	var inputSelectDropdown = undefined;
+	var heightToSet = "200px";
+	/* --------------------------------------------------------------- */
+
 	function arraysEqual(arr1, arr2) {
 		return JSON.stringify(arr1) == JSON.stringify(arr2);
 	}
@@ -36,7 +43,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		option.innerHTML = caption;
 		return option;
 	}
-	
+
 	function resetOptions() {
 		select.innerHTML = "";
 		select.appendChild(nullOption);
@@ -44,7 +51,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 
 	function setCaptions(captions) {
 		resetOptions();
-		
+
 		captions.forEach(function(caption) {
 			var option = buildOption(caption);
 			select.appendChild(option);
@@ -58,8 +65,13 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			return nullOption;
 		}
 	}
-	
+
 	function handleValueChange() {
+		if (drop) {
+			inputSelectDropdown.style.height = prevInputHeight;
+			drop = false;
+		}
+
 		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#selected: " + select.value);
 		connector.handleSelected(select.value);
 	}
@@ -69,9 +81,9 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		if (option) {
 			option.setAttribute("selected", "selected");
 			// $(select).material_select();
-			var valueChange = select.value != caption; 
+			var valueChange = select.value != caption;
 			select.value = caption;
-			if(valueChange) {
+			if (valueChange) {
 				handleValueChange();
 			}
 		} else {
@@ -85,22 +97,11 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		this.getState().captions = this.getState().captions || [];
 		if (arraysDifferent(div.captions, this.getState().captions)) {
 			setCaptions(this.getState().captions);
-			
-			// var inputSelectDropdown =
-			// wrap.querySelector('input.select-dropdown');
-			// var prevHeight = wrap.style.height;
-			// var drop = false;
-			// inputSelectDropdown.addEventListener('focus', function() {
-			// if (drop) {
-			// return;
-			// }
-			// wrap.style.height = "300px";
-			// });
-			// inputSelectDropdown.addEventListener('blur', function() {
-			// wrap.style.height = prevHeight;
-			// });
 		}
-		div.captions = this.getState().captions; // GUARDO LAS OPCIONES ACTUALES EN EL div PRINCIPAL
+		/*
+		 * GUARDO LAS OPCIONES ACTUALES EN EL div PRINCIPAL
+		 */
+		div.captions = this.getState().captions;
 
 		label.innerHTML = this.getState().dropLabel || "";
 		select.disabled = this.getState().dropDisabled;
@@ -109,7 +110,33 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			selectOption(this.getState().selectedLabel);
 		}
 
-		$(select).material_select(); // REINICIA EL SELECT DE MATERIALIZE PARA ADECUARSE AL CAMBIO DE ESTADO
+		/*
+		 * REINICIA EL SELECT DE MATERIALIZE PARA ADECUARSE AL CAMBIO DE ESTADO
+		 */
+		$(select).material_select();
+
+		if (this.getState().compactDrop) {
+			/*
+			 * EL MODO COMPACT DROP IMPLICA QUE EL COMBO NO HARA OVERFLOW SINO
+			 * QUE AL ABRIRLO CRECERA EN TAMAÑO MOSTRANDO UN SCROLLBAR VERTICAL
+			 * PARA SELECCIONAR UNA OPCION. AL SELECCIONAR UNA OPCION
+			 * DETERMINADA, EL COMPONENTE SE ACHICARA.
+			 */
+			wrap.style.overflow = "auto";
+			inputSelectDropdown = wrap.querySelector('input.select-dropdown');
+			prevInputHeight = inputSelectDropdown.style.height;
+			inputSelectDropdown.addEventListener('focus', function() {
+				if (drop) {
+					return;
+				}
+				inputSelectDropdown.style.height = heightToSet;
+				drop = true;
+			});
+			// inputSelectDropdown.addEventListener('blur', function() {
+			// inputSelectDropdown.style.height = prevInputHeight;
+			// drop = false;
+			// });
+		}
 	}
 
 	select.onchange = handleValueChange;

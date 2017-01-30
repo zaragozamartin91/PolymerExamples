@@ -204,6 +204,17 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	/**
+	 * Establece el modo del drop del combo.
+	 * 
+	 * @param compactMode
+	 *            true para desplegar el combo con un scroll vertical (util para combos con demasiadas opciones a mostrarse DENTRO DE UN POPUP). False para que
+	 *            el combo intente desplegar todas las opciones sin scroll vertical (util para combos con pocas opciones o para combos en pantallas regulares).
+	 */
+	public void setCompactMode(boolean compactMode) {
+		this.getState().compactDrop = compactMode;
+	}
+
+	/**
 	 * Listener de cambio de valor.
 	 * 
 	 * @author martin.zaragoza

@@ -11,4 +11,8 @@ public class PaperComboState extends JavaScriptComponentState {
 	public boolean dropDisabled;
 	public String[] captions;
 	public String dropdownContentHeight = "300px";
+	/**
+	 * Booleano que determina si el drop debe mostrarse en modo compacto (es decir, acompañado de un scroll).
+	 */
+	public boolean compactDrop = false;
 }

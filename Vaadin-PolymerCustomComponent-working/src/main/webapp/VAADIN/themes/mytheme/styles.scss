@@ -8,10 +8,41 @@
 	@include addons;
 	@include mytheme;
 	
-	.overflowy {
+	// estilo necesario para que los componentes paper se "derramen" dentro de una ventana de vaadin.
+	.overflow-force-visible {
 		overflow: visible !important;
-		div {
+	}
+	.overflow-recursive-visible {
+		* {
 			overflow: visible;
+		}
+		.avoid-overflow {
+			overflow: hidden;
+		}
+		.avoid-overflow * {
+			overflow: hidden;
 		}	
+	}
+	.overflow-force-hidden {
+		overflow: hidden !important;	
+	}
+	.overflow-recursive-hidden {
+		div {
+			overflow: hidden;
+		}
+	}
+	.overflow-force-auto {
+		overflow: auto !important;	
+	}
+	.overflow-recursive-auto {
+		div {
+			overflow: auto;
+		}
+	}	
+	.avoid-overflow {
+		overflow: hidden;
+		* {
+			overflow: hidden;
+		}
 	}
 }

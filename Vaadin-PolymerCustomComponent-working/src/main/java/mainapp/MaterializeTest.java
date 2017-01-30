@@ -3,6 +3,7 @@ package mainapp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +14,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.Validator;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -25,12 +25,14 @@ import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -74,6 +76,79 @@ public class MaterializeTest extends UI {
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
+				PaperButton complexPopupButton = new PaperButton("complex popup", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						UI ui = MaterializeTest.getCurrent();
+						Window popupWindow = new Window("Complex popup");
+
+						final VerticalLayout headerLayout = new VerticalLayout(new Label("HEADER"));
+						// headerLayout.setMargin(true);
+						final VerticalLayout footerLayout = new VerticalLayout(new Label("FOOTER"));
+						// footerLayout.setMargin(true);
+						footerLayout.setSpacing(true);
+
+						final VerticalLayout contentLayout = new VerticalLayout();
+						VerticalLayout inputsLayout = new VerticalLayout();
+						for (int i = 0; i < 20; i++) {
+							PaperTextInput paperInput = new PaperTextInput("dato " + i);
+							inputsLayout.addComponent(paperInput);
+						}
+						inputsLayout.addStyleName("avoid-overflow");
+						contentLayout.addComponent(inputsLayout);
+						contentLayout.setMargin(true);
+
+						PaperCombo combo = new PaperCombo("Opciones");
+						for (int i = 0; i < 40; i++) {
+							combo.addItem("item_" + i);
+						}
+						combo.setWidth("100%");
+						combo.setCompactMode(true);
+						// combo.addStyleName("overflow-recursive-auto");
+						contentLayout.addComponent(combo);
+
+						Table table = new Table("My table");
+						table.addContainerProperty("Numeric column", Integer.class, null);
+						table.addContainerProperty("String column", String.class, null);
+						table.addContainerProperty("Date column", Date.class, null);
+						table.addItem(new Object[] { new Integer(100500), "this is first", new Date() }, new Integer(1));
+						table.addItem(new Object[] { new Integer(100501), "this is second", new Date() }, new Integer(2));
+						table.addItem(new Object[] { new Integer(100502), "this is third", new Date() }, new Integer(3));
+						table.addItem(new Object[] { new Integer(100503), "this is forth", new Date() }, new Integer(4));
+						table.addItem(new Object[] { new Integer(100504), "this is fifth", new Date() }, new Integer(5));
+						table.addItem(new Object[] { new Integer(100505), "this is sixth", new Date() }, new Integer(6));
+						table.setWidth("100%");
+						table.setPageLength(5);
+						// VerticalLayout tableLayout = new VerticalLayout(table);
+						// tableLayout.setWidth("100%");
+						// contentLayout.addComponent(tableLayout);
+						contentLayout.addComponent(table);
+						// table.addStyleName("avoid-overflow");
+
+						// XXX: place the center layout into a panel, which allows scrollbars
+						final Panel contentPanel = new Panel(contentLayout);
+						contentPanel.setSizeFull();
+
+						// XXX: add the panel instead of the layout
+						final VerticalLayout mainLayout = new VerticalLayout(headerLayout, contentPanel, footerLayout);
+						mainLayout.setSizeFull();
+						mainLayout.setExpandRatio(contentPanel, 1);
+
+						popupWindow.setContent(mainLayout);
+						popupWindow.setModal(true);
+						popupWindow.center();
+						popupWindow.setWidth("300px");
+						popupWindow.setHeight("60%");
+						popupWindow.setResizable(false);
+
+						// popupWindow.addStyleName("overflow-force-visible");
+						// popupWindow.addStyleName("overflow-recursive-visible");
+
+						ui.addWindow(popupWindow);
+					}
+				});
+				layout.addComponent(complexPopupButton);
+
 				paperDateInput = new PaperDateInput("fecha nacimiento");
 				layout.addComponent(paperDateInput);
 				paperDateInput.addValueChangeListener(new ValueChangeListener() {
