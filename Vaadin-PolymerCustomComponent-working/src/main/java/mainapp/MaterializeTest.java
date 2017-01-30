@@ -392,6 +392,12 @@ public class MaterializeTest extends UI {
 
 			{
 				Element script = response.getDocument().createElement("script");
+				script.attr("src", "VAADIN/webcomponents/bower_components/jquery-observe/jquery-observe.js");
+				head.appendChild(script);
+			}
+
+			{
+				Element script = response.getDocument().createElement("script");
 				script.attr("src", "VAADIN/webcomponents/materializeWrap.js");
 				head.appendChild(script);
 			}

@@ -132,10 +132,18 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 				inputSelectDropdown.style.height = heightToSet;
 				drop = true;
 			});
-			// inputSelectDropdown.addEventListener('blur', function() {
-			// inputSelectDropdown.style.height = prevInputHeight;
-			// drop = false;
-			// });
+			inputSelectDropdown.addEventListener('blur', function() {
+				/*
+				 * RETRASO EL CAMBIO DE ALTURA EN EL COMBO DADO QUE EL EVENTO
+				 * blur SE DISPARA ANTES QUE EL EVENTO valueChange
+				 */
+				setTimeout(function() {
+					if (drop) {
+						inputSelectDropdown.style.height = prevInputHeight;
+						drop = false;
+					}
+				}, 750);
+			});
 		}
 	}
 
