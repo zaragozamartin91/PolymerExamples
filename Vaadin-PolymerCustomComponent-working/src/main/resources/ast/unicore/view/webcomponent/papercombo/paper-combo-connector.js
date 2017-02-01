@@ -9,6 +9,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	div.appendChild(select);
 	var nullOption = document.createElement('option');
 	var NULL_VALUE = "__INVALID_KEY__";
+	div.selectedLabel = NULL_VALUE;
 	nullOption.value = NULL_VALUE;
 	nullOption.innerHTML = " ";
 	nullOption.setAttribute("selected", "selected");
@@ -79,8 +80,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	function selectOption(caption) {
 		var option = getOption(caption);
 		if (option) {
-			option.setAttribute("selected", "selected");
-			// $(select).material_select();
+			// option.setAttribute("selected", "selected");
 			var valueChange = select.value != caption;
 			select.value = caption;
 			if (valueChange) {
@@ -105,9 +105,16 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 
 		label.innerHTML = this.getState().dropLabel || "";
 		select.disabled = this.getState().dropDisabled;
-		this.getState().selectedLabel = this.getState().selectedLabel || NULL_VALUE;
-		if (select.value != this.getState().selectedLabel) {
-			selectOption(this.getState().selectedLabel);
+		
+		/* selectedLabel GUARDA UNICAMENTE LA OPCION SELECCIONADA DESE EL PaperCombo DE VAADIN USANDO setSelected. */
+		if (this.getState().selectedLabel) {
+			/* div.selectedLabel GUARDA LA ULTIMA OPCION QUE FUE SELECCIONADA MEDIANTE PaperCombo#setSelected */
+			if(this.getState().selectedLabel != div.selectedLabel) {
+				if (select.value != this.getState().selectedLabel) {
+					selectOption(this.getState().selectedLabel);
+				}
+				div.selectedLabel = this.getState().selectedLabel;
+			}
 		}
 
 		/*
@@ -117,10 +124,8 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 
 		if (this.getState().compactDrop) {
 			/*
-			 * EL MODO COMPACT DROP IMPLICA QUE EL COMBO NO HARA OVERFLOW SINO
-			 * QUE AL ABRIRLO CRECERA EN TAMAÑO MOSTRANDO UN SCROLLBAR VERTICAL
-			 * PARA SELECCIONAR UNA OPCION. AL SELECCIONAR UNA OPCION
-			 * DETERMINADA, EL COMPONENTE SE ACHICARA.
+			 * EL MODO COMPACT DROP IMPLICA QUE EL COMBO NO HARA OVERFLOW SINO QUE AL ABRIRLO CRECERA EN TAMAÑO MOSTRANDO UN SCROLLBAR VERTICAL PARA SELECCIONAR
+			 * UNA OPCION. AL SELECCIONAR UNA OPCION DETERMINADA, EL COMPONENTE SE ACHICARA.
 			 */
 			wrap.style.overflow = "auto";
 			inputSelectDropdown = wrap.querySelector('input.select-dropdown');
@@ -134,8 +139,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			});
 			inputSelectDropdown.addEventListener('blur', function() {
 				/*
-				 * RETRASO EL CAMBIO DE ALTURA EN EL COMBO DADO QUE EL EVENTO
-				 * blur SE DISPARA ANTES QUE EL EVENTO valueChange
+				 * RETRASO EL CAMBIO DE ALTURA EN EL COMBO DADO QUE EL EVENTO blur SE DISPARA ANTES QUE EL EVENTO valueChange
 				 */
 				setTimeout(function() {
 					if (drop) {

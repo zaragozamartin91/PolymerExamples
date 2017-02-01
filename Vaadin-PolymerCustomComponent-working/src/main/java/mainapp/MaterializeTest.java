@@ -24,9 +24,8 @@ import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.SessionInitListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -119,11 +118,7 @@ public class MaterializeTest extends UI {
 						table.addItem(new Object[] { new Integer(100505), "this is sixth", new Date() }, new Integer(6));
 						table.setWidth("100%");
 						table.setPageLength(5);
-						// VerticalLayout tableLayout = new VerticalLayout(table);
-						// tableLayout.setWidth("100%");
-						// contentLayout.addComponent(tableLayout);
-						contentLayout.addComponent(table);
-						// table.addStyleName("avoid-overflow");
+						// contentLayout.addComponent(table);
 
 						// XXX: place the center layout into a panel, which allows scrollbars
 						final Panel contentPanel = new Panel(contentLayout);
@@ -222,8 +217,25 @@ public class MaterializeTest extends UI {
 				countryCombo.addItem("peru");
 				countryCombo.addItem("bolivia");
 				countryCombo.addItem("francia");
-				layout.addComponent(countryCombo);
-				countryCombo.setWidth("75%");
+				countryCombo.setWidth("70%");
+				countryCombo.addValueChangeListener(new PaperCombo.ValueChangeListener<String>() {
+					@Override
+					public void valueChange(String selectedItemCaption, String selectedItemValue) {
+						Notification.show(String.format("Seleccion: %s -> %s", selectedItemCaption, selectedItemValue));
+					}
+				});
+				PaperButton getCountryComboValueButton = new PaperButton("Obtener valor", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						String value = countryCombo.getValue() == null ? "NULL" : countryCombo.getValue().toString();
+						Notification.show(String.format("Valor del combo: %s", value));
+					}
+				});
+				HorizontalLayout countryComboLayout = new HorizontalLayout(countryCombo, getCountryComboValueButton);
+				countryComboLayout.setWidth("100%");
+				countryComboLayout.setComponentAlignment(getCountryComboValueButton, Alignment.MIDDLE_CENTER);
+				countryComboLayout.setExpandRatio(countryCombo, 1f);
+				layout.addComponent(countryComboLayout);
 
 				PaperButton countryComboDisable = new PaperButton("deshabilitar combo", new PaperButton.ClickListener() {
 					@Override

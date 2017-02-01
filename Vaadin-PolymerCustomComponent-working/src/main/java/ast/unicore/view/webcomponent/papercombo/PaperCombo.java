@@ -141,6 +141,26 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	}
 
 	/**
+	 * Obtiene un item a partir de su clave/caption.
+	 * 
+	 * @param item
+	 *            Item a buscar.
+	 * @return Clave/caption del item dentro del combo.
+	 * @throws NonexistentKeyException
+	 *             Si el item no se encuentra en el combo.
+	 */
+	public String getItemCaption(Object item) {
+		Set<Entry<String, Object>> entries = items.entrySet();
+		for (Entry<String, Object> entry : entries) {
+			if (item.equals(entry.getValue())) {
+				return entry.getKey();
+			}
+		}
+
+		throw new NonexistentKeyException("El item " + item + " no pertenece al combo!");
+	}
+
+	/**
 	 * Establece el item seleccionado.
 	 * 
 	 * @param item
@@ -148,15 +168,9 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @return this.
 	 */
 	public PaperCombo setSelectedByItem(Object item) {
-		Set<Entry<String, Object>> entries = items.entrySet();
-		for (Entry<String, Object> entry : entries) {
-			if (item.equals(entry.getValue())) {
-				this.setSelected(entry.getKey());
-				return this;
-			}
-		}
-
-		throw new NonexistentKeyException("El item " + item + " no pertenece al combo!");
+		String itemCaption = getItemCaption(item);
+		this.setSelected(itemCaption);
+		return this;
 	}
 
 	/**
