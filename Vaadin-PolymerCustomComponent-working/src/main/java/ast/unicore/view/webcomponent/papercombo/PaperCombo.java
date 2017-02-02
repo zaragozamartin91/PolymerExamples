@@ -1,6 +1,5 @@
 package ast.unicore.view.webcomponent.papercombo;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -81,6 +80,49 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		markAsDirty();
 
 		return this;
+	}
+
+	/**
+	 * Elimina un item del combo.
+	 * 
+	 * @param item
+	 *            El item propiamente dicho.
+	 * @return retorna el item eliminado, o null en caso de no encontrarlo.
+	 * @throws InvalidKeyException
+	 *             Cuando la clave/caption del item es nula o igual a {@link PaperCombo#INVALID_KEY}.
+	 */
+	public Object removeByItem(Object item) throws InvalidKeyException {
+		String itemCaption;
+		try {
+			itemCaption = getItemCaption(item);
+		} catch (NonexistentKeyException e) {
+			itemCaption = null;
+		}
+
+		Object deleteItem = items.remove(itemCaption);
+		getState().captions = items.keySet().toArray(new String[0]);
+
+		return deleteItem;
+	}
+
+	/**
+	 * Elmina un item del combo.
+	 * 
+	 * @param itemCaption
+	 *            Clave/caption del item.
+	 * @return retorna el ítem elminado, o null en caso de no encontrarlo.
+	 * @throws InvalidKeyException
+	 *             Cuando la clave/caption es nula o igual a {@link PaperCombo#INVALID_KEY}.
+	 */
+	public Object remove(String itemCaption) throws InvalidKeyException {
+		if (itemCaption == null || INVALID_KEY.equals(itemCaption)) {
+			throw new InvalidKeyException("La clave " + itemCaption + " es invalida!");
+		}
+
+		Object deleteItem = items.remove(itemCaption);
+		getState().captions = items.keySet().toArray(new String[0]);
+
+		return deleteItem;
 	}
 
 	/**

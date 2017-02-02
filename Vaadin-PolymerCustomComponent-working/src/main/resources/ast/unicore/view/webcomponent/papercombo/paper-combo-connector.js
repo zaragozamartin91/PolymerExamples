@@ -134,7 +134,18 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 				if (drop) {
 					return;
 				}
-				inputSelectDropdown.style.height = heightToSet;
+				if (div.captions.length > 1) {
+					/* SOLO EXPANDO EL COMBO SI HAY MAS DE UNA OPCION DISPONIBLE */
+					inputSelectDropdown.style.height = heightToSet;
+				}
+
+				/*
+				 * FUERZO A QUE LA POSICION DE LA LISTA DE OPCIONES SEA 0PX. DE LO CONTRARIO, SI EL COMBO ESTA MUY ABAJO EN EL CONTENIDO, SE ESTABLECE ~
+				 * TOP:-300PX LO QUE PROVOCA QUE LAS OPCIONES NO SE VEAN
+				 */
+				var ul = wrap.querySelector('ul');
+				ul.style.top = "0px";
+
 				drop = true;
 			});
 			inputSelectDropdown.addEventListener('blur', function() {

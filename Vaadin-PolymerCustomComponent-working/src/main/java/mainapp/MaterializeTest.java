@@ -26,11 +26,13 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -75,6 +77,74 @@ public class MaterializeTest extends UI {
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
+				PaperButton undefinedSizePopupButton = new PaperButton("Undefined size popup", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						UI ui = MaterializeTest.getCurrent();
+						// Window popupWindow = new Window("Undefined size popup");
+						//
+						// VerticalLayout itemsLayout = new VerticalLayout();
+						// itemsLayout.setWidth("100%");
+						// VerticalLayout windowContent = new VerticalLayout(itemsLayout);
+						// windowContent.setSizeFull();
+						//
+						// for (int i = 0; i < 20; i++) {
+						// PaperTextInput paperInput = new PaperTextInput("dato " + i);
+						// itemsLayout.addComponent(paperInput);
+						// }
+						//
+						// popupWindow.setContent(windowContent);
+						// popupWindow.setWidth("50%");
+						// popupWindow.setHeightUndefined();
+						// popupWindow.center();
+						// ui.addWindow(popupWindow);
+
+						Window dialog = new Window("Dialog");
+						dialog.center();
+						ui.addWindow(dialog);
+
+						VerticalLayout layout = new VerticalLayout();
+						dialog.setContent(layout);
+						layout.setSizeFull();
+						layout.setSpacing(true);
+						layout.setMargin(true);
+
+						HorizontalLayout actions = new HorizontalLayout();
+						actions.setSpacing(true);
+						actions.addComponent(new Button("Add"));
+						actions.addComponent(new Button("Close"));
+
+						FormLayout form__ = new FormLayout();
+						// VerticalLayout form = new VerticalLayout();
+
+						FormLayout form = new FormLayout();
+
+						form.setWidth(form__.getWidth(), form__.getWidthUnits());
+						form.setHeight(form__.getHeight(), form__.getHeightUnits());
+						for (int i = 0; i < 20; i++) {
+							// form.addComponent(new Select("Foo"));
+							// form.addComponent(new Select("Bar"));
+							PaperCombo paperCombo = new PaperCombo("Foo");
+							paperCombo.addItem("One");
+							paperCombo.addItem("Two");
+							paperCombo.addItem("Three");
+							paperCombo.addItem("Four");
+							paperCombo.addItem("five");
+							paperCombo.addItem("six");
+							paperCombo.setCompactMode(true);
+							form.addComponent(paperCombo);
+						}
+
+						layout.addComponent(form);
+						layout.addComponent(new Select("Competence"));
+						layout.addComponent(actions);
+
+						// Added this line and the layout started working
+						layout.setSizeUndefined();
+					}
+				});
+				layout.addComponent(undefinedSizePopupButton);
+
 				PaperButton complexPopupButton = new PaperButton("complex popup", new PaperButton.ClickListener() {
 					@Override
 					public void buttonClick() {
@@ -217,7 +287,7 @@ public class MaterializeTest extends UI {
 				countryCombo.addItem("peru");
 				countryCombo.addItem("bolivia");
 				countryCombo.addItem("francia");
-				countryCombo.setWidth("70%");
+				countryCombo.setWidth("100%");
 				countryCombo.addValueChangeListener(new PaperCombo.ValueChangeListener<String>() {
 					@Override
 					public void valueChange(String selectedItemCaption, String selectedItemValue) {
@@ -235,6 +305,7 @@ public class MaterializeTest extends UI {
 				countryComboLayout.setWidth("100%");
 				countryComboLayout.setComponentAlignment(getCountryComboValueButton, Alignment.MIDDLE_CENTER);
 				countryComboLayout.setExpandRatio(countryCombo, 1f);
+				countryComboLayout.setSpacing(true);
 				layout.addComponent(countryComboLayout);
 
 				PaperButton countryComboDisable = new PaperButton("deshabilitar combo", new PaperButton.ClickListener() {
@@ -251,8 +322,8 @@ public class MaterializeTest extends UI {
 				});
 				layout.addComponent(new HorizontalLayout(countryComboDisable, countryComboEnable));
 
-				PaperTextInput countryInput = new PaperTextInput("Seleccione pais");
-				countryInput.addValueChangeListener(new ValueChangeListener() {
+				PaperTextInput countrySelectInput = new PaperTextInput("Seleccione pais");
+				countrySelectInput.addValueChangeListener(new ValueChangeListener() {
 					@Override
 					public void valueChange(ValueChangeEvent event) {
 						String caption = event.getProperty().getValue().toString();
@@ -263,8 +334,22 @@ public class MaterializeTest extends UI {
 						}
 					}
 				});
-				layout.addComponent(countryInput);
-				countryInput.setWidth("30%");
+				countrySelectInput.setWidth("100%");
+				PaperTextInput countryDeleteInput = new PaperTextInput("Eliminar pais");
+				countryDeleteInput.addValueChangeListener(new ValueChangeListener() {
+					@Override
+					public void valueChange(ValueChangeEvent event) {
+						String caption = event.getProperty().getValue().toString();
+						if (countryCombo.remove(caption) == null) {
+							Notification.show("elemento " + caption + " no existe!", Type.ERROR_MESSAGE);
+						}
+					}
+				});
+				countryDeleteInput.setWidth("100%");
+				HorizontalLayout countrySelectAndDeleteLayout = new HorizontalLayout(countrySelectInput, countryDeleteInput);
+				countrySelectAndDeleteLayout.setWidth("100%");
+				countrySelectAndDeleteLayout.setSpacing(true);
+				layout.addComponent(countrySelectAndDeleteLayout);
 
 				PaperTextInput passwordInput = new PaperTextInput("Ingrese password");
 				passwordInput.setPasswordType();
