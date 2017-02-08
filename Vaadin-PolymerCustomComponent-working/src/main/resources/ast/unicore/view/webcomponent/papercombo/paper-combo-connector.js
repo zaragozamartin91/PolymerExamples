@@ -9,7 +9,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	div.appendChild(select);
 	var nullOption = document.createElement('option');
 	var NULL_VALUE = "__INVALID_KEY__";
-	div.selectedLabel = NULL_VALUE;
+	div.selectedLabel = undefined;
 	nullOption.value = NULL_VALUE;
 	nullOption.innerHTML = " ";
 	nullOption.setAttribute("selected", "selected");
@@ -94,27 +94,31 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#onStateChange");
 
-		this.getState().captions = this.getState().captions || [];
-		if (arraysDifferent(div.captions, this.getState().captions)) {
-			setCaptions(this.getState().captions);
+		var state = this.getState();
+		
+		state.captions = state.captions || [];
+		if (arraysDifferent(div.captions, state.captions)) {
+			setCaptions(state.captions);
 		}
 		/*
-		 * GUARDO LAS OPCIONES ACTUALES EN EL div PRINCIPAL
+		 * GUARDO LOS CAPTIONS DE LAS OPCIONES ACTUALES EN EL div PRINCIPAL
 		 */
-		div.captions = this.getState().captions;
+		div.captions = state.captions;
 
-		label.innerHTML = this.getState().dropLabel || "";
-		select.disabled = this.getState().dropDisabled;
-		
+		label.innerHTML = state.dropLabel || "";
+		select.disabled = state.dropDisabled;
+
 		/* selectedLabel GUARDA UNICAMENTE LA OPCION SELECCIONADA DESE EL PaperCombo DE VAADIN USANDO setSelected. */
-		if (this.getState().selectedLabel) {
+		if (state.selectedLabel) {
 			/* div.selectedLabel GUARDA LA ULTIMA OPCION QUE FUE SELECCIONADA MEDIANTE PaperCombo#setSelected */
-			if(this.getState().selectedLabel != div.selectedLabel) {
-				if (select.value != this.getState().selectedLabel) {
-					selectOption(this.getState().selectedLabel);
+			if (state.selectedLabel != div.selectedLabel) {
+				/* si el valor a marcar como seleccionado es DIFERENTE al seleccionado actualmente entonces se fuerza la seleccion del mismo */
+				if (select.value != state.selectedLabel) {
+					selectOption(state.selectedLabel);
 				}
-				div.selectedLabel = this.getState().selectedLabel;
 			}
+			/* si state.selectedLabel == NULL_VALUE -> se esta queriendo hacer un clear de la seleccion. Por lo tanto reseteo el div.selectedLabel */
+			div.selectedLabel = state.selectedLabel == NULL_VALUE ? undefined : state.selectedLabel;
 		}
 
 		/*
@@ -122,7 +126,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		 */
 		$(select).material_select();
 
-		if (this.getState().compactDrop) {
+		if (state.compactDrop) {
 			/*
 			 * EL MODO COMPACT DROP IMPLICA QUE EL COMBO NO HARA OVERFLOW SINO QUE AL ABRIRLO CRECERA EN TAMAÑO MOSTRANDO UN SCROLLBAR VERTICAL PARA SELECCIONAR
 			 * UNA OPCION. AL SELECCIONAR UNA OPCION DETERMINADA, EL COMPONENTE SE ACHICARA.

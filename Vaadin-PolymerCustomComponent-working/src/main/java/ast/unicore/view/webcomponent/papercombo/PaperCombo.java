@@ -119,10 +119,14 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 			throw new InvalidKeyException("La clave " + itemCaption + " es invalida!");
 		}
 
-		Object deleteItem = items.remove(itemCaption);
-		getState().captions = items.keySet().toArray(new String[0]);
+		Object deletedItem = items.remove(itemCaption);
+		boolean itemRemoved = deletedItem != null;
+		if (itemRemoved) {
+			getState().captions = items.keySet().toArray(new String[0]);
+			this.clear();
+		}
 
-		return deleteItem;
+		return deletedItem;
 	}
 
 	/**

@@ -2,7 +2,9 @@ package mainapp;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -26,6 +28,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -77,6 +80,27 @@ public class MaterializeTest extends UI {
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
+				Collection<?> options = Arrays.asList(new String[] { "uno", "dos", "tres" });
+				final ComboBox sampleCombo = new ComboBox("Sample combo", options);
+				PaperButton removeFirstItemButton = new PaperButton("Remove first item", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						try {
+							Object firstItemId = sampleCombo.getItemIds().iterator().next();
+							sampleCombo.removeItem(firstItemId);
+						} catch (UnsupportedOperationException e) {
+							Notification.show("No hay mas items", Type.ERROR_MESSAGE);
+						}
+					}
+				});
+				PaperButton getSampleComboValueButton = new PaperButton("Get value", new PaperButton.ClickListener() {
+					@Override
+					public void buttonClick() {
+						Notification.show("" + sampleCombo.getValue());
+					}
+				});
+				layout.addComponent(new HorizontalLayout(sampleCombo, removeFirstItemButton, getSampleComboValueButton));
+
 				PaperButton undefinedSizePopupButton = new PaperButton("Undefined size popup", new PaperButton.ClickListener() {
 					@Override
 					public void buttonClick() {
