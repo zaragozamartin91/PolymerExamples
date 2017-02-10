@@ -1,9 +1,11 @@
 package ast.unicore.view.webcomponent.paperinput;
 
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -13,7 +15,7 @@ import com.vaadin.ui.TextField;
 
 import elemental.json.JsonArray;
 
-public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptComponent {
+public abstract class AbstractPaperInput<InputT> extends AbstractJavaScriptComponent implements Validatable {
 	private static final long serialVersionUID = 7395010143963838186L;
 
 	protected AtomicBoolean autoValidate = new AtomicBoolean(false);
@@ -33,6 +35,7 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 					try {
 						validate();
 					} catch (Exception e) {
+						setInputInvalid();
 					}
 				}
 			});
@@ -65,14 +68,14 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	 * @param value
 	 *            Valor nuevo.
 	 */
-	public abstract void setValue(InputType value);
+	public abstract void setValue(InputT value);
 
 	/**
 	 * Obtiene el valor del campo.
 	 * 
 	 * @return Valor del campo.
 	 */
-	public abstract InputType getValue();
+	public abstract InputT getValue();
 
 	/**
 	 * Establece si el Input es requerido.
@@ -87,6 +90,8 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 
 		if (isRequired) {
 			Validator newValidator = new Validator() {
+				private static final long serialVersionUID = -1162906328902819970L;
+
 				@Override
 				public void validate(Object value) throws InvalidValueException {
 					if (value == null || value.toString().isEmpty()) {
@@ -136,6 +141,7 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 	 * @throws InvalidInputException
 	 *             En caso que el valor del paper input sea invalido segun los validadores asignados.
 	 */
+	@Override
 	public void validate() {
 		try {
 			wrappedField.validate();
@@ -199,24 +205,39 @@ public abstract class AbstractPaperInput<InputType> extends AbstractJavaScriptCo
 		}
 	}
 
-	/**
-	 * Agrega un validador del contenido. El mensaje de error a mostrar por invalidez del campo es el mensaje que acompaña al {@link InvalidValueException}.
-	 * 
-	 * @param validator
-	 *            Validador a agregar.
-	 */
+	@Override
 	public void addValidator(final Validator validator) {
 		wrappedField.addValidator(validator);
 	}
 
-	/**
-	 * Elimina un validador de campo.
-	 * 
-	 * @param validator
-	 *            Validador a eliminar.
-	 */
+	@Override
 	public void removeValidator(Validator validator) {
 		wrappedField.removeValidator(validator);
+	}
+
+	@Override
+	public void removeAllValidators() {
+		wrappedField.removeAllValidators();
+	}
+
+	@Override
+	public Collection<Validator> getValidators() {
+		return wrappedField.getValidators();
+	}
+
+	@Override
+	public boolean isValid() {
+		return this.getState().inputInvalid == false;
+	}
+
+	@Override
+	public boolean isInvalidAllowed() {
+		return true;
+	}
+
+	@Override
+	public void setInvalidAllowed(boolean invalidValueAllowed) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("No se permite modificar el comportamiento de validacion del componente");
 	}
 
 	/**

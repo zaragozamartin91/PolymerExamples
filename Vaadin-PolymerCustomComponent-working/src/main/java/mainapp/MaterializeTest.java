@@ -105,24 +105,6 @@ public class MaterializeTest extends UI {
 					@Override
 					public void buttonClick() {
 						UI ui = MaterializeTest.getCurrent();
-						// Window popupWindow = new Window("Undefined size popup");
-						//
-						// VerticalLayout itemsLayout = new VerticalLayout();
-						// itemsLayout.setWidth("100%");
-						// VerticalLayout windowContent = new VerticalLayout(itemsLayout);
-						// windowContent.setSizeFull();
-						//
-						// for (int i = 0; i < 20; i++) {
-						// PaperTextInput paperInput = new PaperTextInput("dato " + i);
-						// itemsLayout.addComponent(paperInput);
-						// }
-						//
-						// popupWindow.setContent(windowContent);
-						// popupWindow.setWidth("50%");
-						// popupWindow.setHeightUndefined();
-						// popupWindow.center();
-						// ui.addWindow(popupWindow);
-
 						Window dialog = new Window("Dialog");
 						dialog.center();
 						ui.addWindow(dialog);

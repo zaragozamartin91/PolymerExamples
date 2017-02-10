@@ -60,7 +60,7 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	 */
 	public void setLabel(String label) {
 		getState().buttonLabel = label;
-	};
+	}
 
 	/**
 	 * Agrega un clickListener.
@@ -162,15 +162,15 @@ public final class PaperButton extends AbstractJavaScriptComponent {
 	}
 
 	@Override
+	public void setHeight(String height) {
+		throw new UnsupportedOperationException("Operacion no soportada!");
+	}
+
+	@Override
 	public void setWidth(float width, Unit unit) {
 		super.setWidth(width, unit);
 		getState().widthToSet = "" + width + unit.getSymbol();
 		markAsDirty();
-	}
-
-	@Override
-	public void setHeight(String height) {
-		throw new UnsupportedOperationException("Operacion no soportada!");
 	}
 
 	private void addHandleClickCallback() {

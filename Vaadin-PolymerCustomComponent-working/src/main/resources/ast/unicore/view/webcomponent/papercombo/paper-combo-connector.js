@@ -126,7 +126,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 		 */
 		$(select).material_select();
 
-		if (state.compactDrop) {
+		if (state.compactDrop && div.captions.length > 1) {
 			/*
 			 * EL MODO COMPACT DROP IMPLICA QUE EL COMBO NO HARA OVERFLOW SINO QUE AL ABRIRLO CRECERA EN TAMAÑO MOSTRANDO UN SCROLLBAR VERTICAL PARA SELECCIONAR
 			 * UNA OPCION. AL SELECCIONAR UNA OPCION DETERMINADA, EL COMPONENTE SE ACHICARA.
@@ -138,10 +138,7 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 				if (drop) {
 					return;
 				}
-				if (div.captions.length > 1) {
-					/* SOLO EXPANDO EL COMBO SI HAY MAS DE UNA OPCION DISPONIBLE */
-					inputSelectDropdown.style.height = heightToSet;
-				}
+				inputSelectDropdown.style.height = heightToSet;
 
 				/*
 				 * FUERZO A QUE LA POSICION DE LA LISTA DE OPCIONES SEA 0PX. DE LO CONTRARIO, SI EL COMBO ESTA MUY ABAJO EN EL CONTENIDO, SE ESTABLECE ~

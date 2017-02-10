@@ -1,10 +1,12 @@
 package ast.unicore.view.webcomponent.papercombo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.gwt.thirdparty.guava.common.collect.FluentIterable;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
