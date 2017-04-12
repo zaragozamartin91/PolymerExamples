@@ -1,4 +1,4 @@
-ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
+ast_unicore_view_webcomponent_papercombo_PaperComboMulti = function() {
 	var connector = this;
 	var element = this.getElement();
 
@@ -73,26 +73,16 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			drop = false;
 		}
 
-		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#selected: " + select.value);
-		connector.handleSelected(select.value);
+		console.log("ast_unicore_view_webcomponent_papercombo_PaperComboMulti#selected: " + $(select).val());
+		connector.handleSelected($(select).val());
 	}
 
 	function selectOption(caption) {
-		var option = getOption(caption);
-		if (option) {
-			// option.setAttribute("selected", "selected");
-			var valueChange = select.value != caption;
-			select.value = caption;
-			if (valueChange) {
-				handleValueChange();
-			}
-		} else {
-			console.error("Elemento " + caption + " no existe!");
-		}
+		handleValueChange();
 	}
 
 	this.onStateChange = function() {
-		console.log("ast_unicore_view_webcomponent_papercombo_PaperCombo#onStateChange");
+		console.log("ast_unicore_view_webcomponent_papercombo_PaperComboMulti#onStateChange");
 
 		var state = this.getState();
 
@@ -113,12 +103,17 @@ ast_unicore_view_webcomponent_papercombo_PaperCombo = function() {
 			/* div.selectedLabel GUARDA LA ULTIMA OPCION QUE FUE SELECCIONADA MEDIANTE PaperCombo#setSelected */
 			if (state.selectedLabel != div.selectedLabel) {
 				/* si el valor a marcar como seleccionado es DIFERENTE al seleccionado actualmente entonces se fuerza la seleccion del mismo */
-				if (select.value != state.selectedLabel) {
+				if ($(select).val() != state.selectedLabel) {
 					selectOption(state.selectedLabel);
 				}
 			}
 			/* si state.selectedLabel == NULL_VALUE -> se esta queriendo hacer un clear de la seleccion. Por lo tanto reseteo el div.selectedLabel */
 			div.selectedLabel = state.selectedLabel == NULL_VALUE ? undefined : state.selectedLabel;
+		}
+
+		/* Habilita el modo de opciones multiples. */
+		if (state.multiple) {
+			select.setAttribute("multiple", true);
 		}
 
 		/*

@@ -47,6 +47,7 @@ import ast.unicore.view.webcomponent.paperbutton.PaperButton.ClickListener;
 import ast.unicore.view.webcomponent.papercheckbox.PaperCheckbox;
 import ast.unicore.view.webcomponent.papercombo.NonexistentKeyException;
 import ast.unicore.view.webcomponent.papercombo.PaperCombo;
+import ast.unicore.view.webcomponent.papercombo.PaperComboMulti;
 import ast.unicore.view.webcomponent.paperinput.date.PaperDateInput;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextArea;
 import ast.unicore.view.webcomponent.paperinput.text.PaperTextInput;
@@ -80,6 +81,13 @@ public class MaterializeTest extends UI {
 		addComponentsButton.addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick() {
+				PaperComboMulti paperComboMulti = new PaperComboMulti("multi combo");
+				paperComboMulti.setId("paper-combo-multi");
+				paperComboMulti.addItem("uno");
+				paperComboMulti.addItem("dos");
+				paperComboMulti.addItem("tres");
+				layout.addComponent(paperComboMulti);
+
 				Collection<?> options = Arrays.asList(new String[] { "uno", "dos", "tres" });
 				final ComboBox sampleCombo = new ComboBox("Sample combo", options);
 				PaperButton removeFirstItemButton = new PaperButton("Remove first item", new PaperButton.ClickListener() {

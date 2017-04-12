@@ -12,42 +12,55 @@ ast_unicore_view_webcomponent_paperinput_date_PaperDateInput = function() {
 	var connector = this;
 	var element = this.getElement();
 
+	function createId() {
+		return "dateinput-" + Math.random().toString(36).substring(7);
+	}
+
 	/*
-	 * si el <input type="date" .../> es soportado, entonces se crea un
-	 * calendario de ese tipo. De lo contrario se crea un paper-dialog-calendar.
+	 * si el <input type="date" .../> es soportado, entonces se crea un calendario de ese tipo. De lo contrario se crea un paper-dialog-calendar.
 	 */
 	var component = document.createElement('input');
 	component.className = "datepicker";
 	component.type = "date";
-	element.appendChild(materializeWrap(component));
+	component.id = createId();
+	var label = document.createElement("label");
+	label.setAttribute("for", component.id);
+	label.innerHTML = "LABEL";
+	var wrap = materializeWrap(label);
+	wrap.appendChild(component);
+	element.appendChild(wrap);
 
 	this.onStateChange = function() {
 		console.log("ast_unicore_view_webcomponent_paperinput_date_PaperDateInput#onStateChange:");
 
-		component.placeholder = this.getState().inputLabel;
+		var inputLabel = this.getState().inputLabel;
+
+		label.innerHTML = inputLabel || "";
 
 		/* EL DATE PICKER DE MATERIALIZE ESTA BASADO EN http://amsul.ca/pickadate.js/date */
 		var $input = $(component).pickadate({
 			selectMonths : true, // Creates a dropdown to control month
 			selectYears : 15,
-			format: 'dd/mm/yyyy',
-			closeOnSelect: true,
-			onSet: function(context) {
-				if(context.select) {
+			format : 'dd/mm/yyyy',
+			closeOnSelect : true,
+			onSet : function(context) {
+				if (context.select) {
 					var newValue = new Date(context.select); // context.select contiene el TIMESTAMP de la nueva fecha seleccionada
-					var newValueAsString = newValue.toISOString().slice(0,10); // obtengo una fecha en formato yyyy-mm-dd
+					var newValueAsString = newValue.toISOString().slice(0, 10); // obtengo una fecha en formato yyyy-mm-dd
 					connector.handleChange(newValueAsString);
 					this.close();
 				}
 			}
 		});
-		
+
 		var picker = $input.pickadate('picker');
-		
-		if(this.getState().inputValue) {
-			picker.set('select', this.getState().inputValue, { format: 'yyyy-mm-dd' })
+
+		if (this.getState().inputValue) {
+			picker.set('select', this.getState().inputValue, {
+				format : 'yyyy-mm-dd'
+			})
 		}
-		
+
 		// component.value = this.getState().inputValue;
 		// component.label = this.getState().inputLabel;
 		// component.pattern = this.getState().inputPattern;

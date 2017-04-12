@@ -15,4 +15,9 @@ public class PaperComboState extends JavaScriptComponentState {
 	 * Booleano que determina si el drop debe mostrarse en modo compacto (es decir, acompañado de un scroll).
 	 */
 	public boolean compactDrop = false;
+
+	/**
+	 * Determina si el combo debe permitir selecciones multiples.
+	 */
+	public boolean multiple = false;
 }

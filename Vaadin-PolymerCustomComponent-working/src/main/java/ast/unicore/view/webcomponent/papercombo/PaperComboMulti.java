@@ -1,10 +1,13 @@
 package ast.unicore.view.webcomponent.papercombo;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.common.base.Joiner;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -21,8 +24,8 @@ import elemental.json.JsonArray;
  *
  */
 @SuppressWarnings("serial")
-@JavaScript({ "paper-combo-connector.js" })
-public final class PaperCombo extends AbstractJavaScriptComponent {
+@JavaScript({ "paper-combo-multi-connector.js" })
+public final class PaperComboMulti extends AbstractJavaScriptComponent {
 	/**
 	 * __INVALID_KEY__
 	 */
@@ -42,11 +45,12 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @param label
 	 *            Label del combo.
 	 */
-	public PaperCombo(String label) {
+	public PaperComboMulti(String label) {
 		resetItems();
 		resetSelectedCaption();
 
 		getState().dropLabel = label;
+		getState().multiple = true;
 
 		addHandleSelectedCallback();
 	}
@@ -64,9 +68,9 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @param item
 	 *            Item propiamente dicho.
 	 * @throws InvalidKeyException
-	 *             Cuando la clave/caption del item a agregar sea nula o igual a {@link PaperCombo#INVALID_KEY}.
+	 *             Cuando la clave/caption del item a agregar sea nula o igual a {@link PaperComboMulti#INVALID_KEY}.
 	 */
-	public PaperCombo addItem(String itemCaption, Object item) throws InvalidKeyException /* , DuplicateItemException */ {
+	public PaperComboMulti addItem(String itemCaption, Object item) throws InvalidKeyException /* , DuplicateItemException */ {
 		if (itemCaption == null || INVALID_KEY.equals(itemCaption)) {
 			throw new InvalidKeyException("La clave " + itemCaption + " es invalida!");
 		}
@@ -89,7 +93,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            El item propiamente dicho.
 	 * @return retorna el item eliminado, o null en caso de no encontrarlo.
 	 * @throws InvalidKeyException
-	 *             Cuando la clave/caption del item es nula o igual a {@link PaperCombo#INVALID_KEY}.
+	 *             Cuando la clave/caption del item es nula o igual a {@link PaperComboMulti#INVALID_KEY}.
 	 */
 	public Object removeByItem(Object item) throws InvalidKeyException {
 		String itemCaption;
@@ -112,7 +116,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Clave/caption del item.
 	 * @return retorna el ítem elminado, o null en caso de no encontrarlo.
 	 * @throws InvalidKeyException
-	 *             Cuando la clave/caption es nula o igual a {@link PaperCombo#INVALID_KEY}.
+	 *             Cuando la clave/caption es nula o igual a {@link PaperComboMulti#INVALID_KEY}.
 	 */
 	public Object remove(String itemCaption) throws InvalidKeyException {
 		if (itemCaption == null || INVALID_KEY.equals(itemCaption)) {
@@ -136,7 +140,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Nuevos items del combo.
 	 * @return this.
 	 */
-	public PaperCombo setItems(Map<String, Object> items) {
+	public PaperComboMulti setItems(Map<String, Object> items) {
 		this.items = new LinkedHashMap<>(items);
 		getState().captions = items.keySet().toArray(new String[0]);
 		markAsDirty();
@@ -150,7 +154,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @param item
 	 *            Item a agregar.
 	 */
-	public PaperCombo addItem(Object item) {
+	public PaperComboMulti addItem(Object item) {
 		this.addItem(item.toString(), item);
 		return this;
 	}
@@ -174,7 +178,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * @throws NonexistentKeyException
 	 *             Si el caption no corresponde con ningun item del combo.
 	 */
-	public PaperCombo setSelected(String itemCaption) throws NonexistentKeyException {
+	public PaperComboMulti setSelected(String itemCaption) throws NonexistentKeyException {
 		if (items.keySet().contains(itemCaption)) {
 			setSelectedItemCaption(itemCaption);
 			getState().selectedLabel = itemCaption;
@@ -213,7 +217,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 *            Item a establecer como seleccionado.
 	 * @return this.
 	 */
-	public PaperCombo setSelectedByItem(Object item) {
+	public PaperComboMulti setSelectedByItem(Object item) {
 		String itemCaption = getItemCaption(item);
 		this.setSelected(itemCaption);
 		return this;
@@ -224,7 +228,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 * 
 	 * @return this.
 	 */
-	public PaperCombo clear() {
+	public PaperComboMulti clear() {
 		String itemCaption = INVALID_KEY;
 		setSelectedItemCaption(itemCaption);
 		getState().selectedLabel = itemCaption;
@@ -236,7 +240,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	/**
 	 * Vacía las opciones del combo.
 	 */
-	public PaperCombo empty() {
+	public PaperComboMulti empty() {
 		resetItems();
 		resetSelectedCaption();
 		getState().captions = new String[] {};
@@ -284,7 +288,7 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 	 */
 	public static abstract class ValueChangeListener<DataType> {
 		/**
-		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo. Si {@link PaperCombo#INVALID_KEY} se encuentra seleccionado, el metodo no se
+		 * Accion a ejecutar cuando ocurra un cambio de seleccion en el combo. Si {@link PaperComboMulti#INVALID_KEY} se encuentra seleccionado, el metodo no se
 		 * ejecutara.
 		 * 
 		 * @param selectedItemCaption
@@ -325,8 +329,13 @@ public final class PaperCombo extends AbstractJavaScriptComponent {
 		addFunction("handleSelected", new JavaScriptFunction() {
 			@Override
 			public void call(JsonArray arguments) {
-				// System.out.println(PaperCombo.class.getSimpleName() + "#handleSelected: " + arguments.getString(0));
-				setSelectedItemCaption(arguments.getString(0));
+				JsonArray argArray = arguments.getArray(0);
+				int captionCount = argArray.length();
+				List<String> captions = new ArrayList<>();
+				for (int i = 0; i < captionCount; i++) {
+					captions.add(argArray.getString(i));
+				}
+				setSelectedItemCaption(captions.isEmpty() ? "" : Joiner.on(',').skipNulls().join(captions));
 			}
 		});
 	}
